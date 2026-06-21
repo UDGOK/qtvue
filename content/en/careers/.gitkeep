@@ -1,0 +1,20 @@
+# Careers content collection
+#
+# This directory is intentionally empty at launch. The /careers page shows an
+# evergreen "we're always looking for talent" CTA when no role files exist.
+#
+# To list an open role, add a Markdown file here, e.g. `robotics-engineer.md`:
+#
+#   ---
+#   title: "Robotics Engineer"
+#   summary: "Design and commission robotic cells for industrial clients."
+#   location: "Remote"
+#   type: "Full-time"
+#   department: "Engineering"
+#   ---
+#
+#   # Robotics Engineer
+#
+#   Role description here.
+#
+# The page auto-switches from evergreen CTA to listing mode when files exist.
