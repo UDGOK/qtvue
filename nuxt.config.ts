@@ -7,6 +7,16 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/content', '@nuxtjs/seo', '@nuxtjs/i18n', '@nuxt/image'],
 
+  // Site config drives @nuxtjs/seo (sitemap, canonical URLs, OG defaults).
+  site: {
+    url: 'https://qtvue.com',
+    name: 'qtvue',
+  },
+
+  seo: {
+    redirectToCanonicalSiteUrl: true,
+  },
+
   css: ['~/assets/css/main.css'],
 
   // Register components by filename only (no directory prefix) so
@@ -45,6 +55,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       script: [
         {
           // No-FOUC: apply stored/prefers-color-scheme dark class before paint.

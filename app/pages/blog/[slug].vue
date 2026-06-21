@@ -12,6 +12,20 @@ useSeoMeta({
   description: () => post.value?.summary ?? '',
   ogImage: () => post.value?.image,
 })
+
+// Article structured data for rich search results.
+watchEffect(() => {
+  if (post.value) {
+    useSchemaOrg([
+      {
+        '@type': 'Article',
+        headline: post.value.title,
+        datePublished: post.value.date,
+        author: { '@type': 'Organization', name: post.value.author },
+      },
+    ])
+  }
+})
 </script>
 
 <template>

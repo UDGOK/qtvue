@@ -7,7 +7,7 @@ export const siteConfig = {
   description:
     'Robotics integration, programming, sales, and consulting for industrial operations.',
   contactEmail: 'hello@qtvue.com',
-  defaultOgImage: '/og-default.png',
+  defaultOgImage: '/og-default.svg',
 } as const
 
 export type SiteConfig = typeof siteConfig
