@@ -9,6 +9,11 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // Register components by filename only (no directory prefix) so
+  // <Container>, <TheHeader>, <Logo> resolve regardless of which
+  // subfolder of app/components/ they live in.
+  components: [{ path: '~/components', pathPrefix: false }],
+
   vite: {
     plugins: [tailwindcss()],
   },

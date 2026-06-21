@@ -1,6 +1,8 @@
-// Vitest global setup: register all ui/ primitives as global components so
-// tests of composite components (e.g. Section using Container) resolve them
-// without each test having to stub them.
+// Vitest global setup: register all ui/, layout/, and marketing/ components
+// as globals so tests of composite components resolve them without per-test stubs.
+// Also provide a NuxtLink stub that renders a real <a href="..."> with slot text,
+// so href-based selectors and text assertions work as in the browser.
+import { defineComponent, h } from 'vue'
 import { config } from '@vue/test-utils'
 
 import Badge from '~/components/ui/Badge.vue'
@@ -14,6 +16,18 @@ import Section from '~/components/ui/Section.vue'
 import Select from '~/components/ui/Select.vue'
 import Stat from '~/components/ui/Stat.vue'
 import Textarea from '~/components/ui/Textarea.vue'
+import Logo from '~/components/marketing/Logo.vue'
+import ThemeToggle from '~/components/layout/ThemeToggle.vue'
+import LanguageSwitcher from '~/components/layout/LanguageSwitcher.vue'
+
+// NuxtLink stub: render <a :href="to"> with slot content.
+const NuxtLinkStub = defineComponent({
+  name: 'NuxtLink',
+  props: { to: { type: String, default: '' } },
+  setup(props, { slots }) {
+    return () => h('a', { href: props.to }, slots.default?.())
+  },
+})
 
 config.global.components = {
   Badge,
@@ -27,4 +41,8 @@ config.global.components = {
   Select,
   Stat,
   Textarea,
+  Logo,
+  ThemeToggle,
+  LanguageSwitcher,
+  NuxtLink: NuxtLinkStub,
 }
