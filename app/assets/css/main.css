@@ -1,0 +1,31 @@
+@import './tokens.css';
+@import 'tailwindcss';
+
+/* Map design tokens into Tailwind v4 theme so utilities like
+   bg-primary, text-text, border-border resolve to our tokens.
+   Using @theme inline keeps the values flowing from the CSS vars
+   defined in tokens.css (including the :root.dark overrides). */
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-600: var(--color-primary-600);
+  --color-accent: var(--color-accent);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+  --color-text: var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --container-max: var(--container-max);
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
