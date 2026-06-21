@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-const nav = [
-  { label: 'Services', to: '/services' },
-  { label: 'Industries', to: '/industries' },
-  { label: 'Work', to: '/work' },
-  { label: 'About', to: '/about' },
-  { label: 'Blog', to: '/blog' },
-  { label: 'Careers', to: '/careers' },
-]
+const { t } = useI18n()
+
+const nav = computed(() => [
+  { label: t('nav.services'), to: '/services' },
+  { label: t('nav.industries'), to: '/industries' },
+  { label: t('nav.work'), to: '/work' },
+  { label: t('nav.about'), to: '/about' },
+  { label: t('nav.blog'), to: '/blog' },
+  { label: t('nav.careers'), to: '/careers' },
+])
 
 const mobileOpen = ref(false)
 </script>
@@ -31,7 +33,7 @@ const mobileOpen = ref(false)
 
       <div class="flex items-center gap-2">
         <ThemeToggle />
-        <Btn href="/contact" size="sm">Contact</Btn>
+        <Btn href="/contact" size="sm">{{ $t('nav.contact') }}</Btn>
         <button
           type="button"
           class="rounded-lg p-2 hover:bg-surface md:hidden"

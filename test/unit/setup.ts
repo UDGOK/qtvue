@@ -1,9 +1,10 @@
 // Vitest global setup: register all ui/, layout/, and marketing/ components
 // as globals so tests of composite components resolve them without per-test stubs.
 // Also provide a NuxtLink stub that renders a real <a href="..."> with slot text,
-// so href-based selectors and text assertions work as in the browser.
+// and a minimal useI18n() stub so components using t() render in tests.
 import { defineComponent, h } from 'vue'
 import { config } from '@vue/test-utils'
+import { vi } from 'vitest'
 
 import Badge from '~/components/ui/Badge.vue'
 import Btn from '~/components/ui/Btn.vue'
@@ -19,6 +20,15 @@ import Textarea from '~/components/ui/Textarea.vue'
 import Logo from '~/components/marketing/Logo.vue'
 import ThemeToggle from '~/components/layout/ThemeToggle.vue'
 import LanguageSwitcher from '~/components/layout/LanguageSwitcher.vue'
+
+// useI18n stub: returns the key passed to it (good enough for "contains" checks).
+const tFn = (k: string) => k
+vi.stubGlobal('useI18n', () => ({
+  t: tFn,
+  locale: { value: 'en' },
+}))
+// $t template helper uses the same identity.
+config.global.mocks = { $t: tFn }
 
 // NuxtLink stub: render <a :href="to"> with slot content.
 const NuxtLinkStub = defineComponent({

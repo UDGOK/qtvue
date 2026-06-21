@@ -14,6 +14,21 @@ export default defineNuxtConfig({
   // subfolder of app/components/ they live in.
   components: [{ path: '~/components', pathPrefix: false }],
 
+  // i18n: prefix_except_default means English is served at '/' (no /en/ prefix),
+  // and any future locale (e.g. 'es') is served at '/es/'. Add a locale here
+  // + a translation file to enable a new language with zero refactor.
+  i18n: {
+    strategy: 'prefix_except_default',
+    defaultLocale: 'en',
+    locales: [{ code: 'en', language: 'en-US', name: 'English', file: 'en.json' }],
+    bundle: { optimizeTranslationDirective: false },
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },

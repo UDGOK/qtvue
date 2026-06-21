@@ -1,0 +1,29 @@
+{
+  "brand": {
+    "name": "qtvue"
+  },
+  "nav": {
+    "services": "Services",
+    "industries": "Industries",
+    "work": "Work",
+    "about": "About",
+    "blog": "Blog",
+    "careers": "Careers",
+    "contact": "Contact"
+  },
+  "cta": {
+    "startProject": "Start a project",
+    "getInTouch": "Get in touch",
+    "viewAll": "View all"
+  },
+  "contact": {
+    "heading": "Tell us about your project",
+    "submit": "Send message",
+    "success": "Thanks — we will be in touch within one business day.",
+    "error": "Something went wrong. Please try again or email us directly."
+  },
+  "footer": {
+    "tagline": "Robotics integration, programming, and consulting for industrial operations worldwide.",
+    "rights": "All rights reserved."
+  }
+}
