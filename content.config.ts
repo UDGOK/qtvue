@@ -6,6 +6,7 @@ import {
   blogSchema,
   careerSchema,
   featureSchema,
+  faqSchema,
 } from './app/content.schemas'
 
 export default defineContentConfig({
@@ -39,6 +40,11 @@ export default defineContentConfig({
       type: 'page',
       source: 'en/features/**/*.md',
       schema: featureSchema,
+    }),
+    faqs: defineCollection({
+      type: 'page',
+      source: 'en/faq/**/*.md',
+      schema: faqSchema,
     }),
   },
 })

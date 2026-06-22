@@ -149,6 +149,7 @@ const resourcesData: Record<'resources', ResourceItem[]> = {
     { label: 'Careers',        desc: 'Build the future of automation with us', to: '/careers',   icon: 'Users' },
     { label: 'Documentation',  desc: 'Cell design guides, KAREL cheatsheet',  to: '/docs',      icon: 'FileText' },
     { label: 'API Reference',  desc: 'Integrate with the qtvue platform',     to: '/api',       icon: 'Terminal' },
+    { label: 'FAQ',            desc: '120+ answered questions, schema.org structured', to: '/faq', icon: 'HelpCircle' },
   ],
 }
 
