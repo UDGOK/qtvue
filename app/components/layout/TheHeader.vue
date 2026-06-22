@@ -85,8 +85,10 @@ interface PlatformCard {
   desc: string
   href: string
   badge?: string
-  /** keyword that picks the thumbnail from /public/menu/ */
-  thumb?: string
+  /** form-factor category for the icon tile: 'quadruped' | 'humanoid' | 'arm' | 'teleop' */
+  thumb?: 'quadruped' | 'humanoid' | 'arm' | 'teleop'
+  /** short price string, rendered as monospace badge (e.g. '~$13.5k') */
+  price?: string
 }
 interface ServiceLine {
   label: string
@@ -102,18 +104,30 @@ interface ServiceLine {
  *   How it works
  *   About
  *   [Submit your use case]   (the single accent CTA)
+ *
+ * Each platform card has:
+ *   icon    — Lucide icon name that visually communicates form factor
+ *             (quadruped, humanoid, arm, teleop rig, etc.)
+ *   shape   — SVG silhouette category used by the icon tile bg
+ *             ('quadruped', 'humanoid', 'arm', 'teleop') — distinct
+ *             halftone pattern per category so the user can scan
+ *             form factors at a glance.
+ *   price   — short price string rendered as monospace badge
+ *   desc    — one-line description
+ *   href    — target page
+ *   badge   — optional label (Workhorse, Industrial, Pro, New)
  */
 
 const platformsData: Record<'platforms', PlatformCard[]> = {
   platforms: [
-    { label: 'Go2',  desc: '4D LiDAR quadruped, ~15 kg, IP67. The accessible workhorse.', href: '/platforms/go2',  thumb: 'go2',  badge: 'Workhorse' },
-    { label: 'B2',   desc: '40 kg+ payload industrial quadruped, IP67, all-terrain.',     href: '/platforms/b2',   thumb: 'b2',   badge: 'Industrial' },
-    { label: 'G1',   desc: '23–43 DoF humanoid with dexterous hands. Indoor R&D.',      href: '/platforms/g1',   thumb: 'g1' },
-    { label: 'R1',   desc: 'Lightweight, developer-friendly humanoid for STEM/HRI.',    href: '/platforms/r1',   thumb: 'r1' },
-    { label: 'H1 / H1-2', desc: 'Full-size, 1.78 m, 3.7 m/s — fastest production humanoid.', href: '/platforms/h1', thumb: 'h1', badge: 'Pro' },
-    { label: 'H2',   desc: 'Refined full-size: unified compute, stronger arms, longer battery.', href: '/platforms/h2', thumb: 'h2', badge: 'New' },
-    { label: 'G1-D', desc: 'Dual-arm teleop rig, <100 ms latency, for embodied-AI teams.',  href: '/platforms/g1-d', thumb: 'g1d' },
-    { label: 'Arms (Z1)', desc: '6+ DoF manipulators for cells and benchtop automation.',   href: '/platforms/arms', thumb: 'arms' },
+    { label: 'Go2',     desc: '4D LiDAR quadruped, ~15 kg, IP67. Workhorse.',  href: '/platforms/go2',  thumb: 'quadruped', badge: 'Workhorse',   price: '~$1.6k' },
+    { label: 'B2',      desc: 'Industrial quadruped. 40 kg payload, all-terrain.', href: '/platforms/b2',   thumb: 'quadruped', badge: 'Industrial',  price: '~$100k' },
+    { label: 'G1',      desc: '23–43 DoF humanoid with dexterous hands. Indoor R&D.', href: '/platforms/g1',   thumb: 'humanoid',                                     price: '~$13.5–16k' },
+    { label: 'R1',      desc: 'Lightweight, developer-friendly humanoid. STEM/HRI.', href: '/platforms/r1',   thumb: 'humanoid',                                     price: '~$4.3–4.9k' },
+    { label: 'H1',      desc: 'Full-size, 1.78 m, 3.7 m/s — fastest production humanoid.', href: '/platforms/h1',   thumb: 'humanoid', badge: 'Pro',          price: '~$90k+' },
+    { label: 'H2',      desc: 'Refined full-size: unified compute, stronger arms.',      href: '/platforms/h2',   thumb: 'humanoid', badge: 'New',          price: '~$30k' },
+    { label: 'G1-D',    desc: 'Dual-arm teleop rig, <100 ms latency. For embodied-AI.',  href: '/platforms/g1-d', thumb: 'teleop',                                       price: 'Contact' },
+    { label: 'Arms',    desc: '6+ DoF manipulators (Z1) for cells and benchtop.',       href: '/platforms/arms', thumb: 'arm',                                          price: '~$16k' },
   ],
 }
 
@@ -356,9 +370,16 @@ watch(() => route.path, () => {
           : 'pointer-events-none -translate-y-2 opacity-0'"
       >
         <Container class="py-8">
-          <!-- ====== CARDS layout (Platforms) ====== -->
+          <!-- ====== CARDS layout (Platforms) — compact 2-col grid ====== -->
+          <!--
+            Each card has a 56px icon tile (distinct per form factor:
+            quadruped / humanoid / arm / teleop), name + price row,
+            one-line description. No 16:9 SVG thumbnails — those made
+            the panel 1092px tall and showed identical mascots for
+            every platform. Compact list fits 8 platforms in ~340px.
+          -->
           <div v-if="entry.layout === 'cards' && entry.key === 'platforms'">
-            <div class="mb-5 flex items-baseline justify-between">
+            <div class="mb-4 flex items-baseline justify-between">
               <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary">
                 {{ (entry as NavDrop).panelTitle }}
               </p>
@@ -371,40 +392,56 @@ watch(() => route.path, () => {
                 {{ (entry as NavDrop).panelLink!.label }} →
               </NuxtLink>
             </div>
-            <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <ul class="grid gap-1.5 sm:grid-cols-2">
               <li v-for="card in platformsData.platforms" :key="card.label">
                 <NuxtLink
                   :to="card.href"
                   @click="closeNow"
-                  class="group flex h-full flex-col overflow-hidden rounded-2xl border border-dashed border-border bg-bg transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
+                  class="group flex items-center gap-3 rounded-xl p-2.5 transition-all hover:bg-surface"
                 >
-                  <!-- thumbnail (16:9) -->
-                  <div class="relative aspect-[16/9] w-full overflow-hidden bg-surface-2 halftone-bg">
-                    <div class="absolute inset-0 grid place-items-center">
-                      <div class="h-3/5 w-3/5 transition-transform duration-500 group-hover:scale-105">
-                        <RobotMascot :variant="card.thumb === 'cell-design' || card.thumb === 'programming' || card.thumb === 'eoat' ? 'arm' : (card.thumb === 'vision' ? 'head' : 'arm')" />
-                      </div>
-                    </div>
-                    <span
-                      v-if="card.badge"
-                      class="absolute left-3 top-3 rounded-full bg-bg/90 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-primary backdrop-blur"
-                    >
-                      {{ card.badge }}
-                    </span>
+                  <!-- icon tile — distinct per form factor -->
+                  <div
+                    :class="[
+                      'grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-dashed border-border halftone-bg transition-colors',
+                      card.thumb === 'quadruped' && 'bg-surface-2 text-primary group-hover:bg-primary-50',
+                      card.thumb === 'humanoid' && 'bg-surface-2 text-primary group-hover:bg-primary-50',
+                      card.thumb === 'arm' && 'bg-surface-2 text-primary group-hover:bg-primary-50',
+                      card.thumb === 'teleop' && 'bg-surface-2 text-primary group-hover:bg-primary-50',
+                    ]"
+                    aria-hidden="true"
+                  >
+                    <Icon
+                      :name="
+                        card.thumb === 'quadruped' ? 'PawPrint' :
+                        card.thumb === 'humanoid' ? 'PersonStanding' :
+                        card.thumb === 'arm' ? 'Cable' :
+                        card.thumb === 'teleop' ? 'Gamepad2' :
+                        'Bot'
+                      "
+                      :size="22"
+                    />
                   </div>
                   <!-- text -->
-                  <div class="flex flex-1 flex-col gap-1.5 p-4">
-                    <div class="flex items-center justify-between gap-2">
-                      <h3 class="text-sm font-bold tracking-tight text-text group-hover:text-primary">
-                        {{ card.label }}
+                  <div class="flex flex-1 flex-col gap-0.5 min-w-0">
+                    <div class="flex items-baseline justify-between gap-2">
+                      <h3 class="text-sm font-bold tracking-tight text-text group-hover:text-primary truncate">
+                        Unitree {{ card.label }}
                       </h3>
                       <span
-                        class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
-                        aria-hidden="true"
-      >→</span>
+                        v-if="card.price"
+                        class="shrink-0 font-mono text-[10px] uppercase tracking-widest text-text-muted"
+                      >
+                        {{ card.price }}
+                      </span>
                     </div>
-                    <p class="text-xs leading-relaxed text-text-secondary">{{ card.desc }}</p>
+                    <p class="text-xs leading-snug text-text-secondary line-clamp-1">{{ card.desc }}</p>
                   </div>
+                  <span
+                    v-if="card.badge"
+                    class="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-widest text-primary"
+                  >
+                    {{ card.badge }}
+                  </span>
                 </NuxtLink>
               </li>
             </ul>
@@ -498,25 +535,45 @@ watch(() => route.path, () => {
               </button>
 
               <ul v-show="mobileExpanded === entry.key" class="pb-2 pl-2">
-                <li v-for="card in platformsData.platforms" :key="`mf-${card.label}`" v-if="entry.key === 'platforms'">
-                  <NuxtLink
-                    :to="card.href"
-                    class="flex items-center gap-2 py-2 text-sm text-text-secondary"
-                    @click="mobileOpen = false"
-                  >
-                    <span class="font-medium">{{ card.label }}</span>
-                  </NuxtLink>
-                </li>
-                <li v-for="r in servicesData.services" :key="`mr-${r.to}`" v-if="entry.key === 'services'">
-                  <NuxtLink
-                    :to="r.to"
-                    class="flex items-center gap-2 py-2 text-sm text-text-secondary"
-                    @click="mobileOpen = false"
-                  >
-                    <Icon :name="r.icon" :size="14" />
-                    {{ r.label }}
-                  </NuxtLink>
-                </li>
+                <template v-if="entry.key === 'platforms'">
+                  <li v-for="card in platformsData.platforms" :key="`mf-${card.label}`">
+                    <NuxtLink
+                      :to="card.href"
+                      class="flex items-center gap-2 py-2 text-sm text-text-secondary"
+                      @click="mobileOpen = false"
+                    >
+                      <Icon
+                        :name="
+                          card.thumb === 'quadruped' ? 'PawPrint' :
+                          card.thumb === 'humanoid' ? 'PersonStanding' :
+                          card.thumb === 'arm' ? 'Cable' :
+                          card.thumb === 'teleop' ? 'Gamepad2' :
+                          'Bot'
+                        "
+                        :size="14"
+                      />
+                      <span class="font-medium">Unitree {{ card.label }}</span>
+                      <span
+                        v-if="card.price"
+                        class="ml-auto font-mono text-[10px] uppercase tracking-widest text-text-muted"
+                      >
+                        {{ card.price }}
+                      </span>
+                    </NuxtLink>
+                  </li>
+                </template>
+                <template v-else-if="entry.key === 'services'">
+                  <li v-for="r in servicesData.services" :key="`mr-${r.to}`">
+                    <NuxtLink
+                      :to="r.to"
+                      class="flex items-center gap-2 py-2 text-sm text-text-secondary"
+                      @click="mobileOpen = false"
+                    >
+                      <Icon :name="r.icon" :size="14" />
+                      {{ r.label }}
+                    </NuxtLink>
+                  </li>
+                </template>
               </ul>
             </div>
           </li>
