@@ -1,421 +1,442 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+/**
+ * TheHeader — qtvue marketing site mega-menu.
+ *
+ * Architecture (borrowed from the best-in-class greptile menu pattern):
+ *  - <button> triggers (not links) with a rotating chevron.
+ *  - Full-width mega-panels stay in the DOM (`v-show`), toggled via
+ *    opacity / translate / pointer-events — SEO-friendly and animatable.
+ *  - Hover-intent with a 140ms close delay so a diagonal mouse path
+ *    from trigger → panel doesn't snap the panel shut.
+ *  - Keyboard: Escape closes and returns focus to the trigger; outside
+ *    click closes; click on a dropdown trigger toggles it open/closed.
+ *  - One `menu` config drives desktop cards, desktop list, and mobile.
+ *  - Logo on the LEFT (not centered, for more conventional nav density).
+ *  - Right side: ThemeToggle + greptile-style chevron-cut CTAs.
+ *  - `prefers-reduced-motion` kills all the transitions.
+ */
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const route = useRoute()
 
 const scrolled = ref(false)
-const open = ref(false)
-const openDropdown = ref<string | null>(null)
+const active = ref<string | null>(null)
+const mobileOpen = ref(false)
+const mobileExpanded = ref<string | null>(null)
+let closeTimer: number | null = null
+const HOVER_CLOSE_MS = 140
 
 /* ============================================================
-   Menu structure — greptile-style.
-   Each item has a small icon, UPPERCASE label, and a route.
-   Dropdowns get a `▾` chevron.
+   Menu config — edit this, the rest regenerates automatically.
+   Types: 'link' (plain nav) | 'dropdown' (mega-panel).
+   Dropdown layouts: 'cards' (Features, with thumbnails + icon + desc)
+                     'list'  (Resources, compact two-line)
    ============================================================ */
-const services = computed(() => [
-  { label: 'Robotics Integration', to: '/services/integration', desc: 'Full cell design, build, and commissioning' },
-  { label: 'Robot Programming', to: '/services/programming', desc: 'New programs, retrofits, optimization' },
-  { label: 'Robot & Peripheral Sales', to: '/services/sales', desc: 'Arms, controllers, EOAT, vision' },
-  { label: 'Feasibility & Consulting', to: '/services/consulting', desc: 'Assessments, ROI, engineering plans' },
-])
-const resources = computed(() => [
-  { label: 'Case studies', to: '/work', desc: 'Selected projects' },
-  { label: 'Industries', to: '/industries', desc: 'Where we work' },
-  { label: 'Blog', to: '/blog', desc: 'Notes on robotics & automation' },
-  { label: 'Careers', to: '/careers', desc: 'Join the team' },
-])
+const services = [
+  { key: 'integration', title: 'Robotics Integration', desc: 'Full cell design, build, and commissioning', to: '/services/integration' },
+  { key: 'programming', title: 'Robot Programming', desc: 'New programs, retrofits, optimization', to: '/services/programming' },
+  { key: 'sales',       title: 'Robot & Peripheral Sales', desc: 'Arms, controllers, EOAT, vision', to: '/services/sales' },
+  { key: 'consulting',  title: 'Feasibility & Consulting', desc: 'Assessments, ROI, engineering plans', to: '/services/consulting' },
+]
+const industries = [
+  { key: 'welding',       title: 'Welding',            desc: 'MIG / TIG / spot cells', to: '/industries/welding' },
+  { key: 'packaging',     title: 'Packaging',          desc: 'Pick-and-place, palletizing', to: '/industries/packaging' },
+  { key: 'material',      title: 'Material Handling',  desc: 'High-throughput transfer', to: '/industries/material-handling' },
+]
 
-interface NavItem {
-  key: string
-  label: string
-  to: string
-  hasDropdown: boolean
-  icon: 'cube' | 'dollar' | 'sparkle' | 'building' | 'book' | 'bookmark' | 'arrow' | 'dot'
+interface MenuLink   { type: 'link';     label: string; to: string }
+interface MenuDrop   { type: 'dropdown'; label: string; key: string; layout: 'cards' | 'list' }
+type MenuEntry = MenuLink | MenuDrop
+
+const menu: MenuEntry[] = [
+  { type: 'link', label: 'Examples', to: '/work' },
+  { type: 'link', label: 'Pricing',  to: '/services' },
+  {
+    type: 'dropdown',
+    label: 'Features',
+    key: 'features',
+    layout: 'cards',
+  },
+  { type: 'link', label: 'Enterprise', to: '/industries' },
+  { type: 'link', label: 'Blog',       to: '/blog' },
+  {
+    type: 'dropdown',
+    label: 'Resources',
+    key: 'resources',
+    layout: 'list',
+  },
+]
+
+/* ============================================================
+   Hover-intent + keyboard + outside-click handlers
+   ============================================================ */
+function open(key: string) {
+  if (closeTimer) {
+    window.clearTimeout(closeTimer)
+    closeTimer = null
+  }
+  active.value = key
+}
+function scheduleClose() {
+  if (closeTimer) window.clearTimeout(closeTimer)
+  closeTimer = window.setTimeout(() => {
+    active.value = null
+  }, HOVER_CLOSE_MS)
+}
+function closeNow() {
+  if (closeTimer) window.clearTimeout(closeTimer)
+  active.value = null
+}
+function toggleClick(key: string) {
+  if (active.value === key) {
+    closeNow()
+  } else {
+    open(key)
+  }
 }
 
-const leftNav = computed<NavItem[]>(() => [
-  { key: 'examples', label: 'Examples', to: '/work', hasDropdown: false, icon: 'cube' },
-  { key: 'pricing', label: 'Pricing', to: '/services', hasDropdown: false, icon: 'dollar' },
-  {
-    key: 'services',
-    label: 'Features',
-    to: '/services',
-    hasDropdown: true,
-    icon: 'sparkle',
-  },
-])
-const rightNav = computed<NavItem[]>(() => [
-  { key: 'enterprise', label: 'Enterprise', to: '/industries', hasDropdown: false, icon: 'building' },
-  { key: 'blog', label: 'Blog', to: '/blog', hasDropdown: false, icon: 'book' },
-  {
-    key: 'resources',
-    label: 'Resources',
-    to: '#',
-    hasDropdown: true,
-    icon: 'bookmark',
-  },
-])
-
-const dropdownMap: Record<string, ReturnType<typeof services.value extends never[] ? never : () => { label: string; to: string; desc: string }[]>> = {
-  services,
-  resources,
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    const prev = active.value
+    if (mobileOpen.value) {
+      mobileOpen.value = false
+      mobileExpanded.value = null
+      return
+    }
+    if (prev) {
+      closeNow()
+      // return focus to the trigger
+      const trigger = document.getElementById(`trigger-${prev}`)
+      trigger?.focus()
+    }
+  }
+}
+function onDocClick(e: MouseEvent) {
+  const target = e.target as HTMLElement | null
+  if (active.value && target && !target.closest('[data-menu-root]')) closeNow()
+  if (mobileOpen.value && target && !target.closest('[data-mobile-root]') && !target.closest('[data-mobile-trigger]')) {
+    mobileOpen.value = false
+    mobileExpanded.value = null
+  }
 }
 
 function handleScroll() {
   scrolled.value = window.scrollY > 8
 }
+
 onMounted(() => {
   handleScroll()
   window.addEventListener('scroll', handleScroll, { passive: true })
-  document.addEventListener('keydown', onKey)
+  document.addEventListener('keydown', onKeydown)
+  document.addEventListener('click', onDocClick)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
-  document.removeEventListener('keydown', onKey)
+  document.removeEventListener('keydown', onKeydown)
+  document.removeEventListener('click', onDocClick)
+  if (closeTimer) window.clearTimeout(closeTimer)
 })
 
-function toggleDropdown(key: string) {
-  openDropdown.value = openDropdown.value === key ? null : key
-}
-function closeAll() {
-  openDropdown.value = null
-  open.value = false
-}
-function onKey(e: KeyboardEvent) {
-  if (e.key === 'Escape') closeAll()
-}
-
-watch(() => route.path, closeAll)
-
-const headerEl = ref<HTMLElement | null>(null)
-function onClickAway(e: MouseEvent) {
-  if (!headerEl.value) return
-  if (!headerEl.value.contains(e.target as Node)) closeAll()
-}
-onMounted(() => document.addEventListener('click', onClickAway))
-onBeforeUnmount(() => document.removeEventListener('click', onClickAway))
+watch(() => route.path, () => {
+  closeNow()
+  mobileOpen.value = false
+  mobileExpanded.value = null
+})
 </script>
 
 <template>
   <header
-    ref="headerEl"
-    :class="[
-      'sticky top-0 z-50 w-full transition-all duration-300',
-      scrolled
-        ? 'border-b border-border bg-bg/85 backdrop-blur-xl supports-[backdrop-filter]:bg-bg/70'
-        : 'bg-bg/60 backdrop-blur-md',
-    ]"
+    class="sticky top-0 z-50 w-full border-b border-border/60 bg-bg/85 backdrop-blur-xl supports-[backdrop-filter]:bg-bg/70 transition-shadow"
+    :class="scrolled && 'shadow-sm'"
+    data-menu-root
   >
-    <Container class="grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
-      <!-- ============= LEFT NAV ============= -->
-      <nav class="hidden items-center gap-1 md:flex" aria-label="Primary left">
-        <div
-          v-for="item in leftNav"
-          :key="item.key"
-          class="relative"
-          @mouseenter="item.hasDropdown ? (openDropdown = item.key) : null"
-          @mouseleave="item.hasDropdown ? (openDropdown = null) : null"
-        >
-          <NuxtLink
-            v-if="!item.hasDropdown"
-            :to="item.to"
-            class="group inline-flex h-10 items-center gap-1.5 rounded-md px-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text"
-          >
-            <!-- inline icon -->
-            <svg
-              v-if="item.icon === 'cube'"
-              class="h-3.5 w-3.5 opacity-70 transition-opacity group-hover:opacity-100"
-              viewBox="0 0 16 16" fill="none" aria-hidden="true"
-            >
-              <path d="M8 1.5 L14 5 L14 11 L8 14.5 L2 11 L2 5 Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
-              <path d="M8 1.5 L14 5 L8 8.5 L2 5 Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
-            </svg>
-            <svg
-              v-else-if="item.icon === 'dollar'"
-              class="h-3.5 w-3.5 opacity-70 transition-opacity group-hover:opacity-100"
-              viewBox="0 0 16 16" fill="none" aria-hidden="true"
-            >
-              <path d="M8 2 V14 M5 5 Q5 4 8 4 Q11 4 11 6 Q11 8 8 8 Q5 8 5 10 Q5 12 8 12 Q11 12 11 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg
-              v-else-if="item.icon === 'sparkle'"
-              class="h-3.5 w-3.5 opacity-70 transition-opacity group-hover:opacity-100"
-              viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
-            >
-              <path d="M8 1 L9.5 6.5 L15 8 L9.5 9.5 L8 15 L6.5 9.5 L1 8 L6.5 6.5 Z" />
-            </svg>
-            <span>{{ item.label }}</span>
-          </NuxtLink>
-
-          <button
-            v-else
-            type="button"
-            :aria-expanded="openDropdown === item.key"
-            aria-haspopup="true"
-            class="group inline-flex h-10 items-center gap-1.5 rounded-md px-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text"
-            @click.stop="toggleDropdown(item.key)"
-          >
-            <svg
-              v-if="item.icon === 'sparkle'"
-              class="h-3.5 w-3.5 opacity-70 transition-opacity group-hover:opacity-100"
-              viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
-            >
-              <path d="M8 1 L9.5 6.5 L15 8 L9.5 9.5 L8 15 L6.5 9.5 L1 8 L6.5 6.5 Z" />
-            </svg>
-            <span>{{ item.label }}</span>
-            <svg
-              :class="['h-3 w-3 opacity-70 transition-transform', openDropdown === item.key && 'rotate-180']"
-              viewBox="0 0 16 16" fill="none" aria-hidden="true"
-            >
-              <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-
-          <!-- DROPDOWN -->
-          <Transition
-            enter-active-class="transition duration-150 ease-out"
-            enter-from-class="opacity-0 -translate-y-1"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition duration-100 ease-in"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 -translate-y-1"
-          >
-            <div
-              v-if="item.hasDropdown && openDropdown === item.key"
-              class="absolute left-0 top-full z-50 mt-2 w-[420px] rounded-2xl border border-border bg-bg p-3 shadow-[var(--shadow-lg)]"
-              role="menu"
-            >
-              <div class="grid grid-cols-1 gap-1">
-                <NuxtLink
-                  v-for="entry in dropdownMap[item.key]"
-                  :key="entry.to"
-                  :to="entry.to"
-                  class="group flex flex-col gap-0.5 rounded-xl p-3 transition-colors hover:bg-surface"
-                  role="menuitem"
-                >
-                  <div class="flex items-center justify-between">
-                    <span class="text-sm font-semibold text-text group-hover:text-primary">
-                      {{ entry.label }}
-                    </span>
-                    <span
-                      class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
-                      aria-hidden="true"
-                    >→</span>
-                  </div>
-                  <span class="text-xs text-text-secondary">{{ entry.desc }}</span>
-                </NuxtLink>
-              </div>
-            </div>
-          </Transition>
-        </div>
-      </nav>
-
-      <!-- ============= CENTER LOGO ============= -->
-      <NuxtLink to="/" aria-label="qtvue home" class="flex items-center justify-center" @click="closeAll">
+    <Container class="flex h-16 items-center gap-4">
+      <!-- ============= LOGO (left) ============= -->
+      <NuxtLink to="/" aria-label="qtvue home" class="flex shrink-0 items-center">
         <Logo />
       </NuxtLink>
 
-      <!-- ============= RIGHT NAV ============= -->
-      <nav class="hidden items-center justify-end gap-1 md:flex" aria-label="Primary right">
-        <div
-          v-for="item in rightNav"
-          :key="item.key"
-          class="relative"
-          @mouseenter="item.hasDropdown ? (openDropdown = item.key) : null"
-          @mouseleave="item.hasDropdown ? (openDropdown = null) : null"
-        >
-          <NuxtLink
-            v-if="!item.hasDropdown"
-            :to="item.to"
-            class="group inline-flex h-10 items-center gap-1.5 rounded-md px-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text"
+      <!-- ============= DESKTOP NAV ============= -->
+      <nav class="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Primary">
+        <ul class="flex items-center gap-1">
+          <li
+            v-for="entry in menu"
+            :key="entry.label"
+            class="relative"
+            @mouseenter="entry.type === 'dropdown' ? open(entry.key) : null"
+            @mouseleave="entry.type === 'dropdown' ? scheduleClose() : null"
           >
-            <svg
-              v-if="item.icon === 'building'"
-              class="h-3.5 w-3.5 opacity-70 transition-opacity group-hover:opacity-100"
-              viewBox="0 0 16 16" fill="none" aria-hidden="true"
+            <!-- Plain link -->
+            <NuxtLink
+              v-if="entry.type === 'link'"
+              :to="entry.to"
+              class="inline-flex h-10 items-center rounded-md px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text"
             >
-              <path d="M2 14 V4 L8 2 L14 4 V14 M5 7 H7 M5 10 H7 M9 7 H11 M9 10 H11 M2 14 H14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg
-              v-else-if="item.icon === 'book'"
-              class="h-3.5 w-3.5 opacity-70 transition-opacity group-hover:opacity-100"
-              viewBox="0 0 16 16" fill="none" aria-hidden="true"
-            >
-              <path d="M2 3 V13 M14 3 V13 M2 3 Q5 2 8 3 Q11 2 14 3 M2 13 Q5 12 8 13 Q11 12 14 13" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
-            </svg>
-            <span>{{ item.label }}</span>
-          </NuxtLink>
+              {{ entry.label }}
+            </NuxtLink>
 
-          <button
-            v-else
-            type="button"
-            :aria-expanded="openDropdown === item.key"
-            aria-haspopup="true"
-            class="group inline-flex h-10 items-center gap-1.5 rounded-md px-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text"
-            @click.stop="toggleDropdown(item.key)"
-          >
-            <svg
-              v-if="item.icon === 'bookmark'"
-              class="h-3.5 w-3.5 opacity-70 transition-opacity group-hover:opacity-100"
-              viewBox="0 0 16 16" fill="none" aria-hidden="true"
+            <!-- Dropdown trigger -->
+            <button
+              v-else
+              :id="`trigger-${entry.key}`"
+              type="button"
+              :aria-expanded="active === entry.key"
+              aria-haspopup="true"
+              :aria-controls="`panel-${entry.key}`"
+              class="inline-flex h-10 items-center gap-1.5 rounded-md px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              @click.stop="toggleClick(entry.key)"
             >
-              <path d="M4 2 H12 V14 L8 11 L4 14 Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
-            </svg>
-            <span>{{ item.label }}</span>
-            <svg
-              :class="['h-3 w-3 opacity-70 transition-transform', openDropdown === item.key && 'rotate-180']"
-              viewBox="0 0 16 16" fill="none" aria-hidden="true"
-            >
-              <path d="M4 6 L8 10 L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-
-          <Transition
-            enter-active-class="transition duration-150 ease-out"
-            enter-from-class="opacity-0 -translate-y-1"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition duration-100 ease-in"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 -translate-y-1"
-          >
-            <div
-              v-if="item.hasDropdown && openDropdown === item.key"
-              class="absolute right-0 top-full z-50 mt-2 w-[420px] rounded-2xl border border-border bg-bg p-3 shadow-[var(--shadow-lg)]"
-              role="menu"
-            >
-              <div class="grid grid-cols-1 gap-1">
-                <NuxtLink
-                  v-for="entry in dropdownMap[item.key]"
-                  :key="entry.to"
-                  :to="entry.to"
-                  class="group flex flex-col gap-0.5 rounded-xl p-3 transition-colors hover:bg-surface"
-                  role="menuitem"
-                >
-                  <div class="flex items-center justify-between">
-                    <span class="text-sm font-semibold text-text group-hover:text-primary">
-                      {{ entry.label }}
-                    </span>
-                    <span
-                      class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
-                      aria-hidden="true"
-                    >→</span>
-                  </div>
-                  <span class="text-xs text-text-secondary">{{ entry.desc }}</span>
-                </NuxtLink>
-              </div>
-            </div>
-          </Transition>
-        </div>
-
-        <!-- Theme toggle + Right CTAs: greptile-style chevron-cut buttons -->
-        <div class="ml-2 flex items-center gap-2">
-          <ThemeToggle class="h-9 w-9" />
-          <div class="flex items-center gap-0">
-            <Btn href="/contact" variant="ink" size="md" chevron>
-              Contact Sales
-            </Btn>
-            <Btn href="/contact" variant="primary" size="md" chevron>
-              Start now
-            </Btn>
-          </div>
-        </div>
+              {{ entry.label }}
+              <svg
+                :class="['h-3 w-3 transition-transform duration-200', active === entry.key && 'rotate-180']"
+                viewBox="0 0 16 16" fill="none" aria-hidden="true"
+              >
+                <path
+                  d="M4 6 L8 10 L12 6"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </li>
+        </ul>
       </nav>
+
+      <!-- ============= RIGHT: theme + CTAs ============= -->
+      <div class="ml-auto hidden items-center gap-2 lg:flex">
+        <ThemeToggle class="h-9 w-9" />
+        <div class="flex items-center gap-0">
+          <Btn href="/contact" variant="ink" size="md" chevron>Contact Sales</Btn>
+          <Btn href="/contact" variant="primary" size="md" chevron>Start now</Btn>
+        </div>
+      </div>
 
       <!-- ============= MOBILE TRIGGER ============= -->
       <button
         type="button"
-        class="ml-1 grid h-9 w-9 place-items-center rounded-full border border-border md:hidden"
-        :aria-label="open ? 'Close menu' : 'Open menu'"
-        :aria-expanded="open"
-        @click="open = !open"
+        class="ml-auto grid h-9 w-9 place-items-center rounded-full border border-border md:hidden"
+        :aria-label="mobileOpen ? 'Close menu' : 'Open menu'"
+        :aria-expanded="mobileOpen"
+        data-mobile-trigger
+        @click="mobileOpen = !mobileOpen"
       >
         <svg
-          v-if="!open"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          aria-hidden="true"
+          v-if="!mobileOpen"
+          width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"
         >
-          <path
-            d="M2 4 H14 M2 8 H14 M2 12 H14"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
+          <path d="M2 4 H14 M2 8 H14 M2 12 H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
         </svg>
-        <svg
-          v-else
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M3 3 L13 13 M13 3 L3 13"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
+        <svg v-else width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 3 L13 13 M13 3 L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
         </svg>
       </button>
     </Container>
 
-    <!-- ============= MOBILE NAV ============= -->
-    <Transition
-      enter-active-class="transition duration-200 ease-out"
-      enter-from-class="opacity-0 -translate-y-2"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition duration-150 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 -translate-y-2"
-    >
+    <!-- ===================== MEGA PANELS (desktop) ===================== -->
+    <template v-for="entry in menu" :key="`panel-${entry.label}`">
       <div
-        v-if="open"
-        class="border-t border-border bg-bg md:hidden"
+        v-if="entry.type === 'dropdown'"
+        :id="`panel-${entry.key}`"
+        role="region"
+        :aria-label="entry.label"
+        @mouseenter="open(entry.key)"
+        @mouseleave="scheduleClose()"
+        v-show="active === entry.key"
+        class="absolute inset-x-0 top-full hidden border-b border-border/60 bg-bg/98 backdrop-blur-xl transition-all duration-200 ease-out lg:block"
+        :class="active === entry.key
+          ? 'pointer-events-auto translate-y-0 opacity-100'
+          : 'pointer-events-none -translate-y-2 opacity-0'"
       >
-        <Container class="flex flex-col gap-1 py-4">
-          <template v-for="group in [leftNav, rightNav]" :key="group.map(i => i.key).join('-')">
-            <template v-for="item in group" :key="item.key">
+        <Container class="py-8">
+          <!-- =====================================================
+               CARDS layout (Features) — service tiles w/ icon + desc
+               ===================================================== -->
+          <div v-if="entry.layout === 'cards'">
+            <div class="mb-6 flex items-baseline justify-between">
+              <p class="eyebrow">What we ship</p>
               <NuxtLink
-                v-if="!item.hasDropdown"
-                :to="item.to"
-                class="rounded-lg px-3 py-2.5 font-mono text-xs uppercase tracking-[0.14em] text-text-secondary hover:bg-surface hover:text-text"
-                @click="open = false"
+                to="/services"
+                class="font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary hover:text-primary"
+                @click="closeNow"
               >
-                {{ item.label }}
+                View all services →
               </NuxtLink>
-              <div v-else class="flex flex-col gap-1">
-                <div class="px-3 pt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
-                  {{ item.label }}
-                </div>
+            </div>
+            <ul class="grid gap-px overflow-hidden rounded-2xl border border-dashed border-border bg-border md:grid-cols-2">
+              <li v-for="s in services" :key="s.key" class="bg-bg">
                 <NuxtLink
-                  v-for="entry in dropdownMap[item.key]"
-                  :key="entry.to"
-                  :to="entry.to"
-                  class="rounded-lg px-3 py-2 text-sm text-text-secondary hover:bg-surface hover:text-text"
-                  @click="open = false"
+                  :to="s.to"
+                  @click="closeNow"
+                  class="group block p-5 transition-colors hover:bg-surface"
                 >
-                  {{ entry.label }}
+                  <div class="flex items-start gap-4">
+                    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-50 text-primary transition-colors group-hover:bg-primary group-hover:text-paper">
+                      <Icon :name="iconForService(s.key)" :size="20" />
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2">
+                        <h3 class="text-sm font-semibold text-text group-hover:text-primary">{{ s.title }}</h3>
+                        <span class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden="true">→</span>
+                      </div>
+                      <p class="mt-1 text-xs text-text-secondary">{{ s.desc }}</p>
+                    </div>
+                  </div>
                 </NuxtLink>
-              </div>
-            </template>
-          </template>
-          <div class="my-2 h-px bg-border" />
-          <div class="flex items-center gap-2">
-            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
-              Theme
-            </span>
-            <ThemeToggle class="h-8 w-8" />
+              </li>
+            </ul>
           </div>
-          <div class="grid grid-cols-2 gap-2">
-            <Btn href="/contact" variant="ink" size="sm" chevron>Contact Sales</Btn>
-            <Btn href="/contact" variant="primary" size="sm" chevron>Start now</Btn>
+
+          <!-- =====================================================
+               LIST layout (Resources) — compact two-line items
+               ===================================================== -->
+          <div v-else>
+            <div class="mb-6 flex items-baseline justify-between">
+              <p class="eyebrow">Learn & explore</p>
+              <NuxtLink
+                to="/contact"
+                class="font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary hover:text-primary"
+                @click="closeNow"
+              >
+                Talk to us →
+              </NuxtLink>
+            </div>
+            <ul class="grid gap-1 md:grid-cols-2">
+              <li v-for="r in resourcesList" :key="r.to">
+                <NuxtLink
+                  :to="r.to"
+                  @click="closeNow"
+                  class="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-surface"
+                >
+                  <div class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-text-secondary group-hover:bg-primary-50 group-hover:text-primary">
+                    <Icon :name="r.icon" :size="18" />
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-sm font-semibold text-text group-hover:text-primary">{{ r.label }}</span>
+                      <span class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden="true">→</span>
+                    </div>
+                    <p class="text-xs text-text-secondary">{{ r.desc }}</p>
+                  </div>
+                </NuxtLink>
+              </li>
+            </ul>
           </div>
         </Container>
       </div>
-    </Transition>
+    </template>
+
+    <!-- ===================== MOBILE DRAWER ===================== -->
+    <div
+      v-show="mobileOpen"
+      data-mobile-root
+      class="border-t border-border bg-bg lg:hidden"
+    >
+      <Container class="flex flex-col gap-1 py-4">
+        <ul class="divide-y divide-border/40">
+          <li v-for="entry in menu" :key="`m-${entry.label}`">
+            <NuxtLink
+              v-if="entry.type === 'link'"
+              :to="entry.to"
+              class="block py-3 font-mono text-xs uppercase tracking-[0.14em] text-text-secondary"
+              @click="mobileOpen = false"
+            >
+              {{ entry.label }}
+            </NuxtLink>
+
+            <div v-else>
+              <button
+                type="button"
+                :aria-expanded="mobileExpanded === entry.key"
+                class="flex w-full items-center justify-between py-3 font-mono text-xs uppercase tracking-[0.14em] text-text-secondary"
+                @click="mobileExpanded = mobileExpanded === entry.key ? null : entry.key"
+              >
+                {{ entry.label }}
+                <svg
+                  :class="['h-3 w-3 transition-transform', mobileExpanded === entry.key && 'rotate-180']"
+                  viewBox="0 0 16 16" fill="none" aria-hidden="true"
+                >
+                  <path
+                    d="M4 6 L8 10 L12 6"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <ul v-show="mobileExpanded === entry.key" class="pb-2 pl-2">
+                <li v-for="s in services" :key="`m-${s.key}`" v-if="entry.key === 'features'">
+                  <NuxtLink
+                    :to="s.to"
+                    class="flex items-center gap-2 py-2 text-sm text-text-secondary"
+                    @click="mobileOpen = false"
+                  >
+                    <Icon :name="iconForService(s.key)" :size="14" />
+                    {{ s.title }}
+                  </NuxtLink>
+                </li>
+                <li v-for="r in resourcesList" :key="`m-${r.to}`" v-if="entry.key === 'resources'">
+                  <NuxtLink
+                    :to="r.to"
+                    class="flex items-center gap-2 py-2 text-sm text-text-secondary"
+                    @click="mobileOpen = false"
+                  >
+                    <Icon :name="r.icon" :size="14" />
+                    {{ r.label }}
+                  </NuxtLink>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+
+        <div class="my-2 h-px bg-border" />
+
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Theme</span>
+          <ThemeToggle class="h-8 w-8" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <Btn href="/contact" variant="ink" size="sm" chevron>Contact Sales</Btn>
+          <Btn href="/contact" variant="primary" size="sm" chevron>Start now</Btn>
+        </div>
+      </Container>
+    </div>
   </header>
 </template>
+
+<script lang="ts">
+// Small helpers used in the template
+const resourcesList = [
+  { label: 'Case studies',  desc: 'Selected robotics projects', to: '/work',         icon: 'Briefcase' },
+  { label: 'Industries',    desc: 'Where we deploy',           to: '/industries',   icon: 'Factory' },
+  { label: 'Blog',          desc: 'Notes from our engineers',  to: '/blog',         icon: 'BookOpen' },
+  { label: 'Careers',       desc: 'Join the team',             to: '/careers',      icon: 'Users' },
+]
+const serviceIconMap: Record<string, string> = {
+  integration: 'Cog',
+  programming: 'Code',
+  sales: 'Package',
+  consulting: 'Lightbulb',
+}
+function iconForService(key: string) {
+  return serviceIconMap[key] ?? 'Cog'
+}
+export { resourcesList, iconForService }
+</script>
+
+<style scoped>
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+</style>

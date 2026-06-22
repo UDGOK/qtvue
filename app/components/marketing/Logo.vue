@@ -1,12 +1,24 @@
 <script setup lang="ts">
 /**
  * Logo — qtvue brand mark.
- * Modeled on greptile's logo: a 3D isometric cube/diamond with bright
- * mint/green face shading + a clean lowercase wordmark.
+ *
+ * Design:
+ *  - A geometric "Q" (rounded square with a small triangular tail at the
+ *    bottom-right). Inside the Q is a small "sensor" dot — the all-seeing
+ *    automation eye. The tail doubles as a play/forward chevron.
+ *  - Three-tone face shading: light top, mid body, dark right tail.
+ *  - Wordmark: clean lowercase "qtvue" with the "v" accented in brand
+ *    primary for a subtle, on-brand color signal.
+ *
+ * Variants:
+ *  - wordmark (default) → mark + name
+ *  - monogram           → mark only (favicons, dense slots)
+ *  - full               → mark + name + "robotics" tag (footer)
  */
 withDefaults(
   defineProps<{
-    variant?: 'wordmark' | 'monogram' | 'abstract' | 'full'
+    variant?: 'wordmark' | 'monogram' | 'full'
+    /** swap the mark's tonal values for use on dark backgrounds */
     inverted?: boolean
   }>(),
   { variant: 'wordmark', inverted: false },
@@ -18,46 +30,84 @@ withDefaults(
     :data-variant="variant"
     class="inline-flex items-center gap-2.5 leading-none"
   >
-    <!-- ====================== DIAMOND / CUBE MARK ====================== -->
+    <!-- =========================== MARK =========================== -->
     <svg
-      v-if="variant === 'wordmark' || variant === 'full' || variant === 'monogram'"
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
+      width="34"
+      height="34"
+      viewBox="0 0 40 40"
       aria-hidden="true"
+      class="shrink-0"
     >
-      <!-- Base hexagon (the "right" face) -->
-      <path d="M16 2 L29 9.5 L29 22.5 L16 30 L3 22.5 L3 9.5 Z" fill="var(--color-accent)" />
-      <!-- Top face (lighter) -->
-      <path
-        d="M16 2 L29 9.5 L16 16 L3 9.5 Z"
-        fill="color-mix(in srgb, var(--color-accent) 60%, white)"
-      />
-      <!-- Right face (darker) -->
-      <path
-        d="M16 16 L29 9.5 L29 22.5 L16 30 Z"
-        fill="color-mix(in srgb, var(--color-accent) 70%, var(--color-text))"
-      />
-    </svg>
+      <defs>
+        <linearGradient id="q-body" x1="0" y1="0" x2="40" y2="40">
+          <stop offset="0" stop-color="var(--color-primary)" />
+          <stop offset="1" :stop-color="inverted ? 'var(--color-text)' : 'var(--color-primary-600)'" />
+        </linearGradient>
+      </defs>
 
-    <!-- ====================== ABSTRACT ================================ -->
-    <svg v-else width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+      <!-- Outer rounded square (the Q body) -->
+      <rect
+        x="3"
+        y="3"
+        width="34"
+        height="34"
+        rx="9"
+        fill="url(#q-body)"
+      />
+
+      <!-- Top highlight (lighter face) -->
       <path
-        d="M4 8 L16 2 L28 8 L28 18 L16 30 L4 18 Z"
+        d="M3 12 Q3 3 12 3 L28 3 Q37 3 37 12 L37 14 L3 14 Z"
+        :fill="inverted ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.22)'"
+        opacity="0.85"
+      />
+
+      <!-- Inner cutout ring (the "hole" of the Q) -->
+      <circle
+        cx="20"
+        cy="20"
+        r="7.5"
+        :fill="inverted ? 'var(--color-text)' : 'var(--color-bg)'"
+      />
+      <!-- Inner ring stroke -->
+      <circle
+        cx="20"
+        cy="20"
+        r="7.5"
         fill="none"
-        :stroke="inverted ? 'var(--color-paper)' : 'var(--color-primary)'"
-        stroke-width="2"
-        stroke-linejoin="round"
+        :stroke="inverted ? 'var(--color-primary)' : 'var(--color-accent)'"
+        stroke-width="1.2"
+        opacity="0.7"
       />
-      <circle cx="16" cy="14" r="3.5" fill="var(--color-accent)" />
+
+      <!-- The "sensor" / "eye" dot in the middle -->
+      <circle
+        cx="20"
+        cy="20"
+        r="2.4"
+        fill="var(--color-accent)"
+      />
+
+      <!-- The Q's tail / chevron (bottom-right) -->
+      <path
+        d="M28 28 L37 37 L30 37 L24 31 Z"
+        :fill="inverted ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.28)'"
+      />
+      <path
+        d="M28 28 L37 37 L30 37 L24 31 Z"
+        :stroke="inverted ? 'var(--color-primary)' : 'var(--color-accent)'"
+        stroke-width="1"
+        fill="none"
+        opacity="0.6"
+      />
     </svg>
 
-    <!-- ====================== WORDMARK ================================ -->
+    <!-- =========================== WORDMARK =========================== -->
     <span
       v-if="variant !== 'monogram'"
-      class="text-[22px] font-extrabold tracking-tight leading-none"
+      class="flex items-baseline gap-0 text-[22px] font-extrabold tracking-tight leading-none"
     >
-      <span :class="inverted ? 'text-paper' : 'text-text'">qtvue</span>
+      <span :class="inverted ? 'text-paper' : 'text-text'">qt</span><span class="text-primary">v</span><span :class="inverted ? 'text-paper' : 'text-text'">ue</span>
     </span>
     <span
       v-if="variant === 'full'"
