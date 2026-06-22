@@ -91,6 +91,12 @@ export const platformSchema = z.object({
   codeLanguage: z.string().default('python'),
   codeFilename: z.string().default('arm_control.py'),
   callouts: z.array(z.string()).default([]), // honest "marketing vs reality" notes
+  /** Optional demo video. Path under /public, e.g. '/videos/g1-demo.mp4' */
+  videoSrc: z.string().optional(),
+  /** Poster image shown until the first frame paints. Path under /public. */
+  videoPoster: z.string().optional(),
+  /** Caption shown under the video (monospace, uppercase) */
+  videoCaption: z.string().optional(),
   order: z.number().default(0),
 })
 

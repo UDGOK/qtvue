@@ -55,6 +55,40 @@ useSeoMeta({
       </Container>
     </section>
 
+    <!-- =============================================================
+         IN THE WILD — demo video (only when one is published for
+         this platform). Frame: dashed-border blueprint style; muted
+         autoplay loop; "live" pill; click-to-play for users with
+         prefers-reduced-motion. Stays above the specs section so the
+         reader gets the "what it actually does" before the numbers.
+         ============================================================= -->
+    <Section
+      v-if="platform.videoSrc"
+      eyebrow="In the wild"
+      heading="See it move."
+    >
+      <Reveal>
+        <p class="max-w-2xl text-text-secondary">
+          Real hardware, real environment, no edits. We tune the gait and
+          balance for each platform; what you see is what we ship.
+        </p>
+      </Reveal>
+      <Reveal :delay="120" class="mt-8">
+        <DemoVideo
+          :src="platform.videoSrc"
+          :poster="platform.videoPoster"
+          :label="`live · ${platform.title} demo`"
+          aspect="16/9"
+        />
+        <p
+          v-if="platform.videoCaption"
+          class="mt-3 font-mono text-[10px] uppercase tracking-widest text-text-muted"
+        >
+          {{ platform.videoCaption }}
+        </p>
+      </Reveal>
+    </Section>
+
     <!-- SPECS + CODE -->
     <Section eyebrow="Specs" heading="What it actually does.">
       <div class="grid gap-6 lg:grid-cols-2 lg:items-start">

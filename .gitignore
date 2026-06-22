@@ -35,3 +35,5 @@ Thumbs.db
 # Vercel
 .vercel
 node-compile-cache/
+# Source video (compressed version is committed)
+public/videos/g1-demo.mp4
