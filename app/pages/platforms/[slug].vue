@@ -78,6 +78,8 @@ useSeoMeta({
           :src="platform.videoSrc"
           :poster="platform.videoPoster"
           :label="`live · ${platform.title} demo`"
+          mode="showcase"
+          tint="forest"
           aspect="16/9"
         />
         <p
@@ -87,6 +89,21 @@ useSeoMeta({
           {{ platform.videoCaption }}
         </p>
       </Reveal>
+    </Section>
+
+    <!-- =============================================================
+         VIDEO GALLERY — additional clips, same themed treatment.
+         Renders only when the platform has more than one clip to
+         show (currently just the Go2 with outdoor / terrain / POV
+         / lifestyle). Same mode + tint as the main video above so
+         the gallery reads as one continuous design system.
+         ============================================================= -->
+    <Section
+      v-if="platform.gallery?.length"
+      eyebrow="In the field"
+      heading="More clips."
+    >
+      <VideoGallery :clips="platform.gallery" />
     </Section>
 
     <!-- SPECS + CODE -->

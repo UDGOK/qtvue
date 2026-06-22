@@ -41,6 +41,13 @@ callouts:
   - "IP67 means the Go2 survives puddles, dust, and rain — but not submersion."
   - "Real-world battery is 1–2 hours active; manufacturer claims of 5–10 hours are standby-only."
   - "4D LiDAR is wide-FOV (360° × 90°). Excellent for SLAM, less ideal for small-object detection at distance."
+videoSrc: "/videos/go2-walk.mp4"
+videoPoster: "/videos/go2-walk-poster.jpg"
+videoCaption: "Stock-clipped · outdoor walk · 12s loop"
+gallery:
+  - { label: "Outdoor walk",   src: "/videos/go2-walk.mp4",      poster: "/videos/go2-walk-poster.jpg",      caption: "Park + lakeside · 8s" }
+  - { label: "All-terrain",    src: "/videos/go2-terrain.mp4",   poster: "/videos/go2-terrain-poster.jpg",   caption: "Rocks + water · 5.4s" }
+  - { label: "Payload + ride", src: "/videos/go2-lifestyle.mp4", poster: "/videos/go2-lifestyle-poster.jpg", caption: "Operator on top · 3.3s" }
 order: 1
 ---
 

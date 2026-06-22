@@ -97,6 +97,20 @@ export const platformSchema = z.object({
   videoPoster: z.string().optional(),
   /** Caption shown under the video (monospace, uppercase) */
   videoCaption: z.string().optional(),
+  /**
+   * Additional demo clips for a video gallery (e.g. the Go2 has 4
+   * distinct use cases — outdoor walk, terrain, POV, lifestyle). All
+   * videos on a platform share the same 'mode' (showcase) and tint
+   * treatment so they look like one continuous design system.
+   */
+  gallery: z.array(
+    z.object({
+      label: z.string(),                       // "outdoor walk" / "POV SLAM" / etc.
+      src: z.string(),                         // /videos/go2-walk.mp4
+      poster: z.string().optional(),
+      caption: z.string().optional(),          // monospace uppercase
+    }),
+  ).default([]),
   order: z.number().default(0),
 })
 

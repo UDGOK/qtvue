@@ -154,6 +154,58 @@ const servicesByKey = computed(() => {
     </Section>
 
     <!-- =============================================================
+         2.5 IN THE WILD — homepage hero showcase video, greptile-style
+         Full-bleed autoplay loop, no controls, themed tint. Sits between
+         the platform grid and the services section as a "proof point"
+         that the platform actually moves.
+         ============================================================= -->
+    <Section
+      eyebrow="In the wild"
+      heading="See it work."
+      sub="Real hardware, real environment. No edits, no promo footage. This is what we ship."
+      tone="ink"
+      bleed
+    >
+      <Reveal>
+        <div class="relative isolate overflow-hidden rounded-3xl border border-paper/10">
+          <!-- Full-bleed autoplay loop, no chrome, themed tint -->
+          <div class="relative aspect-video">
+            <DemoVideo
+              src="/videos/home-hero.mp4"
+              poster="/videos/home-hero-poster.jpg"
+              mode="background"
+              tint="forest"
+              aspect="16/9"
+            />
+
+            <!-- Top-left status pill — same shape as platform pages,
+                 but on a dark tinted background so it reads -->
+            <div class="pointer-events-none absolute left-6 top-6 flex items-center gap-2 rounded-full border border-paper/20 bg-bg/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-paper/80 backdrop-blur">
+              <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+                <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+              </span>
+              live · G1 in motion
+            </div>
+
+            <!-- Bottom-right caption -->
+            <div class="absolute bottom-6 right-6 hidden font-mono text-[10px] uppercase tracking-widest text-paper/60 sm:block">
+              <Reveal :delay="200">8s loop · autoplay · muted</Reveal>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+      <Reveal :delay="120" class="mt-6 text-center">
+        <NuxtLink
+          to="/platforms/g1"
+          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+        >
+          See the G1 page →
+        </NuxtLink>
+      </Reveal>
+    </Section>
+
+    <!-- =============================================================
          3. SERVICES
          ============================================================= -->
     <Section
