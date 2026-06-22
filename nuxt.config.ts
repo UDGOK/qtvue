@@ -80,7 +80,15 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'en' },
+      htmlAttrs: { lang: 'en', translate: 'no' },
+      meta: [
+        // Prevent Google Translate from rewriting the DOM. Auto-translation
+        // walks the text nodes and replaces them with <font> wrappers, which
+        // breaks Vue's reactivity (class-based dark mode, v-show, hydration),
+        // corrupts SVG geometry, and triggers the nextSibling crash we saw
+        // when Google injected nodes mid-hydration.
+        { name: 'google', content: 'notranslate' },
+      ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       script: [
         {
