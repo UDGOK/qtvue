@@ -82,12 +82,17 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'en', translate: 'no', class: 'no-js' },
       meta: [
-        // Prevent Google Translate from rewriting the DOM. Auto-translation
-        // walks the text nodes and replaces them with <font> wrappers, which
-        // breaks Vue's reactivity (class-based dark mode, v-show, hydration),
-        // corrupts SVG geometry, and triggers the nextSibling crash we saw
-        // when Google injected nodes mid-hydration.
+        // Disable Google auto-translate (see translate="no" above for why).
         { name: 'google', content: 'notranslate' },
+        // Aggressively bust browser HTML cache. Without this, browsers can
+        // hold onto an old index.html that references old hashed JS bundles,
+        // which is exactly the "click does nothing, but refresh works"
+        // failure mode. With these metas the browser revalidates every
+        // page load so it always pulls the latest HTML and therefore the
+        // latest JS hash.
+        { 'http-equiv': 'Cache-Control', content: 'no-cache, no-store, must-revalidate' },
+        { 'http-equiv': 'Pragma', content: 'no-cache' },
+        { 'http-equiv': 'Expires', content: '0' },
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       script: [
