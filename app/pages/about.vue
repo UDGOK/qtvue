@@ -8,6 +8,50 @@ useSeoMeta({
   description:
     'qtvue is a Unitree robotics specialist. Pre-launch. Practitioner-led, not reseller-led.',
 })
+
+// Per-page structured data — AboutPage + Person schema.
+// (Organization schema is already set globally in app/app.vue.)
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'AboutPage',
+    name: 'About — qtvue',
+    description: 'qtvue is a Unitree robotics specialist. Pre-launch. Practitioner-led, not reseller-led.',
+    url: 'https://qtvue.com/about',
+    inLanguage: 'en-US',
+    isPartOf: { '@type': 'WebSite', url: 'https://qtvue.com', name: 'qtvue' },
+    primaryImage: 'https://qtvue.com/og-default.svg',
+  }),
+  {
+    '@type': 'Person',
+    name: 'qtvue team',
+    jobTitle: 'Founder-led engineering team',
+    description: 'Distributed engineering team with presence in the US, EU, and Asia. Practitioner-led: the engineer scoping your engagement is the engineer who will deliver it.',
+    worksFor: { '@type': 'Organization', name: 'qtvue', url: 'https://qtvue.com' },
+    url: 'https://qtvue.com/about',
+    sameAs: [
+      'https://github.com/UDGOK',
+      'https://github.com/UDGOK/qtvue',
+    ],
+    knowsAbout: [
+      'Unitree robotics',
+      'Unitree SDK (unitree_sdk2)',
+      'ROS 2',
+      'Isaac Lab',
+      'LeRobot',
+      'UnifoLM-VLA-0',
+      'Robot security (UniPwn 2025)',
+      'Sim-to-real reinforcement learning',
+      'Industrial robot safety (ISO 10218, RIA R15.06)',
+    ],
+    alumniOf: 'Robotics engineering practice (specific institutions withheld pre-launch)',
+  },
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home', item: 'https://qtvue.com/' },
+      { name: 'About', item: 'https://qtvue.com/about' },
+    ],
+  }),
+])
 </script>
 
 <template>

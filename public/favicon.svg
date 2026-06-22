@@ -1,5 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
-  <rect width="28" height="28" rx="7" fill="#2563eb"/>
-  <circle cx="14" cy="14" r="5" fill="white"/>
-  <circle cx="14" cy="14" r="2" fill="#2563eb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <defs>
+    <linearGradient id="q-body" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0e5c3a"/>
+      <stop offset="1" stop-color="#0a3d27"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="34" height="34" rx="9" fill="url(#q-body)"/>
+  <path d="M3 12 Q3 3 12 3 L28 3 Q37 3 37 12 L37 14 L3 14 Z" fill="rgba(255,255,255,0.22)" opacity="0.85"/>
+  <circle cx="20" cy="20" r="7.5" fill="#faf6ec"/>
+  <circle cx="20" cy="20" r="7.5" fill="none" stroke="#3df5a3" stroke-width="1.2" opacity="0.7"/>
+  <circle cx="20" cy="20" r="2.4" fill="#3df5a3"/>
+  <path d="M28 28 L37 37 L30 37 L24 31 Z" fill="rgba(255,255,255,0.28)"/>
+  <path d="M28 28 L37 37 L30 37 L24 31 Z" stroke="#3df5a3" stroke-width="1" fill="none" opacity="0.6"/>
 </svg>

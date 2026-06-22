@@ -1,0 +1,22 @@
+# qtvue security disclosure policy
+# RFC 9116 — https://www.rfc-editor.org/rfc/rfc9116
+
+Contact: https://github.com/UDGOK/qtvue/security/advisories/new
+Contact: mailto:security@qtvue.com
+Expires: 2027-12-31T23:59:59Z
+Preferred-Languages: en
+Canonical: https://qtvue.com/.well-known/security.txt
+
+# We accept vulnerability reports for:
+#  - qtvue.com and all subdomains
+#  - The public Nuxt source at https://github.com/UDGOK/qtvue
+#  - Any deployment artifact under @qtvue on npm
+#
+# We do NOT cover:
+#  - Unitree platform firmware or hardware vulnerabilities
+#    (report those directly to Unitree: security@unitree.com)
+#  - Third-party services we link to but don't operate
+#
+# Acknowledgement SLA: 48 hours
+# Triage SLA: 5 business days
+# Disclosure timeline: coordinated, 90 days default

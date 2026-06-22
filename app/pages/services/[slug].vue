@@ -23,6 +23,71 @@ useSeoMeta({
   title: () => `${service.value?.title} — qtvue`,
   description: () => service.value?.summary ?? '',
 })
+
+// Per-service Service schema. Critical for AI engines to surface
+// qtvue in 'who offers X near me' / 'who can integrate Unitree'
+// queries, and for Google's service Knowledge Panel.
+//
+// Note: defineService is NOT auto-imported from nuxt-schema-org's
+// vue.mjs (it's in index.mjs only). We use the plain object form
+// here, which the schema-org graph still picks up and renders.
+useSchemaOrg(() => {
+  const s = service.value
+  if (!s) return []
+
+  return [
+    defineWebPage({
+      '@type': 'ServicePage',
+      name: `${s.title} — qtvue`,
+      description: s.summary,
+      url: `https://qtvue.com/services/${s.slug}`,
+      inLanguage: 'en-US',
+      isPartOf: { '@type': 'WebSite', url: 'https://qtvue.com', name: 'qtvue' },
+      primaryImage: 'https://qtvue.com/og-default.svg',
+    }),
+    {
+      '@type': 'Service',
+      name: s.title,
+      serviceType: 'Robotics engineering',
+      description: s.summary,
+      url: `https://qtvue.com/services/${s.slug}`,
+      provider: { '@type': 'Organization', name: 'qtvue', url: 'https://qtvue.com' },
+      areaServed: [
+        { '@type': 'Country', name: 'United States' },
+        { '@type': 'Country', name: 'Germany' },
+        { '@type': 'Country', name: 'Japan' },
+        { '@type': 'Country', name: 'Singapore' },
+        { '@type': 'AdministrativeArea', name: 'Worldwide' },
+      ],
+      availableChannel: {
+        '@type': 'ServiceChannel',
+        serviceUrl: 'https://qtvue.com/intake',
+        availableLanguage: ['English'],
+      },
+      category: s.title,
+      hoursAvailable: 'Mo–Fr 09:00–18:00 UTC',
+      offers: {
+        '@type': 'Offer',
+        url: 'https://qtvue.com/intake',
+        priceCurrency: 'USD',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          priceCurrency: 'USD',
+          description: 'Per-engagement; fixed-price after engineering review',
+        },
+        availability: 'https://schema.org/InStock',
+        availabilityStarts: '2026-01-01',
+      },
+    },
+    defineBreadcrumb({
+      itemListElement: [
+        { name: 'Home', item: 'https://qtvue.com/' },
+        { name: 'Services', item: 'https://qtvue.com/services' },
+        { name: s.title, item: `https://qtvue.com/services/${s.slug}` },
+      ],
+    }),
+  ]
+})
 </script>
 
 <template>

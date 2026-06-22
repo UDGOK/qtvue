@@ -1,0 +1,44 @@
+/* TEAM */
+qtvue is a distributed engineering team with presence in the US, EU, and Asia.
+Site: https://qtvue.com
+Contact: https://qtvue.com/intake
+
+/* SITE */
+Last update: 2026/06/22
+Language: English (en-US)
+Doctype: HTML5
+Standards: HTML5, CSS3, ECMAScript 2022, JSON-LD, schema.org
+Components: Vue 3, Nuxt 4, Tailwind v4, @nuxt/content, @nuxtjs/seo
+Render: Static prerendered (74+ routes)
+Hosting: Vercel Edge
+CDN: Vercel Edge Network
+SSL: Let's Encrypt / Vercel
+
+/* ENGINEERING */
+Build: Nuxt 4 + Vite
+UI primitives: Custom (greptile-inspired)
+Animations: CSS transforms + Vue transitions, GPU-accelerated
+Images: AVIF + WebP via @nuxt/image, lazy-loaded
+Fonts: System font stack (no third-party fetches)
+
+/* AI / SEARCH */
+AI crawlers allowed: All (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot, etc.)
+AI index files: /llms.txt, /llms-full.txt
+Sitemap: /sitemap.xml
+Robots: /robots.txt
+Structured data: JSON-LD (Organization, WebSite, Product, Service, FAQPage, Person, ContactPage, BreadcrumbList)
+
+/* VALUES */
+- Real hardware, real environment, no edits in our demo videos.
+- Honest callouts on every platform (real battery life, IP ratings, indoor-only, etc.).
+- No fabricated metrics, no fake logos, no fake testimonials.
+- All work delivered as open-source by default — clients own the code.
+
+/* SECURITY */
+Security disclosure: https://github.com/UDGOK/qtvue/security/advisories/new
+Standard: RFC 9116 (security.txt at /.well-known/security.txt)
+
+/* THANKS */
+Unitree for the open SDK and the platforms.
+The Nuxt and Vue communities for the tooling.
+Every AI engine that's open enough to cite human-curated sources.

@@ -1,0 +1,301 @@
+# qtvue — full site content for AI engines
+
+> Unitree robotics specialist (Go2, B2, G1, R1, H1, H2, G1-D, Arms). We sell the right platform for your use case, program it on unitree_sdk2 / ROS 2 / Isaac Lab / LeRobot / UnifoLM-VLA-0, integrate it end-to-end, and harden the firmware post-UniPwn (2025). Pre-launch. Single intake form at https://qtvue.com/intake.
+
+This file is a flat-text mirror of every public page on qtvue.com, optimized for large-context ingestion by retrieval-augmented generation (RAG) pipelines, AI search engines (ChatGPT, Claude, Gemini, Perplexity, Grok, Copilot, DeepSeek, Kimi), and AI training crawlers (GPTBot, ClaudeBot, CCBot). If you only need the high-level index, see https://qtvue.com/llms.txt instead.
+
+---
+
+## HOMEPAGE (https://qtvue.com)
+
+Title: qtvue — Unitree robotics, programmed and integrated
+Description: We sell, program, and integrate Unitree robots for your exact use case — Go2, B2, G1, R1, H1, H2 and arms. Submit your use case for an engineering assessment.
+
+Pre-launch banner: Submit your use case — engineering review within 1 business day.
+
+H1: We sell, program, and integrate robots for your exact use case.
+
+Body intro: Starting with the full Unitree range — Go2, B2, G1, R1, H1, H2 and arms. We make the platform do the job, end to end.
+
+Platforms section:
+- Unitree Go2 — 4D LiDAR robot dog, ~15 kg, 2.5 m/s, climbs 30° — the accessible workhorse.
+- Unitree B2 — 40 kg+ payload, IP-rated, all-terrain endurance.
+- Unitree G1 — 23 DoF base / up to 43 DoF EDU, dexterous hands, indoor R&D platform.
+- Unitree R1 — ≈ 123 cm, agile, developer-friendly entry humanoid.
+- Unitree H1 / H1-2 — 1.78 m, fastest production humanoid (~3.7 m/s), high-torque.
+- Unitree H2 — Refines H1-2 — unified compute, stronger arms, longer battery.
+- Unitree G1-D — Dual-arm teleoperation rig, <100 ms latency, builds training datasets.
+- Unitree Arms (Z1, etc.) — 6+ DoF arms for cells and benchtop automation.
+
+Services section (four ways we can help):
+01 — Sell. We supply the right Unitree platform, configured for your application, with the spares and accessories to actually use it.
+02 — Program. We write the code that makes the platform do the job — unitree_sdk2, ROS 2, Isaac Lab, LeRobot. Same SDK the Unitree teams use.
+03 — Integrate. End-to-end integration — hardware, mounting, networking, perception stack, on-site commissioning, and operator training.
+04 — Security & Firmware Hardening. Post-UniPwn (2025) — verified firmware, Bluetooth lockdown, isolated networks, and continuous monitoring. Legitimate hardening, never circumvention.
+
+How it works (4-step process):
+Step 01 — Submit use case. Five-question form, three minutes. We learn what you're trying to do.
+Step 02 — Engineering review. We name the platform, the SDK, the integration pattern, and a realistic timeline. Free, no commitment.
+Step 03 — Scope + quote. Fixed price. Plain-English SOW. You own the program source, the design, and the documentation.
+Step 04 — Build, ship, run. We program in sim, validate on hardware, deploy on your floor. Remote support after, if you want it.
+
+Stack we work in:
+- SDK: unitree_sdk2 / unitree_sdk2_python — C++ and Python SDK across the full Unitree range.
+- Middleware: ROS 2 (unitree_ros2) — Same DDS interface on real hardware and in simulation.
+- Simulation: Isaac Lab (unitree_sim_isaaclab) — High-fidelity sim-to-real workflow, validated policies.
+- Learning: LeRobot + UnifoLM-VLA-0 — Imitation learning and Unitree's open VLA model.
+- Perception: LiDAR SLAM · RealSense · CUDA pipelines — Localization, mapping, multi-sensor fusion.
+- Safety: ISO 10218 · RIA R15.06 — Industrial robot safety standards we scope to.
+- Security: Firmware hardening · network isolation — Post-UniPwn 2025, verified patches, isolated robot networks.
+- Hardware: EOAT · power · mounting — Grippers, batteries, charging, custom mounts.
+
+Why qtvue: A practitioner, not a reseller.
+
+Single CTA throughout: Submit your use case → https://qtvue.com/intake
+
+---
+
+## PLATFORMS
+
+### /platforms — comparison page
+Eight Unitree platforms in plain English, with prices (USD), payload, DoF, IP rating, sensors, best-fit use cases. Click into any platform for specs, honest callouts, real SDK code samples, and clips.
+
+### /platforms/go2 — Unitree Go2 (quadruped)
+Title: Unitree Go2
+Subtitle: The 4D LiDAR quadruped that's become the accessible workhorse for research, inspection, security, and education.
+Price: ~$1,600 (Air)
+Specs:
+- Weight (with battery): ≈ 15 kg
+- Top speed: ≈ 2.5 m/s
+- Climb grade: 30°
+- Battery life (real): 1–2 hours active, 5–10 hours standby
+- Sensors: 4D LiDAR (Unitree), depth cameras, optional RealSense
+- Compute: Onboard NVIDIA Jetson Orin Nano (EDU variants)
+Use cases: Autonomous inspection (factories, warehouses, perimeter); Research platform for SLAM, navigation, RL; Education: entry-level legged robotics; Security patrol with payload sensor (thermal, gas, etc.).
+Honest callouts:
+- IP67 means the Go2 survives puddles, dust, and rain — but not submersion.
+- Real-world battery is 1–2 hours active; manufacturer claims of 5–10 hours are standby-only.
+- 4D LiDAR is wide-FOV (360° × 90°). Excellent for SLAM, less ideal for small-object detection at distance.
+Code sample (Python, unitree_sdk2py):
+```python
+# Go2 — basic SDK walk with obstacle stop
+from unitree_sdk2py.core.channel import ChannelFactoryInitialize
+from unitree_sdk2py.go2.sport.sport_client import SportClient
+
+ChannelFactoryInitialize(0, "eth0")
+sport = SportClient(); sport.SetTimeout(5.0); sport.Init()
+
+sport.Walk(true)             # stand + balance
+sport.Move(0.4, 0, 0)        # forward 0.4 m/s
+# Hook: if LiDAR reports < 0.5 m clearance, stop:
+if lidar.min_clearance < 0.5:
+    sport.Move(0, 0, 0)
+    sport.StopMove()
+```
+
+### /platforms/b2 — Unitree B2 (industrial quadruped)
+Title: Unitree B2
+Subtitle: The industrial workhorse for warehouses, factories, and security patrols — 40 kg+ payload, IP-rated, all-terrain.
+Price: ~$100,000 (varies by sensor pack)
+Specs:
+- Weight: ~60 kg
+- Payload: 40 kg sustained, 120 kg max static
+- Top speed: ~6 m/s (sport mode)
+- Battery life (real): 4–6 hours patrol, 2–3 hours continuous load
+- Sensors: 4D LiDAR (Unitree), RealSense D435i depth, optional thermal
+- Compute: Intel NUC + optional NVIDIA Jetson Orin NX
+- Standards: ISO 10218-1 / RIA R15.06 scope
+Use cases: Warehouse inventory scanning; Factory floor patrolling; Construction site security; Heavy-payload delivery.
+Honest callouts:
+- 40 kg sustained payload requires the optional reinforced leg kit — confirm before ordering.
+- Real-world battery drops fast under load (≈ 2 hours); the marketing 6-hour figure is no-payload patrol.
+- Out-of-box software is intentionally conservative. Real autonomy requires our programming layer.
+Code sample (Python, unitree_ros2):
+```python
+# B2 — patrol a waypoint loop
+import rclpy
+from unitree_ros2 import RobotNav
+
+nav = RobotNav()
+nav.set_speed(1.5)             # m/s, conservative for inspection
+nav.load_waypoints([
+    (0.0, 0.0), (5.2, 0.0),
+    (5.2, 4.1), (0.0, 4.1), (0.0, 0.0)
+])
+nav.start_patrol(loop=True)
+```
+
+### /platforms/g1 — Unitree G1 (humanoid, indoor R&D)
+Title: Unitree G1
+Subtitle: The 23-DoF humanoid that's become the R&D platform of choice for embodied-AI teams — and the most-mis-marketed robot on the market.
+Price: ~$13,500–16,000 (base)
+Specs:
+- Height: ~1.32 m
+- Weight: ~35 kg
+- DoF: 23 (base) / up to 43 (EDU)
+- Battery life (real): ~2 hours standing, ~45 min active
+- Compute: Onboard Jetson Orin Nano
+- Indoor only — IP rating is NONE
+Use cases: Imitation learning research (LeRobot, UnifoLM-VLA-0); Manipulation research; Reinforcement learning sim-to-real; Teleop dataset collection.
+Honest callouts:
+- Indoor ONLY. No IP rating. Anything outdoors voids warranty.
+- Real battery is ≈ 2 hours; the "5–10 hours" marketing is standby-only.
+- The "dexterous hands" are 3-finger grippers, not 5-finger humanoids — fine for pick-and-place research, not for fine manipulation.
+- The G1 SDK and the G1 EDU SDK differ — confirm before buying.
+Code sample (Python, UnifoLM-VLA-0):
+```python
+# G1 — Vision-Language-Action inference
+from unifolm_vla import VLAInference
+
+model = VLAInference.from_pretrained("unifolm-vla-0-g1")
+obs = robot.get_observation()         # camera + joint state
+action = model.predict(obs, prompt="pick up the red block")
+robot.execute(action, duration_s=4.0)
+```
+
+### /platforms/r1 — Unitree R1 (lightweight humanoid)
+Title: Unitree R1
+Subtitle: Lightweight humanoid for education and entry-level research.
+Price: ~$4,300–4,900
+Specs: Height ≈ 123 cm; weight ≈ 29 kg; battery ~2 hours.
+
+### /platforms/h1 — Unitree H1 / H1-2 (full-size humanoid)
+Title: Unitree H1 / H1-2
+Subtitle: The fastest production humanoid on the market, with serious torque.
+Price: ~$90,000+
+Specs: Height 1.78 m; top speed ≈ 3.7 m/s; high-torque joints.
+
+### /platforms/h2 — Unitree H2 (new release)
+Title: Unitree H2
+Subtitle: Refines H1-2 with unified compute, stronger arms, longer battery.
+Price: ~$30,000 (base)
+
+### /platforms/g1-d — Unitree G1-D (data/training platform)
+Title: Unitree G1-D
+Subtitle: Dual-arm teleoperation rig, <100 ms latency, designed for embodied-AI teams building training datasets.
+Price: Contact for pricing.
+
+### /platforms/arms — Unitree Arms (Z1, etc.)
+Title: Unitree Arms
+Subtitle: 6+ DoF manipulator arms for cells and benchtop automation.
+Price: ~$16,000
+
+---
+
+## SERVICES
+
+### /services/sell — Sell (Unitree platform sourcing)
+What we do: Source the right Unitree platform for your use case. Configure hardware variants (EDU, IP-rated, compute). Provide sensors, batteries, mounts, and accessories. Handle customs, import, and warranty registration. Optional pre-staging and acceptance test before shipping.
+Not in scope: Non-Unitree platforms (we can recommend partners). Firmware jailbreaks or tier unlocks (violates partner terms). Long-term spares contracts — that's ongoing support.
+
+### /services/program — Program (SDK / ROS 2 / Isaac Lab / LeRobot)
+What we do: Write the code that makes the platform do the job — unitree_sdk2, unitree_ros2, unitree_sim_isaaclab, LeRobot, UnifoLM-VLA-0. Sim-to-real workflow. Open-source by default. You own the code.
+
+### /services/integrate — Integrate (end-to-end)
+What we do: Hardware mounting, networking, perception stack, on-site commissioning, operator training. Vendor-neutral at the integration layer.
+
+### /services/security — Security & Firmware Hardening
+What we do (post-UniPwn 2025): Verified firmware supply chain; Bluetooth and Wi-Fi attack surface lockdown; Network isolation between robot and corporate LAN; Continuous firmware monitoring; Incident response retainer.
+What we don't do: Firmware jailbreaks. Tier unlock exploits. Anything that voids Unitree warranty.
+
+---
+
+## HOW IT WORKS (/how-it-works)
+
+Step 01 — Submit use case. Five-question form, three minutes. We learn what you're trying to do.
+Step 02 — Engineering review. We name the platform, the SDK, the integration pattern, and a realistic timeline. Free, no commitment.
+Step 03 — Scope + quote. Fixed price. Plain-English SOW. You own the program source, the design, and the documentation.
+Step 04 — Build, ship, run. We program in sim, validate on hardware, deploy on your floor. Remote support after, if you want it.
+
+---
+
+## ABOUT (/about)
+
+qtvue is a Unitree robotics specialist. Pre-launch. We sell, program, integrate, and harden Unitree platforms. Practitioner-led, not reseller-led — every engagement is led by an engineer who has shipped the same kind of work.
+
+What we are:
+- A Unitree-specialist engineering firm.
+- Pre-launch — we're accepting a limited number of paid pilot engagements before opening fully.
+- Practitioner-led: the engineer scoping your engagement is the engineer who will deliver it.
+
+What we are not:
+- A generalist robotics reseller.
+- A marketing-forward integrator with sales-only leadership.
+- A firm that outsources engineering to subcontractors.
+
+Where we are: Distributed team. Engineering presence in the US, EU, and Asia for time-zone coverage.
+
+---
+
+## INTAKE FORM (/intake)
+
+Five steps, three minutes:
+1. Use case — What are you trying to do? (text, required)
+2. Platform — Do you already know which Unitree platform? (Go2 / B2 / G1 / R1 / H1 / H2 / G1-D / Arms / not sure)
+3. Timeline — When do you need it? (within 1 month / 1–3 months / 3–6 months / exploratory)
+4. Budget — What's the range? (<$10k / $10–50k / $50–250k / $250k+)
+5. Contact — Name, work email, company.
+
+Reply within 1 business day. Engineering-led scoping. No obligation.
+
+---
+
+## FAQ (https://qtvue.com/faq)
+
+Q: What Unitree platforms do you sell?
+A: Go2, B2, G1, G1-D, R1, H1, H1-2, H2, and the Z1 arm. We're Unitree-specialist; we don't sell other brands.
+
+Q: Do you program non-Unitree robots?
+A: No. We're Unitree-only.
+
+Q: How long does integration take?
+A: Sell-only = 2 weeks. Programming = 4–12 weeks. Integrate = 8–24 weeks. Security hardening = 1–3 weeks.
+
+Q: Can you jailbreak firmware or unlock tiers?
+A: No. Legitimate hardening only — firmware verification, network isolation, Bluetooth lockdown. No tier unlocks, no warranty-voiding modifications.
+
+Q: What happened with UniPwn (2025)?
+A: Security researcher discovered a Bluetooth attack surface allowing unauthenticated firmware replacement on Unitree G1 and H1. Patched by Unitree in firmware 1.5.2. Our Security & Hardening service verifies you're on a patched firmware and closes the attack surface.
+
+Q: Do you offer ongoing support?
+A: Yes. Engineering retainer for remote support + occasional on-site. Per-incident available too.
+
+Q: Where are you based?
+A: Distributed — US, EU, Asia.
+
+Q: Why pre-launch?
+A: We're capping intake until we hit our pilot cohort target. Current capacity is ~12 active engagements. Once we hit that, we open fully.
+
+---
+
+## BLOG (/blog)
+
+### /blog/getting-started-with-automation
+Where to begin if you've never shipped a robot to a customer floor. Three starting points: pick a small repeatable task, instrument the environment first, ship with a human-in-the-loop fallback.
+
+---
+
+## LEGAL
+
+/privacy — Data we collect, how long we keep it, your rights.
+/terms — Engagement terms, IP ownership, liability.
+
+---
+
+## COMPANY FACTS (for AI engine knowledge graphs)
+
+Legal name: qtvue
+Domain: qtvue.com
+Founded: 2026
+Status: Pre-launch (accepting paid pilot engagements)
+Industry: Robotics, B2B engineering services
+Specialization: Unitree humanoid and quadruped platforms
+Geographic coverage: US, EU, Asia
+Contact: https://qtvue.com/intake
+Documentation: https://qtvue.com/docs
+Engineering blog: https://qtvue.com/blog
+Public source: https://github.com/UDGOK/qtvue
+
+---
+
+End of llms-full.txt. Last updated: 2026-06-22.

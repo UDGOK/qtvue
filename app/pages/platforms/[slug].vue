@@ -22,6 +22,116 @@ const siblings = computed(() => (allPlatforms.value ?? []).filter((p) => p.slug 
 useSeoMeta({
   title: () => (platform.value ? `${platform.value.title} — qtvue` : 'Platform — qtvue'),
   description: () => platform.value?.summary ?? '',
+  ogType: 'product',
+})
+
+// Per-platform Product schema. Critical for AI engines and Google
+// Shopping / Product Knowledge Graph. Includes Brand (Unitree),
+// Category, Offer with price range, and the honest callouts as
+// product properties.
+useSchemaOrg(() => {
+  const p = platform.value
+  if (!p) return []
+
+  // Map our type field to a schema.org product category
+  const categoryMap: Record<string, string> = {
+    Quadruped: 'Quadruped robot / Robot dog',
+    'Industrial quadruped': 'Industrial quadruped robot',
+    Humanoid: 'Humanoid robot',
+    'Lightweight humanoid': 'Lightweight humanoid robot',
+    'Full-size humanoid': 'Full-size humanoid robot',
+    'Full-size humanoid (new)': 'Full-size humanoid robot',
+    'Data/training platform': 'Robotic teleoperation rig',
+    Manipulator: 'Robotic manipulator arm',
+  }
+
+  const priceUsd = (() => {
+    const m = (p.priceFrom ?? '').match(/\$([\d,]+)/)
+    if (!m) return undefined
+    return Number(m[1].replace(/,/g, ''))
+  })()
+
+  return [
+    defineWebPage({
+      '@type': 'ProductPage',
+      name: `${p.title} — qtvue`,
+      description: p.summary,
+      url: `https://qtvue.com/platforms/${p.slug}`,
+      inLanguage: 'en-US',
+      isPartOf: { '@type': 'WebSite', url: 'https://qtvue.com', name: 'qtvue' },
+      primaryImage: p.videoPoster ? `https://qtvue.com${p.videoPoster}` : 'https://qtvue.com/og-default.svg',
+    }),
+    defineProduct({
+      '@type': 'Product',
+      name: `Unitree ${p.title.replace(/^Unitree\s+/i, '')}`,
+      description: p.summary,
+      image: p.videoPoster ? `https://qtvue.com${p.videoPoster}` : 'https://qtvue.com/og-default.svg',
+      brand: { '@type': 'Brand', name: 'Unitree' },
+      manufacturer: { '@type': 'Organization', name: 'Unitree Robotics' },
+      category: categoryMap[p.type] ?? 'Robotics platform',
+      sku: `unitree-${p.slug}`,
+      mpn: `unitree-${p.slug}`,
+      url: `https://qtvue.com/platforms/${p.slug}`,
+      ...(priceUsd
+        ? {
+            offers: {
+              '@type': 'Offer',
+              url: `https://qtvue.com/platforms/${p.slug}`,
+              priceCurrency: 'USD',
+              price: priceUsd,
+              priceValidUntil: '2027-12-31',
+              availability: 'https://schema.org/InStock',
+              availabilityStarts: '2026-01-01',
+              itemCondition: 'https://schema.org/NewCondition',
+              seller: { '@type': 'Organization', name: 'qtvue', url: 'https://qtvue.com' },
+              shippingDetails: {
+                '@type': 'OfferShippingDetails',
+                shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'US' },
+                deliveryTime: {
+                  '@type': 'ShippingDeliveryTime',
+                  handlingTime: { '@type': 'QuantitativeValue', minValue: 5, maxValue: 14, unitCode: 'DAY' },
+                  transitTime: { '@type': 'QuantitativeValue', minValue: 7, maxValue: 21, unitCode: 'DAY' },
+                },
+              },
+              hasMerchantReturnPolicy: {
+                '@type': 'MerchantReturnPolicy',
+                returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+              },
+            },
+          }
+        : {}),
+      additionalProperty: [
+        { '@type': 'PropertyValue', name: 'whoItIsFor', value: p.whoItsFor },
+        ...(p.callouts ?? []).map((c: string, i: number) => ({
+          '@type': 'PropertyValue',
+          name: `honestCallout_${i + 1}`,
+          value: c,
+        })),
+      ],
+    }),
+    defineBreadcrumb({
+      itemListElement: [
+        { name: 'Home', item: 'https://qtvue.com/' },
+        { name: 'Platforms', item: 'https://qtvue.com/platforms' },
+        { name: p.title, item: `https://qtvue.com/platforms/${p.slug}` },
+      ],
+    }),
+    ...(p.videoSrc
+      ? [
+          defineVideo({
+            '@type': 'VideoObject',
+            name: `${p.title} — in the wild`,
+            description: p.videoCaption ?? `${p.title} real-hardware footage`,
+            contentUrl: `https://qtvue.com${p.videoSrc}`,
+            thumbnailUrl: p.videoPoster ? `https://qtvue.com${p.videoPoster}` : 'https://qtvue.com/og-default.svg',
+            uploadDate: '2026-06-22',
+            duration: 'PT18S',
+            encodingFormat: 'video/mp4',
+            isPartOf: { '@type': 'Product', name: `Unitree ${p.title.replace(/^Unitree\s+/i, '')}` },
+          }),
+        ]
+      : []),
+  ]
 })
 </script>
 

@@ -11,10 +11,77 @@ export default defineNuxtConfig({
   site: {
     url: 'https://qtvue.com',
     name: 'qtvue',
+    description:
+      'Unitree robotics specialist — sell, program, integrate, and harden Unitree platforms (Go2, B2, G1, R1, H1, H2, G1-D, Arms). Pre-launch.',
+    defaultLocale: 'en-US',
+    twitter: '@qtvue',
+    ogImage: 'https://qtvue.com/og-default.svg',
   },
 
   seo: {
     redirectToCanonicalSiteUrl: true,
+  },
+
+  // Schema.org defaults — applied to every page that doesn't override.
+  // The Organization + WebSite + SiteNavigation schemas live in app/app.vue
+  // (single canonical source of truth). Per-page schemas (Product,
+  // Service, FAQPage, Person, ContactPage, Article) are added in each
+  // page via useSchemaOrg.
+  schemaOrg: {
+    identity: {
+      type: 'Organization',
+      name: 'qtvue',
+      url: 'https://qtvue.com',
+      logo: 'https://qtvue.com/favicon.svg',
+      sameAs: [
+        'https://github.com/UDGOK',
+        'https://github.com/UDGOK/qtvue',
+      ],
+    },
+  },
+
+  // OG image auto-generation — uses nuxt-og-image under @nuxtjs/seo.
+  // Each page renders a branded 1200x630 PNG with the page title
+  // overlaid on a forest-green background.
+  ogImage: {
+    enabled: true,
+    defaults: {
+      width: 1200,
+      height: 630,
+      type: 'png',
+      component: 'OgImage',
+      colorMode: 'light',
+      background: '#faf6ec',
+      // Inline the qtvue logo on every generated OG image
+      logo: '/favicon.svg',
+    },
+    runtimeSatori: true,
+  },
+
+  // Sitemap — @nuxtjs/sitemap (bundled with @nuxtjs/seo) auto-crawls
+  // every prerendered route. Disallow API / internal Nuxt paths.
+  // crawlLinks: true (set in nitro.prerender below) is what makes
+  // sitemap.xml auto-discover every page.
+  sitemap: {
+    autoLastmod: true,
+    sitemaps: false, // single sitemap.xml at the root
+    exclude: [
+      '/_nuxt/**',
+      '/api/**',
+      '/_payload.json',
+    ],
+  },
+
+  // Robots — public/_robots.txt is the source of truth (explicit
+  // AI bot allow list). @nuxtjs/robots merges config + file.
+  robots: {
+    blockNonSeoBots: false,
+    disallow: ['/api/', '/_nuxt/'],
+    sitemap: ['/sitemap.xml', '/llms.txt'],
+    // Allow every well-known AI crawler explicitly so the robots.txt
+    // is unambiguous to engines that look up their own UA first.
+    // The actual rules live in public/_robots.txt (which @nuxtjs/robots
+    // honors). This block is for engines that prefer programmatic config.
   },
 
   css: ['~/assets/css/main.css'],
@@ -70,7 +137,16 @@ export default defineNuxtConfig({
     preset: 'vercel',
     prerender: {
       crawlLinks: true,
-      routes: ['/', '/sitemap.xml', '/robots.txt'],
+      routes: [
+        '/',
+        '/sitemap.xml',
+        '/robots.txt',
+        '/llms.txt',
+        '/llms-full.txt',
+        '/humans.txt',
+        '/.well-known/security.txt',
+        '/.well-known/ai.txt',
+      ],
     },
   },
 
@@ -110,7 +186,7 @@ export default defineNuxtConfig({
         // stale cache their browser is holding.
         {
           innerHTML:
-            "(function(){var V='qtvue_build_2026_06_22_v2_force_reload';try{var s=localStorage.getItem('qtvue_build');if(s&&s!==V){localStorage.setItem('qtvue_build',V);location.reload();return}localStorage.setItem('qtvue_build',V)}catch(e){}})();",
+            "(function(){var V='qtvue_build_2026_06_22_v3_aio_geo';try{var s=localStorage.getItem('qtvue_build');if(s&&s!==V){localStorage.setItem('qtvue_build',V);location.reload();return}localStorage.setItem('qtvue_build',V)}catch(e){}})();",
           tagPosition: 'head',
         },
         {

@@ -29,6 +29,58 @@ useSeoMeta({
     'We sell, program, and integrate Unitree robots for your exact use case — Go2, B2, G1, R1, H1, H2 and arms. Submit your use case for an engineering assessment.',
 })
 
+// Homepage-specific structured data: WebPage + VideoObject (the
+// "in the wild" hero clip) + an ItemList of all platforms so
+// every AI engine gets a clean structural index.
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: 'qtvue — Unitree robotics, programmed and integrated',
+    description:
+      'We sell, program, and integrate Unitree robots for your exact use case — Go2, B2, G1, R1, H1, H2 and arms. Submit your use case for an engineering assessment.',
+    url: 'https://qtvue.com/',
+    inLanguage: 'en-US',
+    isPartOf: { '@type': 'WebSite', url: 'https://qtvue.com', name: 'qtvue' },
+    primaryImage: 'https://qtvue.com/og-default.svg',
+  }),
+  defineVideo({
+    '@type': 'VideoObject',
+    name: 'Unitree G1 — in the wild, qtvue demo loop',
+    description: 'Real Unitree G1 humanoid hardware running in our demo loop. No edits, no promo footage.',
+    contentUrl: 'https://qtvue.com/videos/home-hero.mp4',
+    thumbnailUrl: 'https://qtvue.com/videos/home-hero-poster.jpg',
+    uploadDate: '2026-06-22',
+    duration: 'PT8S',
+    encodingFormat: 'video/mp4',
+    isFamilyFriendly: true,
+  }),
+  {
+    '@type': 'ItemList',
+    name: 'Unitree platforms we sell / program / integrate',
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    itemListElement: [
+      'Unitree Go2',
+      'Unitree B2',
+      'Unitree G1',
+      'Unitree G1-D',
+      'Unitree R1',
+      'Unitree H1',
+      'Unitree H2',
+      'Unitree Arms (Z1)',
+    ].map((name, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name,
+      url: `https://qtvue.com/platforms/${name.toLowerCase().replace(/^unitree\s+/i, '').replace(/\s*\(.+\)/, '').replace(/[- ]/g, '')}`,
+    })),
+  },
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home', item: 'https://qtvue.com/' },
+    ],
+  }),
+])
+
 // Real Unitree SDK snippet (Python) — used as the "code as hero visual" pattern
 const unitreeSnippet = `# unitree_sdk2_python — joint position control
 # Works across Go2, B2, G1, H1, H2, R1

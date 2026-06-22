@@ -1,2 +1,237 @@
-User-Agent: *
-Disallow:
+# qtvue.com — robots.txt
+# ============================================================
+# Strategy: explicitly allow every major AI crawler so that
+# ChatGPT, Claude, Perplexity, Gemini, Grok, DeepSeek, Kimi,
+# Copilot, and every other AI engine can index the site and
+# cite it in answers.
+#
+# We do NOT block any AI bot. The marketing site is public,
+# useful, and designed to be cited. Pages about supply,
+# programming, integration, and security hardening are the
+# exact material these engines are looking to surface.
+#
+# Crawlers listed below are all currently ALLOWED (the default
+# User-Agent: * rule covers them, but listing each one explicitly
+# removes ambiguity for the engines that consult their own UA
+# strings and helps future audits).
+# ============================================================
+
+# Default — open to all
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_nuxt/
+Disallow: /_payload.json
+
+# Sitemap locations
+Sitemap: https://qtvue.com/sitemap_index.xml
+Sitemap: https://qtvue.com/sitemap.xml
+Sitemap: https://qtvue.com/llms.txt
+Sitemap: https://qtvue.com/llms-full.txt
+
+# ============================================================
+# AI search engines + answer engines — explicitly allowed
+# ============================================================
+
+# OpenAI (ChatGPT, SearchGPT, GPTBot)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic (Claude, ClaudeBot, Claude-User)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google AI (Gemini, Vertex AI, AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+# Microsoft (Copilot, Bing Chat, MSN Bot)
+User-agent: msnbot
+Allow: /
+
+User-agent: msnbot-media
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# xAI (Grok)
+User-agent: xAI
+Allow: /
+
+User-agent: grok-bot
+Allow: /
+
+# DeepSeek (China)
+User-agent: DeepSeekBot
+Allow: /
+
+User-agent: DeepSeek-User
+Allow: /
+
+# Moonshot AI (Kimi)
+User-agent: Kimi
+Allow: /
+
+User-agent: Moonshot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Amazon (Rufus, Alexa)
+User-agent: Amazonbot
+Allow: /
+
+User-agent: AlexaIA
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+User-agent: cohere-training-data-crawler
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: LeChatBot
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# Common Crawl (used by every major LLM for training)
+User-agent: CCBot
+Allow: /
+
+# Diffbot (knowledge graph for AI)
+User-agent: Diffbot
+Allow: /
+
+# AI crawlers used by retrieval-augmented generation (RAG)
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: ImagesiftBot
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+User-agent: Omgili
+Allow: /
+
+User-agent: Webzio-Extended
+Allow: /
+
+# ============================================================
+# Standard search engines (already allowed by default, listed
+# here for transparency)
+# ============================================================
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Sogou Pic Spider
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+User-agent: PetalBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# ============================================================
+# Bad bots — block aggressive scrapers (not AI)
+# ============================================================
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# ============================================================
+# Host
+# ============================================================
+
+Host: https://qtvue.com

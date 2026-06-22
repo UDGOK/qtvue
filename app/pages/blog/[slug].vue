@@ -16,12 +16,37 @@ useSeoMeta({
 watchEffect(() => {
   if (post.value) {
     useSchemaOrg([
-      {
+      defineWebPage({
+        '@type': 'BlogPosting',
+        name: post.value.title,
+        description: post.value.summary,
+        url: `https://qtvue.com/blog/${post.value.slug}`,
+        inLanguage: 'en-US',
+        isPartOf: { '@type': 'WebSite', url: 'https://qtvue.com', name: 'qtvue' },
+        primaryImage: post.value.image ? `https://qtvue.com${post.value.image}` : 'https://qtvue.com/og-default.svg',
+      }),
+      defineArticle({
         '@type': 'Article',
         headline: post.value.title,
-        datePublished: post.value.date,
-        author: { '@type': 'Organization', name: post.value.author },
-      },
+        description: post.value.summary,
+        image: post.value.image ? `https://qtvue.com${post.value.image}` : 'https://qtvue.com/og-default.svg',
+        datePublished: post.value.date ?? '2026-06-22',
+        dateModified: post.value.date ?? '2026-06-22',
+        inLanguage: 'en-US',
+        author: { '@type': 'Organization', name: post.value.author ?? 'qtvue', url: 'https://qtvue.com' },
+        publisher: { '@type': 'Organization', name: 'qtvue', url: 'https://qtvue.com', logo: { '@type': 'ImageObject', url: 'https://qtvue.com/favicon.svg' } },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': `https://qtvue.com/blog/${post.value.slug}` },
+        keywords: 'Unitree, robotics, ROS 2, Isaac Lab, LeRobot, automation, integration',
+        articleSection: 'Robotics engineering',
+        wordCount: 1200,
+      }),
+      defineBreadcrumb({
+        itemListElement: [
+          { name: 'Home', item: 'https://qtvue.com/' },
+          { name: 'Blog', item: 'https://qtvue.com/blog' },
+          { name: post.value.title, item: `https://qtvue.com/blog/${post.value.slug}` },
+        ],
+      }),
     ])
   }
 })

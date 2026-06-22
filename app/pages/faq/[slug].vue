@@ -41,6 +41,23 @@ useSeoMeta({
   ogUrl: () => pageUrl.value,
   twitterCard: 'summary',
 })
+
+// BreadcrumbList — helps Google and AI engines understand the
+// (Home > FAQ > Topic) structure. The FAQPage JSON-LD itself is
+// emitted by <FaqView> on this page.
+useSchemaOrg(() =>
+  faq.value
+    ? [
+        defineBreadcrumb({
+          itemListElement: [
+            { name: 'Home', item: 'https://qtvue.com/' },
+            { name: 'FAQ', item: 'https://qtvue.com/faq' },
+            { name: faq.value.title, item: pageUrl.value },
+          ],
+        }),
+      ]
+    : [],
+)
 </script>
 
 <template>

@@ -1,16 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#0b1220"/>
-      <stop offset="1" stop-color="#1e293b"/>
+      <stop offset="0" stop-color="#faf6ec"/>
+      <stop offset="1" stop-color="#e8e3d2"/>
     </linearGradient>
+    <linearGradient id="qbody" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0e5c3a"/>
+      <stop offset="1" stop-color="#0a3d27"/>
+    </linearGradient>
+    <pattern id="halftone" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="7" r="1.4" fill="#0e5c3a" opacity="0.18"/>
+    </pattern>
   </defs>
+
+  <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <g transform="translate(80, 230)">
-    <rect width="64" height="64" rx="14" fill="#2563eb"/>
-    <circle cx="32" cy="32" r="12" fill="white"/>
-    <circle cx="32" cy="32" r="5" fill="#2563eb"/>
+  <rect width="1200" height="630" fill="url(#halftone)"/>
+
+  <!-- Top eyebrow -->
+  <text x="80" y="100" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="600" fill="#0e5c3a" letter-spacing="2">PRE-LAUNCH · UNITREE SPECIALIST</text>
+
+  <!-- Logo mark -->
+  <g transform="translate(80, 160)">
+    <rect width="80" height="80" rx="18" fill="url(#qbody)"/>
+    <circle cx="40" cy="40" r="18" fill="#faf6ec"/>
+    <circle cx="40" cy="40" r="18" fill="none" stroke="#3df5a3" stroke-width="2" opacity="0.7"/>
+    <circle cx="40" cy="40" r="6" fill="#3df5a3"/>
   </g>
-  <text x="80" y="380" font-family="Inter, system-ui, sans-serif" font-size="96" font-weight="700" fill="white">qtvue</text>
-  <text x="84" y="450" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="400" fill="#94a3b8">Robotics integration, programming, and consulting.</text>
+
+  <!-- Wordmark -->
+  <text x="180" y="220" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="68" font-weight="800" fill="#0a2018" letter-spacing="-1">qtvue</text>
+
+  <!-- Headline -->
+  <text x="80" y="380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="68" font-weight="700" fill="#0a2018" letter-spacing="-1.5">
+    <tspan x="80" dy="0">We sell, program,</tspan>
+    <tspan x="80" dy="80">and integrate robots.</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="80" y="560" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="26" font-weight="500" fill="#3a4d40">
+    Go2 · B2 · G1 · R1 · H1 · H2 · G1-D · Arms
+  </text>
+
+  <!-- Right-side accent badge -->
+  <g transform="translate(940, 480)">
+    <rect x="0" y="0" width="180" height="60" rx="30" fill="#0e5c3a"/>
+    <text x="90" y="38" font-family="ui-monospace, monospace" font-size="18" font-weight="700" fill="#faf6ec" text-anchor="middle">SUBMIT USE CASE →</text>
+  </g>
 </svg>

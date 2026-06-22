@@ -1,0 +1,48 @@
+# qtvue
+
+> Unitree robotics specialist (Go2, B2, G1, R1, H1, H2, G1-D, Arms). We sell the right platform for your use case, program it on unitree_sdk2 / ROS 2 / Isaac Lab / LeRobot / UnifoLM-VLA-0, integrate it end-to-end, and harden the firmware post-UniPwn (2025). Pre-launch. Single intake form for sell, programming, integration, and security engagements.
+
+## About
+- [qtvue — homepage](https://qtvue.com/): The full pitch. Single CTA throughout the site: "Submit your use case" → /intake.
+- [How it works](https://qtvue.com/how-it-works): 4-step process — submit use case → engineering review (free) → scope + quote → build / ship / run.
+- [About qtvue](https://qtvue.com/about): Practitioner-led, not reseller-led. Why we exist, what we don't do.
+- [Submit your use case](https://qtvue.com/intake): 5-step form — three minutes, no commitment, reply within 1 business day.
+
+## Platforms (Unitree range, with SDK code samples per platform)
+- [Compare all platforms](https://qtvue.com/platforms): The 8 Unitree platforms we sell / program / integrate, side-by-side.
+- [Unitree Go2](https://qtvue.com/platforms/go2): 4D LiDAR quadruped, ~15 kg, 2.5 m/s, climbs 30°, IP67. ~$1,600 (Air). The accessible workhorse for research, inspection, security, education.
+- [Unitree B2](https://qtvue.com/platforms/b2): Industrial quadruped. 40 kg+ payload, IP67, all-terrain endurance. ~$100k. ISO 10218 / RIA R15.06 scope.
+- [Unitree G1](https://qtvue.com/platforms/g1): 23 DoF base / up to 43 DoF EDU humanoid. ~$13.5–16k (base). Indoor R&D platform. Real 2-hour battery (not the marketing 5–10hr claim).
+- [Unitree R1](https://qtvue.com/platforms/r1): Lightweight humanoid ≈ 123 cm. ~$4.3–4.9k. Agile, developer-friendly entry humanoid.
+- [Unitree H1 / H1-2](https://qtvue.com/platforms/h1): Full-size humanoid, 1.78 m, fastest production humanoid ~3.7 m/s, high-torque. ~$90k+.
+- [Unitree H2](https://qtvue.com/platforms/h2): New release. Refines H1-2 — unified compute, stronger arms, longer battery. ~$30k base.
+- [Unitree G1-D](https://qtvue.com/platforms/g1-d): Dual-arm teleoperation rig, <100 ms latency. For embodied-AI teams that need to build training datasets. Contact for pricing.
+- [Unitree Arms (Z1)](https://qtvue.com/platforms/arms): 6+ DoF manipulator arms for cells and benchtop automation. ~$16k.
+
+## Services (the four ways we can help)
+- [All services](https://qtvue.com/services): Pick one, or stack them. Programming-only engagements route through the same intake form.
+- [Sell — Unitree sourcing](https://qtvue.com/services/sell): Source the right Unitree platform, configured for your application, with spares and accessories to actually use it.
+- [Program — SDK / ROS 2 / Isaac Lab / LeRobot](https://qtvue.com/services/program): Write the code that makes the platform do the job. Same SDK the Unitree teams use (unitree_sdk2, unitree_ros2, unitree_sim_isaaclab, LeRobot, UnifoLM-VLA-0).
+- [Integrate — end-to-end](https://qtvue.com/services/integrate): Hardware mounting, networking, perception stack, on-site commissioning, operator training.
+- [Security & Firmware Hardening](https://qtvue.com/services/security): Post-UniPwn (2025). Verified firmware, Bluetooth lockdown, isolated networks, continuous monitoring. Legitimate hardening, never circumvention.
+
+## FAQ
+- [All FAQs](https://qtvue.com/faq): Plain-English answers about Unitree, pricing, lead times, support, security.
+- [FAQ — about qtvue](https://qtvue.com/faq/about-qtvue): Who we are, where we are, what we won't do.
+- [FAQ — Unitree general](https://qtvue.com/faq/unitree-general): Real-world specs, batteries, IP ratings, what the marketing numbers mean.
+
+## Blog
+- [Blog](https://qtvue.com/blog): Notes from the workbench — SDK examples, perception stack choices, integration patterns.
+- [Getting started with automation](https://qtvue.com/blog/getting-started-with-automation): Where to begin if you've never shipped a robot to a customer floor.
+
+## Legal
+- [Privacy policy](https://qtvue.com/legal/privacy)
+- [Terms of service](https://qtvue.com/legal/terms)
+
+## Standard files for AI engines
+- [llms.txt](https://qtvue.com/llms.txt): This file (LLM site index).
+- [llms-full.txt](https://qtvue.com/llms-full.txt): Full content dump for deeper indexing.
+- [sitemap.xml](https://qtvue.com/sitemap.xml): All public routes with lastmod.
+- [robots.txt](https://qtvue.com/robots.txt): Crawler allow list (all major AI bots explicitly allowed).
+- [humans.txt](https://qtvue.com/humans.txt): Team credits and standards.
+- [security.txt](https://qtvue.com/.well-known/security.txt): Security disclosure contact (RFC 9116).

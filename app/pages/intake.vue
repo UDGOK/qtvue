@@ -20,6 +20,34 @@ useSeoMeta({
   description: 'Five questions, three minutes. Engineering review within 1 business day.',
 })
 
+// ContactPage schema — helps AI engines surface this page as the
+// canonical 'contact' / 'request a quote' endpoint.
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'ContactPage',
+    name: 'Submit your use case — qtvue',
+    description: 'Five questions, three minutes. Engineering review within 1 business day. No commitment, no spam.',
+    url: 'https://qtvue.com/intake',
+    inLanguage: 'en-US',
+    isPartOf: { '@type': 'WebSite', url: 'https://qtvue.com', name: 'qtvue' },
+    primaryImage: 'https://qtvue.com/og-default.svg',
+    mainEntity: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      url: 'https://qtvue.com/intake',
+      availableLanguage: ['English'],
+      areaServed: 'Worldwide',
+      hoursAvailable: 'Mo–Fr 09:00–18:00 UTC',
+    },
+  }),
+  defineBreadcrumb({
+    itemListElement: [
+      { name: 'Home', item: 'https://qtvue.com/' },
+      { name: 'Submit your use case', item: 'https://qtvue.com/intake' },
+    ],
+  }),
+])
+
 const TOTAL_STEPS = 5
 const step = ref(1)
 const submitted = ref(false)
