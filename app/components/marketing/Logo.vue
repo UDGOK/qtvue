@@ -1,17 +1,12 @@
 <script setup lang="ts">
 /**
  * Logo — qtvue brand mark.
- * - "wordmark"  → the main brand: small gecko-style halftone mark + name
- *                 (greptile-style horizontal lockup, "qtvue" set in display
- *                 weight with one letter accented in limelight)
- * - "monogram"  → the Q monogram for favicons / dense slots
- * - "abstract"  → the abstract robot-arm mark
- * - "full"      → wordmark + tagline, used in the footer
+ * Modeled on greptile's logo: a 3D isometric cube/diamond with bright
+ * mint/green face shading + a clean lowercase wordmark.
  */
 withDefaults(
   defineProps<{
     variant?: 'wordmark' | 'monogram' | 'abstract' | 'full'
-    /** swap inks for use on dark backgrounds */
     inverted?: boolean
   }>(),
   { variant: 'wordmark', inverted: false },
@@ -21,80 +16,31 @@ withDefaults(
 <template>
   <span
     :data-variant="variant"
-    class="inline-flex items-center gap-2.5 font-semibold leading-none"
+    class="inline-flex items-center gap-2.5 leading-none"
   >
-    <!-- ====================== WORDMARK =========================== -->
+    <!-- ====================== DIAMOND / CUBE MARK ====================== -->
     <svg
-      v-if="variant === 'wordmark' || variant === 'full'"
+      v-if="variant === 'wordmark' || variant === 'full' || variant === 'monogram'"
       width="32"
       height="32"
       viewBox="0 0 32 32"
       aria-hidden="true"
     >
-      <defs>
-        <pattern id="logo-halftone" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse">
-          <circle cx="1.5" cy="1.5" r="0.9" :fill="inverted ? 'var(--color-paper)' : 'var(--color-ink)'" />
-        </pattern>
-      </defs>
-      <!-- background tile -->
-      <rect
-        x="0.5"
-        y="0.5"
-        width="31"
-        height="31"
-        rx="8"
-        :fill="inverted ? 'var(--color-ink)' : 'var(--color-primary)'"
+      <!-- Base hexagon (the "right" face) -->
+      <path d="M16 2 L29 9.5 L29 22.5 L16 30 L3 22.5 L3 9.5 Z" fill="var(--color-accent)" />
+      <!-- Top face (lighter) -->
+      <path
+        d="M16 2 L29 9.5 L16 16 L3 9.5 Z"
+        fill="color-mix(in srgb, var(--color-accent) 60%, white)"
       />
-      <!-- halftone robotic arm silhouette -->
-      <g transform="translate(6 22)">
-        <rect x="0" y="0" width="20" height="3" rx="1" fill="url(#logo-halftone)" />
-        <rect x="8" y="-12" width="4" height="14" rx="1" fill="url(#logo-halftone)" />
-        <circle cx="10" cy="-12" r="3.5" fill="url(#logo-halftone)" />
-        <rect
-          x="9"
-          y="-21"
-          width="4"
-          height="10"
-          rx="1"
-          fill="url(#logo-halftone)"
-          transform="rotate(-22 11 -16)"
-        />
-        <circle cx="4.5" cy="-19" r="3" fill="url(#logo-halftone)" />
-        <rect
-          x="3"
-          y="-26"
-          width="4"
-          height="7"
-          rx="1"
-          fill="url(#logo-halftone)"
-          transform="rotate(15 5 -22.5)"
-        />
-      </g>
-      <!-- glowing joint accent -->
-      <circle cx="16" cy="10" r="1.6" :fill="inverted ? 'var(--color-paper)' : 'var(--color-accent)'" />
+      <!-- Right face (darker) -->
+      <path
+        d="M16 16 L29 9.5 L29 22.5 L16 30 Z"
+        fill="color-mix(in srgb, var(--color-accent) 70%, var(--color-text))"
+      />
     </svg>
 
-    <!-- ====================== MONOGRAM =========================== -->
-    <svg v-else-if="variant === 'monogram'" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
-      <defs>
-        <linearGradient id="q-grad" x1="0" y1="0" x2="32" y2="32">
-          <stop offset="0" :stop-color="inverted ? 'var(--color-paper)' : 'var(--color-primary)'" />
-          <stop offset="1" stop-color="var(--color-accent)" />
-        </linearGradient>
-      </defs>
-      <rect width="32" height="32" rx="8" fill="url(#q-grad)" />
-      <text
-        x="16"
-        y="23"
-        text-anchor="middle"
-        font-family="var(--font-display)"
-        font-size="18"
-        font-weight="800"
-        :fill="inverted ? 'var(--color-ink)' : 'var(--color-paper)'"
-      >Q</text>
-    </svg>
-
-    <!-- ====================== ABSTRACT =========================== -->
+    <!-- ====================== ABSTRACT ================================ -->
     <svg v-else width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
       <path
         d="M4 8 L16 2 L28 8 L28 18 L16 30 L4 18 Z"
@@ -106,12 +52,16 @@ withDefaults(
       <circle cx="16" cy="14" r="3.5" fill="var(--color-accent)" />
     </svg>
 
-    <span class="flex items-baseline gap-0.5 text-xl font-extrabold tracking-tight">
-      <span :class="inverted ? 'text-paper' : 'text-text'">qt</span><span class="text-primary">v</span><span :class="inverted ? 'text-paper' : 'text-text'">ue</span>
+    <!-- ====================== WORDMARK ================================ -->
+    <span
+      v-if="variant !== 'monogram'"
+      class="text-[22px] font-extrabold tracking-tight leading-none"
+    >
+      <span :class="inverted ? 'text-paper' : 'text-text'">qtvue</span>
     </span>
     <span
       v-if="variant === 'full'"
-      class="ml-1 font-mono text-[10px] uppercase tracking-widest text-text-muted"
+      class="ml-1 font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted"
     >
       robotics
     </span>

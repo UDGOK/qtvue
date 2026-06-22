@@ -10,8 +10,8 @@
   --color-primary: #0e5c3a;          /* deep forest green */
   --color-primary-600: #0a4a2e;      /* hover/pressed */
   --color-primary-50: #e8f3ec;       /* tint for hovers, chips */
-  --color-accent: #c6f432;            /* limelight / chartreuse */
-  --color-accent-600: #a8e020;
+  --color-accent: #3df5a3;            /* bright mint (greptile-style) */
+  --color-accent-600: #28d488;
 
   /* ---------- Paper (light mode) ---------------------------------------- */
   --color-bg: #faf6ec;               /* warm cream paper */
@@ -83,11 +83,11 @@
    dark mode is opt-in but treated as a first-class citizen.
    --------------------------------------------------------------------------- */
 :root.dark {
-  --color-primary: #2dd47a;          /* brighter green for dark bg */
-  --color-primary-600: #4ce695;
+  --color-primary: #3df58a;          /* brighter green for dark bg */
+  --color-primary-600: #5cf7a3;
   --color-primary-50: #0f2417;
-  --color-accent: #c6f432;
-  --color-accent-600: #d6ff52;
+  --color-accent: #3df5a3;            /* bright mint, same as light mode */
+  --color-accent-600: #5cf7a3;
 
   --color-bg: #0a0f0a;
   --color-paper: #0a0f0a;
