@@ -43,10 +43,31 @@ export const industrySchema = z.object({
 export const blogSchema = z.object({
   title: z.string(),
   summary: z.string(),
+  /** longer excerpt shown on the post detail page */
+  excerpt: z.string().optional(),
   date: z.string(),
-  author: z.string().default('qtvue'),
+  /** last updated date, shown alongside date */
+  updated: z.string().optional(),
+  author: z.string().default('qtvue team'),
+  /** author role shown next to name on post detail */
+  authorRole: z.string().optional(),
+  /** author bio block at end of post */
+  authorBio: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  /** greptile-style category. Drives badge color + filter on index. */
+  category: z.enum(['research', 'engineering', 'security', 'tutorial', 'analysis']).default('engineering'),
+  /** estimated read time in minutes (shown on cards + post) */
+  readTime: z.number().default(6),
+  /** hero image for post page (used as OG image too) */
   image: z.string().optional(),
+  /** accent color for the hero band — forest / ink / cream */
+  tone: z.enum(['forest', 'ink', 'cream']).default('cream'),
+  /** mark as featured (shown larger on the index hero) */
+  featured: z.boolean().default(false),
+  /** pinned to top of index even if not newest */
+  pinned: z.boolean().default(false),
+  /** post slug (matches filename). Explicit for safety. */
+  slug: z.string().optional(),
 })
 
 export const careerSchema = z.object({
