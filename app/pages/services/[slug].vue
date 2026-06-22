@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { stemToRoute } from '~/utils/content'
-
+/**
+ * /services/[slug] — per-service detail page (Sell, Program,
+ * Integrate, Security). Renders inScope / notInScope / code snippet
+ * and the "submit your use case" CTA.
+ */
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 
@@ -8,12 +11,13 @@ const { data: service } = await useAsyncData(`service-${slug.value}`, () =>
   queryCollection('services').where('stem', '=', `en/services/${slug.value}`).first(),
 )
 if (!service.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Service not found', fatal: true })
+  throw createError({ statusCode: 404, statusMessage: 'Service not found' })
 }
 
-const { data: related } = await useAsyncData(`service-${slug.value}-work`, () =>
-  queryCollection('work').where('services', 'LIKE', `%"${slug.value}"%`).limit(3).all(),
+const { data: allServices } = await useAsyncData('all-services', () =>
+  queryCollection('services').order('order', 'ASC').all(),
 )
+const siblings = computed(() => (allServices.value ?? []).filter((s) => s.stem !== service.value?.stem))
 
 useSeoMeta({
   title: () => `${service.value?.title} — qtvue`,
@@ -24,48 +28,123 @@ useSeoMeta({
 <template>
   <article v-if="service">
     <section class="border-b border-border bg-bg">
-      <Container class="py-20 sm:py-28">
+      <Container class="py-16 sm:py-20">
         <Reveal>
-          <NuxtLink to="/services" class="font-mono text-xs uppercase tracking-widest text-text-secondary hover:text-primary">
-            ← All services
-          </NuxtLink>
-          <div class="mt-6 flex items-center gap-3">
-            <span class="grid h-12 w-12 place-items-center rounded-xl bg-primary-50 text-primary">
-              <Icon :name="service.icon" :size="24" />
-            </span>
-            <p class="eyebrow">Service</p>
+          <div class="mb-4 text-[12px]">
+            <NuxtLink
+              to="/services"
+              class="font-mono uppercase tracking-[0.14em] text-text-muted hover:text-primary"
+            >
+              ← All services
+            </NuxtLink>
           </div>
-          <h1 class="display-lg mt-4 max-w-4xl">{{ service.title }}</h1>
-          <p class="mt-6 max-w-2xl text-lg text-text-secondary">{{ service.summary }}</p>
+          <p v-if="service.label" class="eyebrow">{{ service.label }}</p>
+          <h1 class="display-xl mt-3 max-w-4xl">{{ service.title }}</h1>
+          <p class="mt-5 max-w-2xl text-lg text-text-secondary sm:text-xl">{{ service.summary }}</p>
         </Reveal>
       </Container>
     </section>
 
-    <Section>
+    <Section eyebrow="Scope" heading="What's in. What's out.">
+      <div class="grid gap-6 lg:grid-cols-2">
+        <Reveal>
+          <Card variant="default" pad="lg" class="h-full border-dashed">
+            <p class="eyebrow">In scope</p>
+            <ul class="mt-4 space-y-2 text-sm text-text-secondary">
+              <li
+                v-for="(s, i) in service.inScope"
+                :key="i"
+                class="flex items-start gap-2"
+              >
+                <span class="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                {{ s }}
+              </li>
+            </ul>
+          </Card>
+        </Reveal>
+        <Reveal :delay="80">
+          <Card variant="default" pad="lg" class="h-full border-dashed">
+            <p class="eyebrow">Not in scope</p>
+            <ul class="mt-4 space-y-2 text-sm text-text-secondary">
+              <li
+                v-for="(s, i) in service.notInScope"
+                :key="i"
+                class="flex items-start gap-2"
+              >
+                <span class="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-text-muted" />
+                {{ s }}
+              </li>
+            </ul>
+          </Card>
+        </Reveal>
+      </div>
+    </Section>
+
+    <Section v-if="service.codeSnippet" eyebrow="Code" heading="Same SDK the Unitree team uses.">
       <Reveal>
-        <ContentRenderer :value="service" class="prose max-w-none text-text" />
-        <div class="mt-12">
-          <Btn href="/contact" variant="primary" size="lg" arrow>
-            Start a {{ service.title.toLowerCase() }} project
-          </Btn>
-        </div>
+        <p class="max-w-2xl text-text-secondary">
+          Every service ships with a real, runnable snippet from the SDK
+          we'd use on your project. No pseudocode.
+        </p>
+      </Reveal>
+      <Reveal :delay="100" class="mt-6">
+        <CodeBlock
+          :filename="service.codeFilename || 'example.py'"
+          :language="service.codeLanguage || 'python'"
+          :code="service.codeSnippet"
+        />
       </Reveal>
     </Section>
 
-    <Section v-if="related?.length" tone="surface" eyebrow="Related work" heading="See it in action.">
+    <Section tone="ink" eyebrow="Get started" heading="Submit your use case.">
       <Reveal>
-        <div class="grid gap-6 sm:grid-cols-3">
-          <NuxtLink v-for="w in related" :key="w.path" :to="stemToRoute(w.stem)">
-            <Card interactive pad="none" class="overflow-hidden">
-              <Media :src="w.image" :alt="w.title" ratio="16/9" placeholder="arm" />
-              <div class="p-5">
-                <h4 class="font-semibold text-text">{{ w.title }}</h4>
-                <p class="mt-1 line-clamp-2 text-sm text-text-secondary">{{ w.summary }}</p>
-              </div>
-            </Card>
-          </NuxtLink>
-        </div>
+        <p class="max-w-2xl text-paper/80">
+          Tell us what you want to do. We'll tell you whether this
+          service is the right fit, and what a realistic engagement
+          looks like.
+        </p>
       </Reveal>
+      <Reveal :delay="100" class="mt-6 flex flex-wrap gap-3">
+        <NuxtLink
+          to="/intake"
+          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+        >
+          Submit your use case →
+        </NuxtLink>
+        <NuxtLink
+          to="/services"
+          class="inline-flex h-11 items-center rounded-full border border-paper/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-paper transition-all hover:border-paper/60"
+        >
+          Other services
+        </NuxtLink>
+      </Reveal>
+    </Section>
+
+    <Section eyebrow="Other services" heading="The full stack.">
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal
+          v-for="(s, i) in siblings"
+          :key="s.stem"
+          :delay="i * 40"
+          as="li"
+        >
+          <NuxtLink
+            :to="`/services/${s.stem?.replace(/^en\/services\//, '')}`"
+            class="group flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40"
+          >
+            <span class="font-mono text-[10px] uppercase tracking-widest text-text-muted">
+              {{ s.label || s.title }}
+            </span>
+            <span class="mt-2 text-sm font-semibold text-text group-hover:text-primary">
+              {{ s.title }}
+            </span>
+            <span class="mt-2 text-xs text-text-secondary">{{ s.summary }}</span>
+            <span class="mt-3 font-mono text-[10px] uppercase tracking-widest text-text-secondary group-hover:text-primary">
+              Read more →
+            </span>
+          </NuxtLink>
+        </Reveal>
+      </ul>
     </Section>
   </article>
 </template>

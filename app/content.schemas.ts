@@ -16,8 +16,21 @@ export const workSchema = z.object({
 export const serviceSchema = z.object({
   title: z.string(),
   summary: z.string(),
+  /** short label for cards, e.g. "01 — Sell" */
+  label: z.string().optional(),
   icon: z.string().default('Cog'),
   order: z.number().default(0),
+  /** body markdown for the detail page */
+  body: z.string().optional(),
+  /** list of what's in scope */
+  inScope: z.array(z.string()).default([]),
+  /** list of what's not in scope */
+  notInScope: z.array(z.string()).default([]),
+  /** code snippet shown on the detail page */
+  codeLanguage: z.string().default('python'),
+  codeFilename: z.string().default('example.py'),
+  codeSnippet: z.string().optional(),
+  cta: z.object({ label: z.string(), to: z.string() }).optional(),
 })
 
 export const industrySchema = z.object({
@@ -61,6 +74,26 @@ export const featureSchema = z.object({
  * Questions/answers are explicit JSON so the rendered page AND the
  * application/ld+json schema.org FAQPage markup stay in lockstep.
  */
+export const platformSchema = z.object({
+  title: z.string(),
+  summary: z.string(),
+  slug: z.string(),
+  type: z.string(),                    // "Quadruped" | "Humanoid" | "Manipulator" | "Industrial quadruped" | "Data/training platform"
+  priceFrom: z.string(),                // "~$1,600 (Air)"
+  whoItsFor: z.string(),
+  oneLiner: z.string(),                 // short tagline for cards
+  payload: z.string().optional(),       // "15 kg", "40 kg+", ""
+  dof: z.string().optional(),           // "12 DoF", "23 base / up to 43"
+  ipRating: z.string().optional(),      // "IP67", "indoor only"
+  useCases: z.array(z.string()).default([]),
+  specs: z.array(z.object({ k: z.string(), v: z.string() })).default([]),
+  codeSnippet: z.string().optional(),   // a real SDK / ROS 2 snippet
+  codeLanguage: z.string().default('python'),
+  codeFilename: z.string().default('arm_control.py'),
+  callouts: z.array(z.string()).default([]), // honest "marketing vs reality" notes
+  order: z.number().default(0),
+})
+
 export const faqSchema = z.object({
   title: z.string(),
   summary: z.string(),

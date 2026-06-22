@@ -43,7 +43,7 @@ interface NavLink {
 interface NavDrop {
   type: 'dropdown'
   label: string
-  key: 'features' | 'resources' | 'industries' | 'company'
+  key: 'platforms' | 'services'
   layout: 'cards' | 'list'
   icon?: string
   /** title shown in the panel header */
@@ -54,36 +54,33 @@ interface NavDrop {
 type MenuEntry = NavLink | NavDrop
 
 const menu: MenuEntry[] = [
-  { type: 'link', label: 'Examples',  to: '/work',       icon: 'Briefcase' },
-  { type: 'link', label: 'Pricing',   to: '/services',   icon: 'Tag' },
   {
     type: 'dropdown',
-    label: 'Features',
-    key: 'features',
+    label: 'Platforms',
+    key: 'platforms',
     layout: 'cards',
-    icon: 'Sparkles',
-    panelTitle: 'Everything you need to automate',
-    panelLink: { label: 'View all services', to: '/services' },
+    icon: 'Cpu',
+    panelTitle: 'The Unitree range',
+    panelLink: { label: 'Compare all platforms', to: '/platforms' },
   },
-  { type: 'link', label: 'Industries', to: '/industries', icon: 'Factory' },
-  { type: 'link', label: 'Enterprise', to: '/contact',    icon: 'Building2' },
-  { type: 'link', label: 'Blog',       to: '/blog',       icon: 'BookOpen' },
   {
     type: 'dropdown',
-    label: 'Resources',
-    key: 'resources',
+    label: 'Services',
+    key: 'services',
     layout: 'list',
-    icon: 'Bookmark',
-    panelTitle: 'Learn & explore',
-    panelLink: { label: 'Talk to our team', to: '/contact' },
+    icon: 'Wrench',
+    panelTitle: 'How we can help',
+    panelLink: { label: 'See the full stack', to: '/services' },
   },
+  { type: 'link', label: 'How it works', to: '/how-it-works', icon: 'ListChecks' },
+  { type: 'link', label: 'About',       to: '/about',         icon: 'User' },
 ]
 
 /* ============================================================
    Dropdown content (real robotics content for qtvue)
    ============================================================ */
 
-interface FeatureCard {
+interface PlatformCard {
   label: string
   desc: string
   href: string
@@ -91,65 +88,41 @@ interface FeatureCard {
   /** keyword that picks the thumbnail from /public/menu/ */
   thumb?: string
 }
-interface ResourceItem {
+interface ServiceLine {
   label: string
   desc: string
   to: string
   icon: string
 }
 
-const featuresData: Record<'features', FeatureCard[]> = {
-  features: [
-    {
-      label: 'Cell Design & Simulation',
-      desc: '3D cell layout with cycle-time, reach, and collision analysis',
-      href: '/features/cell-design',
-      thumb: 'cell-design',
-      badge: 'Core',
-    },
-    {
-      label: 'Robot Programming',
-      desc: 'FANUC KAREL, ABB RAPID, KUKA KRL, Yaskawa, UR — offline + on-floor',
-      href: '/features/programming',
-      thumb: 'programming',
-    },
-    {
-      label: 'Vision & Sensing',
-      desc: '2D/3D vision, force/torque, laser, and proximity sensor integration',
-      href: '/features/vision',
-      thumb: 'vision',
-    },
-    {
-      label: 'End-of-Arm Tooling',
-      desc: 'Pneumatic & electric grippers, welders, dispensers, custom EOAT',
-      href: '/features/eoat',
-      thumb: 'eoat',
-    },
-    {
-      label: 'Safety & Compliance',
-      desc: 'ISO 10218, ISO/TS 15066, ANSI/RIA R15.06 risk assessments',
-      href: '/features/safety',
-      thumb: 'safety',
-    },
-    {
-      label: '24/7 Global Support',
-      desc: 'Remote monitoring, on-site service, spare parts in 14 countries',
-      href: '/features/support',
-      thumb: 'support',
-      badge: 'Always on',
-    },
+/**
+ * Per the v2 brief: nav is exactly 5 items.
+ *   Platforms  (dropdown, cards) — the 8 Unitree platforms
+ *   Services   (dropdown, list)  — Sell, Program, Integrate, Security
+ *   How it works
+ *   About
+ *   [Submit your use case]   (the single accent CTA)
+ */
+
+const platformsData: Record<'platforms', PlatformCard[]> = {
+  platforms: [
+    { label: 'Go2',  desc: '4D LiDAR quadruped, ~15 kg, IP67. The accessible workhorse.', href: '/platforms/go2',  thumb: 'go2',  badge: 'Workhorse' },
+    { label: 'B2',   desc: '40 kg+ payload industrial quadruped, IP67, all-terrain.',     href: '/platforms/b2',   thumb: 'b2',   badge: 'Industrial' },
+    { label: 'G1',   desc: '23–43 DoF humanoid with dexterous hands. Indoor R&D.',      href: '/platforms/g1',   thumb: 'g1' },
+    { label: 'R1',   desc: 'Lightweight, developer-friendly humanoid for STEM/HRI.',    href: '/platforms/r1',   thumb: 'r1' },
+    { label: 'H1 / H1-2', desc: 'Full-size, 1.78 m, 3.7 m/s — fastest production humanoid.', href: '/platforms/h1', thumb: 'h1', badge: 'Pro' },
+    { label: 'H2',   desc: 'Refined full-size: unified compute, stronger arms, longer battery.', href: '/platforms/h2', thumb: 'h2', badge: 'New' },
+    { label: 'G1-D', desc: 'Dual-arm teleop rig, <100 ms latency, for embodied-AI teams.',  href: '/platforms/g1-d', thumb: 'g1d' },
+    { label: 'Arms (Z1)', desc: '6+ DoF manipulators for cells and benchtop automation.',   href: '/platforms/arms', thumb: 'arms' },
   ],
 }
 
-const resourcesData: Record<'resources', ResourceItem[]> = {
-  resources: [
-    { label: 'Case studies',   desc: 'Real deployments, real numbers',   to: '/work',       icon: 'Briefcase' },
-    { label: 'Industries',     desc: 'Welding, packaging, material handling', to: '/industries', icon: 'Factory' },
-    { label: 'Engineering blog', desc: 'Notes from our team on the line', to: '/blog',       icon: 'BookOpen' },
-    { label: 'Careers',        desc: 'Build the future of automation with us', to: '/careers',   icon: 'Users' },
-    { label: 'Documentation',  desc: 'Cell design guides, KAREL cheatsheet',  to: '/docs',      icon: 'FileText' },
-    { label: 'API Reference',  desc: 'Integrate with the qtvue platform',     to: '/api',       icon: 'Terminal' },
-    { label: 'FAQ',            desc: '120+ answered questions, schema.org structured', to: '/faq', icon: 'HelpCircle' },
+const servicesData: Record<'services', ServiceLine[]> = {
+  services: [
+    { label: 'Sell',                    desc: 'Source the right Unitree platform, configured for your application.', to: '/services/sell',      icon: 'Package' },
+    { label: 'Program',                 desc: 'Write the SDK / ROS 2 / Isaac Lab code that makes it do the job.',     to: '/services/program',   icon: 'Code2' },
+    { label: 'Integrate',               desc: 'End-to-end integration: hardware, networking, perception, training.',  to: '/services/integrate', icon: 'Wrench' },
+    { label: 'Security & Hardening',    desc: 'Post-UniPwn (2025): firmware verify, network isolation, fleet policy.', to: '/services/security',   icon: 'Shield' },
   ],
 }
 
@@ -234,17 +207,16 @@ watch(() => route.path, () => {
     class="relative z-50 border-b border-accent/30 bg-accent text-text"
   >
     <Container class="flex h-9 items-center justify-center gap-3 text-[12px] sm:text-[13px]">
-      <span class="font-mono uppercase tracking-[0.18em] text-text/70">New</span>
+      <span class="font-mono uppercase tracking-[0.18em] text-text/70">Pre-launch</span>
       <span class="hidden h-3 w-px bg-text/20 sm:block" />
       <span class="font-medium">
-        <span class="hidden sm:inline">Now booking Q3 2026 — </span>cell commissioning in
-        <span class="font-bold">under 6 weeks</span>.
+        <span class="hidden sm:inline">Submit your use case — </span>engineering review within 1 business day.
       </span>
       <NuxtLink
-        to="/contact"
+        to="/intake"
         class="inline-flex items-center gap-1 font-semibold underline-offset-2 hover:underline"
       >
-        Book a call
+        Submit now
         <span aria-hidden="true">→</span>
       </NuxtLink>
       <button
@@ -333,13 +305,16 @@ watch(() => route.path, () => {
         </ul>
       </nav>
 
-      <!-- ============= RIGHT: theme + CTAs ============= -->
+      <!-- ============= RIGHT: theme + single CTA per brief ============= -->
       <div class="ml-auto hidden items-center gap-2 lg:flex">
         <ThemeToggle class="h-9 w-9" />
-        <div class="flex items-center gap-0">
-          <Btn href="/contact" variant="ink" size="md" chevron>Contact Sales</Btn>
-          <Btn href="/contact" variant="primary" size="md" chevron>Start now</Btn>
-        </div>
+        <NuxtLink
+          to="/intake"
+          class="group relative inline-flex items-center justify-center font-semibold uppercase tracking-[0.12em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg whitespace-nowrap h-10 px-5 text-xs bg-primary text-[#faf6ec] hover:bg-primary-600 shadow-sm hover:shadow-[var(--shadow-glow)]"
+          style="clip-path:polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%, 13px 50%);"
+        >
+          <span class="pl-3 sm:pl-4">Submit your use case</span>
+        </NuxtLink>
       </div>
 
       <!-- ============= MOBILE TRIGGER ============= -->
@@ -381,8 +356,8 @@ watch(() => route.path, () => {
           : 'pointer-events-none -translate-y-2 opacity-0'"
       >
         <Container class="py-8">
-          <!-- ====== CARDS layout (Features) ====== -->
-          <div v-if="entry.layout === 'cards' && entry.key === 'features'">
+          <!-- ====== CARDS layout (Platforms) ====== -->
+          <div v-if="entry.layout === 'cards' && entry.key === 'platforms'">
             <div class="mb-5 flex items-baseline justify-between">
               <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary">
                 {{ (entry as NavDrop).panelTitle }}
@@ -397,7 +372,7 @@ watch(() => route.path, () => {
               </NuxtLink>
             </div>
             <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              <li v-for="card in featuresData.features" :key="card.label">
+              <li v-for="card in platformsData.platforms" :key="card.label">
                 <NuxtLink
                   :to="card.href"
                   @click="closeNow"
@@ -435,8 +410,8 @@ watch(() => route.path, () => {
             </ul>
           </div>
 
-          <!-- ====== LIST layout (Resources) ====== -->
-          <div v-else-if="entry.layout === 'list' && entry.key === 'resources'">
+          <!-- ====== LIST layout (Services) ====== -->
+          <div v-else-if="entry.layout === 'list' && entry.key === 'services'">
             <div class="mb-5 flex items-baseline justify-between">
               <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary">
                 {{ (entry as NavDrop).panelTitle }}
@@ -451,7 +426,7 @@ watch(() => route.path, () => {
               </NuxtLink>
             </div>
             <ul class="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-              <li v-for="r in resourcesData.resources" :key="r.to">
+              <li v-for="r in servicesData.services" :key="r.to">
                 <NuxtLink
                   :to="r.to"
                   @click="closeNow"
@@ -523,7 +498,7 @@ watch(() => route.path, () => {
               </button>
 
               <ul v-show="mobileExpanded === entry.key" class="pb-2 pl-2">
-                <li v-for="card in featuresData.features" :key="`mf-${card.label}`" v-if="entry.key === 'features'">
+                <li v-for="card in platformsData.platforms" :key="`mf-${card.label}`" v-if="entry.key === 'platforms'">
                   <NuxtLink
                     :to="card.href"
                     class="flex items-center gap-2 py-2 text-sm text-text-secondary"
@@ -532,7 +507,7 @@ watch(() => route.path, () => {
                     <span class="font-medium">{{ card.label }}</span>
                   </NuxtLink>
                 </li>
-                <li v-for="r in resourcesData.resources" :key="`mr-${r.to}`" v-if="entry.key === 'resources'">
+                <li v-for="r in servicesData.services" :key="`mr-${r.to}`" v-if="entry.key === 'services'">
                   <NuxtLink
                     :to="r.to"
                     class="flex items-center gap-2 py-2 text-sm text-text-secondary"
@@ -554,9 +529,14 @@ watch(() => route.path, () => {
           <ThemeToggle class="h-8 w-8" />
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <Btn href="/contact" variant="ink" size="sm" chevron>Contact Sales</Btn>
-          <Btn href="/contact" variant="primary" size="sm" chevron>Start now</Btn>
+        <div class="grid grid-cols-1 gap-2">
+          <NuxtLink
+            to="/intake"
+            @click="mobileOpen = false"
+            class="inline-flex h-10 items-center justify-center rounded-full bg-primary font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-bg"
+          >
+            Submit your use case
+          </NuxtLink>
         </div>
       </Container>
     </div>
