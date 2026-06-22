@@ -26,6 +26,7 @@ const industries = [
 <template>
   <form
     class="space-y-4 rounded-xl border border-border bg-surface p-6"
+    novalidate
     @submit.prevent="submit(form)"
   >
     <div v-if="status === 'success'" class="rounded-lg bg-success/10 p-4 text-success">

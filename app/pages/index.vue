@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { stemToRoute } from '~/utils/content'
+
 const { t } = useI18n()
 
 const { data: services } = await useAsyncData('home-services', () =>
@@ -42,7 +44,9 @@ useSeoMeta({
           <Icon :name="s.icon" :size="28" />
           <h3 class="mt-4 text-lg font-semibold">{{ s.title }}</h3>
           <p class="mt-2 text-sm text-text-secondary">{{ s.summary }}</p>
-          <NuxtLink :to="s.path" class="mt-4 inline-block text-sm text-primary">Learn more →</NuxtLink>
+          <NuxtLink :to="stemToRoute(s.stem)" class="mt-4 inline-block text-sm text-primary">
+            Learn more →
+          </NuxtLink>
         </Card>
       </div>
     </Section>
@@ -50,7 +54,7 @@ useSeoMeta({
     <!-- Featured work -->
     <Section eyebrow="Work" heading="Selected projects">
       <div class="grid gap-6 sm:grid-cols-3">
-        <NuxtLink v-for="w in work" :key="w.path" :to="w.path">
+        <NuxtLink v-for="w in work" :key="w.path" :to="stemToRoute(w.stem)">
           <Card>
             <Media :src="w.image" alt="" decorative ratio="16/9" />
             <h3 class="mt-4 font-semibold">{{ w.title }}</h3>

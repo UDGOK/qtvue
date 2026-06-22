@@ -3,7 +3,7 @@ useSeoMeta({ title: 'Privacy Policy — qtvue', description: 'qtvue privacy poli
 </script>
 
 <template>
-  <Section heading="Privacy Policy">
+  <Section heading="Privacy Policy" level="1">
     <div class="prose max-w-none text-text-secondary">
       <p><strong>Last updated:</strong> 2026-06-21</p>
       <p>

@@ -8,7 +8,7 @@ useSeoMeta({ title: 'Contact — qtvue', description: 'Start a project with qtvu
 </script>
 
 <template>
-  <Section eyebrow="Contact" :heading="t('contact.heading')">
+  <Section eyebrow="Contact" :heading="t('contact.heading')" level="1">
     <div class="grid gap-12 lg:grid-cols-2">
       <div>
         <p class="text-text-secondary">

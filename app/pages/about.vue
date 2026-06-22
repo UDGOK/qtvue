@@ -6,7 +6,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <Section eyebrow="About" heading="Engineering automation that lasts">
+  <Section eyebrow="About" heading="Engineering automation that lasts" level="1">
     <div class="max-w-2xl text-text-secondary">
       <p>
         [PLACEHOLDER — replace with real copy.] qtvue is a robotics company that sells and programs

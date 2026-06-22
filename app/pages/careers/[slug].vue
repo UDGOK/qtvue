@@ -15,7 +15,7 @@ useSeoMeta({
 
 <template>
   <article v-if="role">
-    <Section eyebrow="Careers" :heading="role.title">
+    <Section eyebrow="Careers" :heading="role.title" level="1">
       <p class="text-text-secondary">{{ role.location }} · {{ role.type }}</p>
       <ContentRenderer :value="role" class="prose mt-8 max-w-none" />
       <div class="mt-8">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { stemToRoute } from '~/utils/content'
+
 const { data: services } = await useAsyncData('services-index', () =>
   queryCollection('services').order('order', 'ASC').all(),
 )
@@ -11,7 +13,7 @@ useSeoMeta({
 <template>
   <Section eyebrow="Services" heading="Everything you need to automate">
     <div class="grid gap-6 sm:grid-cols-2">
-      <NuxtLink v-for="s in services" :key="s.path" :to="s.path">
+      <NuxtLink v-for="s in services" :key="s.path" :to="stemToRoute(s.stem)">
         <Card>
           <div class="flex items-center gap-3">
             <Icon :name="s.icon" :size="24" />

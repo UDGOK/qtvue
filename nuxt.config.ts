@@ -48,6 +48,27 @@ export default defineNuxtConfig({
     typeCheck: false,
   },
 
+  // Rendering strategy ("2030-ready, dynamic on same pages"):
+  // Pre-render all routes at build time today (fast, cheap, perfect SEO).
+  // Flip a specific route to { ssr: true } later (e.g. /portal/**, /quote)
+  // to make it dynamic with zero migration — marketing pages stay static.
+  routeRules: {
+    '/**': { prerender: true },
+    // Reserved for Spec 2 / future:
+    // '/portal/**': { ssr: true },
+    // '/quote': { ssr: true },
+  },
+
+  nitro: {
+    // Vercel preset — Vercel auto-detects Nuxt, but setting the preset
+    // explicitly ensures correct build output for the platform.
+    preset: 'vercel',
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', '/sitemap.xml', '/robots.txt'],
+    },
+  },
+
   future: {
     compatibilityVersion: 4,
   },

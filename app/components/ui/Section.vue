@@ -1,8 +1,19 @@
 <script setup lang="ts">
-defineProps<{
-  eyebrow?: string
-  heading?: string
-}>()
+import { computed } from 'vue'
+
+// `level` controls which heading element renders the `heading` prop, so pages
+// can use <h1> (detail pages) or <h2> (section headings) as appropriate for
+// document outline / accessibility. Defaults to h2 (section-level).
+const props = withDefaults(
+  defineProps<{
+    eyebrow?: string
+    heading?: string
+    level?: '1' | '2' | '3'
+  }>(),
+  { level: '2' },
+)
+
+const headingTag = computed(() => `h${props.level}`)
 </script>
 
 <template>
@@ -12,7 +23,9 @@ defineProps<{
         <p v-if="eyebrow" class="font-mono text-sm uppercase tracking-wider text-primary">
           {{ eyebrow }}
         </p>
-        <h2 v-if="heading" class="mt-2 text-3xl font-bold sm:text-4xl">{{ heading }}</h2>
+        <component :is="headingTag" v-if="heading" class="mt-2 text-3xl font-bold sm:text-4xl">
+          {{ heading }}
+        </component>
       </div>
       <slot />
     </Container>

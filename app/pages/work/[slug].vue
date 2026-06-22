@@ -16,7 +16,7 @@ useSeoMeta({
 
 <template>
   <article v-if="project">
-    <Section :eyebrow="`Case study · ${project.year}`" :heading="project.title">
+    <Section :eyebrow="`Case study · ${project.year}`" :heading="project.title" level="1">
       <Media :src="project.image" :alt="project.title" ratio="16/9" />
       <div class="mt-6 flex flex-wrap gap-2">
         <Badge :text="project.industry" />

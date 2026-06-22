@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { stemToRoute } from '~/utils/content'
+
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 
@@ -18,12 +20,12 @@ useSeoMeta({
 </script>
 
 <template>
-  <Section :heading="industry?.title" eyebrow="Industries">
+  <Section :heading="industry?.title" eyebrow="Industries" level="1">
     <ContentRenderer :value="industry" class="prose max-w-none" />
     <div v-if="work?.length" class="mt-12">
       <h3 class="mb-4 text-xl font-semibold">Related work</h3>
       <div class="grid gap-6 sm:grid-cols-3">
-        <NuxtLink v-for="w in work" :key="w.path" :to="w.path">
+        <NuxtLink v-for="w in work" :key="w.path" :to="stemToRoute(w.stem)">
           <Card>
             <h4 class="font-medium">{{ w.title }}</h4>
             <p class="mt-1 text-sm text-text-secondary">{{ w.summary }}</p>

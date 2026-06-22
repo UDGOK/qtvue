@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { stemToRoute } from '~/utils/content'
+
 const { data: roles } = await useAsyncData('careers', () => queryCollection('careers').all())
 useSeoMeta({ title: 'Careers — qtvue', description: 'Join the qtvue team.' })
 </script>
 
 <template>
-  <Section eyebrow="Careers" heading="Build the future of automation with us">
+  <Section eyebrow="Careers" heading="Build the future of automation with us" level="1">
     <!-- Listing mode (when roles exist) -->
     <div v-if="roles?.length" class="grid gap-6">
-      <NuxtLink v-for="r in roles" :key="r.path" :to="r.path">
+      <NuxtLink v-for="r in roles" :key="r.path" :to="stemToRoute(r.stem)">
         <Card>
           <div class="flex items-center justify-between">
             <div>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { stemToRoute } from '~/utils/content'
+
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 
@@ -13,7 +15,7 @@ if (!service.value) {
 }
 
 const { data: related } = await useAsyncData(`service-${slug.value}-work`, () =>
-  queryCollection('work').where('services', 'CONTAINS', slug.value).limit(3).all(),
+  queryCollection('work').where('services', 'LIKE', `%"${slug.value}"%`).limit(3).all(),
 )
 
 useSeoMeta({
@@ -24,12 +26,12 @@ useSeoMeta({
 
 <template>
   <article v-if="service">
-    <Section eyebrow="Services" :heading="service.title">
+    <Section eyebrow="Services" :heading="service.title" level="1">
       <ContentRenderer :value="service" class="prose max-w-none text-text" />
       <div v-if="related?.length" class="mt-12">
         <h3 class="mb-4 text-xl font-semibold">Related work</h3>
         <div class="grid gap-6 sm:grid-cols-3">
-          <NuxtLink v-for="w in related" :key="w.path" :to="w.path">
+          <NuxtLink v-for="w in related" :key="w.path" :to="stemToRoute(w.stem)">
             <Card>
               <Media :src="w.image" alt="" decorative ratio="16/9" />
               <h4 class="mt-3 font-medium">{{ w.title }}</h4>

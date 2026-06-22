@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { stemToRoute } from '~/utils/content'
+
 const { data: work } = await useAsyncData('work-index', () =>
   queryCollection('work').order('year', 'DESC').all(),
 )
@@ -9,7 +11,7 @@ useSeoMeta({ title: 'Work — qtvue', description: 'Selected robotics projects.'
   <Section eyebrow="Work" heading="Selected projects">
     <p v-if="!work?.length" class="text-text-secondary">Case studies coming soon.</p>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <NuxtLink v-for="w in work" :key="w.path" :to="w.path">
+      <NuxtLink v-for="w in work" :key="w.path" :to="stemToRoute(w.stem)">
         <Card>
           <Media :src="w.image" alt="" decorative ratio="16/9" />
           <h3 class="mt-4 font-semibold">{{ w.title }}</h3>
