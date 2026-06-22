@@ -167,7 +167,21 @@ function closeNow() {
   if (closeTimer) window.clearTimeout(closeTimer)
   active.value = null
 }
-function toggleClick(key: string) {
+function toggleClick(key: string, e?: MouseEvent) {
+  // On a mouse device, hover already owns open/close. A real mouse
+  // click (e.detail > 0) on a trigger that's already open from hover
+  // would close it, fighting the user's intent. On touch + keyboard
+  // (e.detail === 0) the click is the only way to toggle, so let it
+  // through.
+  if (
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(hover: hover)').matches &&
+    e && e.detail !== 0
+  ) {
+    e.stopPropagation()
+    return
+  }
+  e?.stopPropagation()
   if (active.value === key) closeNow()
   else open(key)
 }
@@ -180,11 +194,13 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 function onDocClick(e: MouseEvent) {
-  const t = e.target as HTMLElement | null
-  if (active.value && t && !t.closest('[data-menu-root]')) closeNow()
-  if (mobileOpen.value && t && !t.closest('[data-mobile-root]') && !t.closest('[data-mobile-trigger]')) {
-    mobileOpen.value = false; mobileExpanded.value = null
-  }
+  // Anything inside the guarded header is NOT "outside" — so the
+  // click that opened a panel/drawer can never close it. Both desktop
+  // mega-panels and the mobile drawer live inside data-menu-root.
+  if (e.target instanceof Element && e.target.closest('[data-menu-root]')) return
+  closeNow()
+  mobileOpen.value = false
+  mobileExpanded.value = null
 }
 function handleScroll() { scrolled.value = window.scrollY > 8 }
 
@@ -296,7 +312,7 @@ watch(() => route.path, () => {
                   ? 'bg-accent text-text'
                   : 'text-text-secondary hover:bg-accent/25 hover:text-text',
               ]"
-              @click.stop="toggleClick(entry.key)"
+              @click="toggleClick(entry.key, $event)"
             >
               <span>{{ entry.label }}</span>
               <svg
@@ -328,11 +344,11 @@ watch(() => route.path, () => {
       <!-- ============= MOBILE TRIGGER ============= -->
       <button
         type="button"
-        class="ml-auto grid h-9 w-9 place-items-center rounded-full border border-border md:hidden"
+        class="ml-auto grid h-9 w-9 place-items-center rounded-full border border-border lg:hidden"
         :aria-label="mobileOpen ? 'Close menu' : 'Open menu'"
         :aria-expanded="mobileOpen"
         data-mobile-trigger
-        @click="mobileOpen = !mobileOpen"
+        @click.stop="mobileOpen = !mobileOpen"
       >
         <svg
           v-if="!mobileOpen"
