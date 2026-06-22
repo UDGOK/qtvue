@@ -4,6 +4,15 @@ import { stemToRoute } from '~/utils/content'
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 
+/**
+ * Feature detail page.
+ *
+ * Fetched via @nuxt/content v3 queryCollection, same pattern as the
+ * working /work/[slug] and /services/[slug] pages. The data is
+ * resolved at build time (the route is fully prerendered), so a
+ * failure at query time would prevent the route from being generated
+ * — that's a build error, not a runtime 500.
+ */
 const { data: feature } = await useAsyncData(`feature-${slug.value}`, () =>
   queryCollection('features').where('stem', '=', `en/features/${slug.value}`).first(),
 )
@@ -25,18 +34,20 @@ useSeoMeta({
   <article v-if="feature">
     <!-- HERO -->
     <section class="relative border-b border-border bg-bg">
-      <!-- thumb backdrop -->
       <div class="absolute inset-0 -z-10 halftone-bg opacity-30" aria-hidden="true" />
       <Container class="py-20 sm:py-28">
         <Reveal>
-          <NuxtLink to="/services" class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary hover:text-primary">
+          <NuxtLink to="/features" class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary hover:text-primary">
             ← All features
           </NuxtLink>
           <div class="mt-6 flex flex-wrap items-center gap-3">
             <span class="grid h-12 w-12 place-items-center rounded-xl bg-primary-50 text-primary">
               <Icon :name="feature.icon" :size="24" />
             </span>
-            <span v-if="feature.badge" class="rounded-full border border-primary/30 bg-primary-50 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-primary">
+            <span
+              v-if="feature.badge"
+              class="rounded-full border border-primary/30 bg-primary-50 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-primary"
+            >
               {{ feature.badge }}
             </span>
             <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary">Feature</p>
@@ -62,7 +73,7 @@ useSeoMeta({
     <Section bleed>
       <Reveal>
         <div class="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-dashed border-border bg-surface halftone-bg">
-          <div class="aspect-[16/9] grid place-items-center">
+          <div class="grid aspect-[16/9] place-items-center">
             <div class="h-3/4 w-3/4">
               <RobotMascot variant="arm" />
             </div>
