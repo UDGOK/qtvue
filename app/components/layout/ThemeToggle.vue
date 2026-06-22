@@ -12,9 +12,18 @@ const { isDark, toggle } = useThemeWithLifecycle()
     :aria-pressed="isDark"
     @click="toggle"
   >
+    <!--
+      v-show (not v-if) so BOTH icons are always in the DOM.
+      v-if changes the DOM structure based on isDark → SSR renders
+      moon (isDark=false), client first render reads DOM (isDark=true
+      when dark class is set), renders sun → different DOM trees →
+      hydration mismatch → nextSibling of null crash.
+      v-show keeps both icons in the DOM and only toggles display,
+      so SSR and client first render produce identical DOM trees.
+    -->
     <!-- sun (shown in dark mode → click to go light) -->
     <svg
-      v-if="isDark"
+      v-show="isDark"
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -35,7 +44,7 @@ const { isDark, toggle } = useThemeWithLifecycle()
     </svg>
     <!-- moon (shown in light mode → click to go dark) -->
     <svg
-      v-else
+      v-show="!isDark"
       width="16"
       height="16"
       viewBox="0 0 16 16"
