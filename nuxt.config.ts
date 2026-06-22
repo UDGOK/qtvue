@@ -53,7 +53,12 @@ export default defineNuxtConfig({
   // Flip a specific route to { ssr: true } later (e.g. /portal/**, /quote)
   // to make it dynamic with zero migration — marketing pages stay static.
   routeRules: {
-    '/**': { prerender: true },
+    // No caching on HTML — the theme toggle is client-side and we never
+    // want Vercel or any browser cache to serve a stale bundle.
+    '/**': {
+      prerender: true,
+      headers: { 'Cache-Control': 'public, max-age=0, must-revalidate' },
+    },
     // Reserved for Spec 2 / future:
     // '/portal/**': { ssr: true },
     // '/quote': { ssr: true },
@@ -79,9 +84,13 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       script: [
         {
-          // No-FOUC: apply stored/prefers-color-scheme dark class before paint.
+          // No-FOUC theme bootstrap. Runs synchronously in <head> so
+          // the very first paint is already in the correct theme. This
+          // is the source of truth for the first frame; the Vue
+          // composable reconciles after hydration and follows the OS
+          // preference from there on.
           innerHTML:
-            "(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})();",
+            "(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t===null&&typeof matchMedia!=='undefined'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);if(t===null){try{localStorage.setItem('theme',d?'dark':'light')}catch(e){}}}catch(e){}})();",
           tagPosition: 'head',
         },
       ],

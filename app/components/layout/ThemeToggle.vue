@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useTheme } from '~/composables/useTheme'
+import { useThemeWithLifecycle } from '~/composables/useTheme'
 
-const { isDark, toggle } = useTheme()
+const { isDark, toggle } = useThemeWithLifecycle()
 </script>
 
 <template>
@@ -9,6 +9,7 @@ const { isDark, toggle } = useTheme()
     type="button"
     class="grid h-9 w-9 place-items-center rounded-full border border-border text-text-secondary transition-all hover:border-primary hover:text-primary"
     :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+    :aria-pressed="isDark"
     @click="toggle"
   >
     <!-- sun (shown in dark mode → click to go light) -->

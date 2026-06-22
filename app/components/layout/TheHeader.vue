@@ -308,14 +308,17 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickAway))
           </Transition>
         </div>
 
-        <!-- Right CTAs: greptile-style chevron-cut buttons -->
-        <div class="ml-2 flex items-center gap-0">
-          <Btn href="/contact" variant="ink" size="md" chevron>
-            Contact Sales
-          </Btn>
-          <Btn href="/contact" variant="primary" size="md" chevron>
-            Start now
-          </Btn>
+        <!-- Theme toggle + Right CTAs: greptile-style chevron-cut buttons -->
+        <div class="ml-2 flex items-center gap-2">
+          <ThemeToggle class="h-9 w-9" />
+          <div class="flex items-center gap-0">
+            <Btn href="/contact" variant="ink" size="md" chevron>
+              Contact Sales
+            </Btn>
+            <Btn href="/contact" variant="primary" size="md" chevron>
+              Start now
+            </Btn>
+          </div>
         </div>
       </nav>
 
@@ -401,6 +404,12 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickAway))
             </template>
           </template>
           <div class="my-2 h-px bg-border" />
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">
+              Theme
+            </span>
+            <ThemeToggle class="h-8 w-8" />
+          </div>
           <div class="grid grid-cols-2 gap-2">
             <Btn href="/contact" variant="ink" size="sm" chevron>Contact Sales</Btn>
             <Btn href="/contact" variant="primary" size="sm" chevron>Start now</Btn>
