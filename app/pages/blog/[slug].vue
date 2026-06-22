@@ -13,7 +13,6 @@ useSeoMeta({
   ogImage: () => post.value?.image,
 })
 
-// Article structured data for rich search results.
 watchEffect(() => {
   if (post.value) {
     useSchemaOrg([
@@ -30,13 +29,30 @@ watchEffect(() => {
 
 <template>
   <article v-if="post">
-    <Section>
-      <time class="font-mono text-sm text-text-secondary">{{ post.date }} · {{ post.author }}</time>
-      <h1 class="mt-2 text-3xl font-bold sm:text-4xl">{{ post.title }}</h1>
-      <div v-if="post.tags?.length" class="mt-4 flex gap-2">
-        <Badge v-for="tag in post.tags" :key="tag" :text="tag" />
-      </div>
-      <ContentRenderer :value="post" class="prose mt-8 max-w-none" />
-    </Section>
+    <section class="border-b border-border bg-bg">
+      <Container class="py-20">
+        <Reveal>
+          <NuxtLink to="/blog" class="font-mono text-xs uppercase tracking-widest text-text-secondary hover:text-primary">
+            ← All posts
+          </NuxtLink>
+          <p class="eyebrow mt-6">Blog</p>
+          <h1 class="display-md mt-4 max-w-4xl">{{ post.title }}</h1>
+          <div class="mt-6 flex items-center gap-3 font-mono text-xs text-text-secondary">
+            <time>{{ post.date }}</time>
+            <span class="text-text-muted">·</span>
+            <span>{{ post.author }}</span>
+          </div>
+        </Reveal>
+      </Container>
+    </section>
+
+    <Container class="py-12">
+      <Reveal>
+        <div v-if="post.tags?.length" class="mb-6 flex flex-wrap gap-2">
+          <Badge v-for="tag in post.tags" :key="tag" :text="tag" variant="outline" />
+        </div>
+        <ContentRenderer :value="post" class="prose max-w-none" />
+      </Reveal>
+    </Container>
   </article>
 </template>

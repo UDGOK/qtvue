@@ -11,7 +11,7 @@ const form = reactive({
   company: '',
   industry: '',
   message: '',
-  website: '', // honeypot — must stay empty
+  website: '', // honeypot
 })
 
 const industries = [
@@ -25,31 +25,54 @@ const industries = [
 
 <template>
   <form
-    class="space-y-4 rounded-xl border border-border bg-surface p-6"
+    class="space-y-5 rounded-2xl border border-border bg-surface p-6 sm:p-8"
     novalidate
     @submit.prevent="submit(form)"
   >
-    <div v-if="status === 'success'" class="rounded-lg bg-success/10 p-4 text-success">
+    <div v-if="status === 'success'" class="rounded-xl bg-primary-50 p-4 text-sm text-primary">
       {{ t('contact.success') }}
     </div>
-    <div v-if="errors._form" class="rounded-lg bg-danger/10 p-4 text-danger">
+    <div v-if="errors._form" class="rounded-xl bg-danger/10 p-4 text-sm text-danger">
       {{ errors._form }}
     </div>
 
-    <Input v-model="form.name" name="name" label="Name" :error="errors.name" required />
+    <div class="grid gap-5 sm:grid-cols-2">
+      <Input
+        v-model="form.name"
+        name="name"
+        label="Name"
+        :error="errors.name"
+        required
+        placeholder="Your name"
+      />
+      <Input
+        v-model="form.email"
+        name="email"
+        label="Email"
+        type="email"
+        :error="errors.email"
+        required
+        placeholder="you@company.com"
+      />
+    </div>
     <Input
-      v-model="form.email"
-      name="email"
-      label="Email"
-      type="email"
-      :error="errors.email"
-      required
+      v-model="form.company"
+      name="company"
+      label="Company"
+      placeholder="Where you work"
     />
-    <Input v-model="form.company" name="company" label="Company (optional)" />
     <Select v-model="form.industry" name="industry" label="Industry" :options="industries" />
-    <Textarea v-model="form.message" name="message" label="Message" :error="errors.message" required />
+    <Textarea
+      v-model="form.message"
+      name="message"
+      label="Tell us about the project"
+      :error="errors.message"
+      required
+      placeholder="What are you trying to automate? What's the pain?"
+      :rows="5"
+    />
 
-    <!-- Honeypot: hidden from users, visible to bots. Must stay empty. -->
+    <!-- Honeypot -->
     <input
       v-model="form.website"
       name="website"
@@ -60,8 +83,13 @@ const industries = [
       class="hidden"
     />
 
-    <Btn type="submit" :disabled="status === 'submitting'">
-      {{ status === 'submitting' ? 'Sending…' : t('contact.submit') }}
-    </Btn>
+    <div class="flex items-center justify-between gap-4 pt-2">
+      <Btn type="submit" :disabled="status === 'submitting'" variant="primary" size="md" arrow>
+        {{ status === 'submitting' ? 'Sending…' : t('contact.submit') }}
+      </Btn>
+      <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">
+        reply within 1 business day
+      </p>
+    </div>
   </form>
 </template>

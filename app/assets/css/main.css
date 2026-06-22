@@ -1,31 +1,267 @@
 @import './tokens.css';
 @import 'tailwindcss';
 
-/* Map design tokens into Tailwind v4 theme so utilities like
+/* ---------------------------------------------------------------------------
+   Map design tokens into Tailwind v4 theme so utilities like
    bg-primary, text-text, border-border resolve to our tokens.
    Using @theme inline keeps the values flowing from the CSS vars
-   defined in tokens.css (including the :root.dark overrides). */
+   defined in tokens.css (including the :root.dark overrides).
+   --------------------------------------------------------------------------- */
 @theme inline {
   --color-primary: var(--color-primary);
   --color-primary-600: var(--color-primary-600);
+  --color-primary-50: var(--color-primary-50);
   --color-accent: var(--color-accent);
+  --color-accent-600: var(--color-accent-600);
+
   --color-bg: var(--color-bg);
+  --color-paper: var(--color-paper);
   --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
   --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+
   --color-text: var(--color-text);
   --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+
   --color-success: var(--color-success);
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
+  --color-info: var(--color-info);
+
+  --color-ink: var(--color-ink);
+  --color-ink-2: var(--color-ink-2);
+  --color-ink-bg: var(--color-ink-bg);
+  --color-ink-text: var(--color-ink-text);
 
   --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
   --font-mono: var(--font-mono);
 
   --container-max: var(--container-max);
+  --container-narrow: var(--container-narrow);
+
+  --radius-sm: var(--radius-sm);
+  --radius: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
 }
 
+/* ---------------------------------------------------------------------------
+   Global base
+   --------------------------------------------------------------------------- */
 html {
   font-family: var(--font-sans);
   background-color: var(--color-bg);
   color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  /* subtle paper texture using radial gradients */
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 0%, color-mix(in srgb, var(--color-primary) 4%, transparent), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 90% 10%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 60%);
+  background-attachment: fixed;
+}
+
+:root.dark body {
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 0%, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 90% 10%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 60%);
+}
+
+/* display utility — greptile-style chunky headlines */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.95;
+}
+
+.display-xl {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.95;
+  font-size: clamp(2.5rem, 6.4vw, 5.5rem);
+}
+.display-lg {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.98;
+  font-size: clamp(2.25rem, 5.4vw, 4.5rem);
+}
+.display-md {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.05;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+/* mono uppercase eyebrow — greptile-style section labels */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-text-secondary);
+}
+
+/* highlighted text — light mint callout */
+.text-highlight {
+  background-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  padding: 0 0.25em;
+  border-radius: 4px;
+  color: var(--color-text);
+}
+
+/* hero word highlight — primary-colored word with limelight underline
+   (greptile-style: one word in the headline gets the brand color and a
+   small accent bar behind it) */
+.hl {
+  position: relative;
+  display: inline-block;
+  color: var(--color-primary);
+}
+.hl::after {
+  content: '';
+  position: absolute;
+  left: -0.05em;
+  right: -0.05em;
+  bottom: 0.08em;
+  height: 0.32em;
+  background: color-mix(in srgb, var(--color-accent) 38%, transparent);
+  z-index: -1;
+  border-radius: 4px;
+}
+
+/* selection */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-text) 15%, transparent);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-text) 30%, transparent);
+}
+
+/* smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* prose overrides for content */
+.prose {
+  color: var(--color-text);
+}
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+.prose a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose code {
+  font-family: var(--font-mono);
+  background: var(--color-surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.prose pre {
+  font-family: var(--font-mono);
+  background: var(--color-surface-2);
+  padding: 1em 1.2em;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+}
+.prose pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+.prose blockquote {
+  border-left: 3px solid var(--color-primary);
+  padding-left: 1em;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+}
+.prose li {
+  margin: 0.4em 0;
+}
+
+/* halftone dot pattern overlay (used by mascot SVG + decorative bgs) */
+.halftone-bg {
+  background-image: radial-gradient(
+    circle at center,
+    var(--color-ink) 1px,
+    transparent 1.5px
+  );
+  background-size: 6px 6px;
+}
+
+/* keyboard shortcut pill */
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.15em 0.45em;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+}
+
+/* animated underline link */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right center;
+  transform: scaleX(0);
+  transition: transform 350ms var(--ease-out);
+}
+.link-underline:hover::after {
+  transform-origin: left center;
+  transform: scaleX(1);
 }
