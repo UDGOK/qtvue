@@ -265,12 +265,3 @@ html { scroll-behavior: smooth; }
   transform-origin: left center;
   transform: scaleX(1);
 }
-
-/* No-JS fallback for Reveal.vue.
-   Components inside <Reveal> are visually hidden until JS animates them in.
-   For users without JS (and search engines that don't render JS), force
-   the content visible so the site is still readable. */
-.no-js .qtvue-reveal {
-  opacity: 1 !important;
-  transform: none !important;
-}
