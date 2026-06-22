@@ -80,7 +80,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'en', translate: 'no' },
+      htmlAttrs: { lang: 'en', translate: 'no', class: 'no-js' },
       meta: [
         // Prevent Google Translate from rewriting the DOM. Auto-translation
         // walks the text nodes and replaces them with <font> wrappers, which
@@ -91,6 +91,14 @@ export default defineNuxtConfig({
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       script: [
+        // Strip the .no-js class as soon as the script executes, so the
+        // `.no-js .qtvue-reveal { opacity:1; transform:none }` fallback in
+        // main.css only kicks in when JS is genuinely unavailable. This
+        // runs BEFORE the theme bootstrap so the cascade order is correct.
+        {
+          innerHTML: "document.documentElement.classList.remove('no-js')",
+          tagPosition: 'head',
+        },
         {
           // No-FOUC theme bootstrap. Runs synchronously in <head> so
           // the very first paint is already in the correct theme. This
