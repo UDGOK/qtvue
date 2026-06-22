@@ -103,9 +103,14 @@ export default defineNuxtConfig({
         // with the broken WebGL cleanup) and we force a hard reload
         // to pull the fresh HTML + JS. This is the belt-and-braces to
         // the http-equiv no-cache meta tags above.
+        //
+        // IMPORTANT: bump this string every single deploy. If you
+        // don't, existing users whose localStorage already matches
+        // the prior string will skip the guard and stay on whatever
+        // stale cache their browser is holding.
         {
           innerHTML:
-            "(function(){var V='qtvue_build_2026_06_22_post_reveal_revert';try{var s=localStorage.getItem('qtvue_build');if(s&&s!==V){localStorage.setItem('qtvue_build',V);location.reload();return}localStorage.setItem('qtvue_build',V)}catch(e){}})();",
+            "(function(){var V='qtvue_build_2026_06_22_v2_force_reload';try{var s=localStorage.getItem('qtvue_build');if(s&&s!==V){localStorage.setItem('qtvue_build',V);location.reload();return}localStorage.setItem('qtvue_build',V)}catch(e){}})();",
           tagPosition: 'head',
         },
         {
