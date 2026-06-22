@@ -11,7 +11,7 @@
  *  - Auto-downgrades to a static frame on prefers-reduced-motion
  *  - Pixel ratio capped at 1.5
  */
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import * as THREE from 'three'
 
 const props = withDefaults(
@@ -344,20 +344,29 @@ onMounted(() => {
     window.removeEventListener('mousemove', onMove)
     document.removeEventListener('visibilitychange', onVis)
     ro.disconnect()
-    renderer.dispose()
-    particleGeo.dispose()
-    particleMat.dispose()
-    scene.traverse((obj) => {
-      if ((obj as THREE.Mesh).geometry) (obj as THREE.Mesh).geometry.dispose()
-      const m = (obj as THREE.Mesh).material
-      if (m) {
-        if (Array.isArray(m)) m.forEach((mm) => mm.dispose())
-        else (m as THREE.Material).dispose()
+    // Defer Three.js disposal to nextTick. Do NOT manually removeChild
+    // the canvas here — Vue is still walking its block tree during
+    // onBeforeUnmount; a manual removeChild corrupts it and throws
+    // "Cannot read properties of null (reading 'nextSibling')".
+    // Vue removes the parent <div ref="root"> itself on unmount,
+    // which takes the canvas with it.
+    nextTick(() => {
+      try {
+        renderer.dispose()
+        particleGeo.dispose()
+        particleMat.dispose()
+        scene.traverse((obj) => {
+          if ((obj as THREE.Mesh).geometry) (obj as THREE.Mesh).geometry.dispose()
+          const m = (obj as THREE.Mesh).material
+          if (m) {
+            if (Array.isArray(m)) m.forEach((mm) => mm.dispose())
+            else (m as THREE.Material).dispose()
+          }
+        })
+      } catch {
+        /* renderer already torn down */
       }
     })
-    if (renderer.domElement.parentNode === el) {
-      el.removeChild(renderer.domElement)
-    }
   })
 })
 </script>

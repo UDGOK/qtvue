@@ -5,7 +5,7 @@
  * testimonials, etc. to give the site that "trillion-dollar" tech vibe
  * without being distracting.
  */
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import * as THREE from 'three'
 
 const props = withDefaults(
@@ -134,10 +134,17 @@ onMounted(() => {
     cancelAnimationFrame(raf)
     document.removeEventListener('visibilitychange', onVis)
     ro.disconnect()
-    renderer.dispose()
-    geo.dispose()
-    mat.dispose()
-    if (renderer.domElement.parentNode === el) el.removeChild(renderer.domElement)
+    // Defer disposal to nextTick; never manually removeChild here.
+    // Vue removes the parent on unmount; the canvas goes with it.
+    nextTick(() => {
+      try {
+        renderer.dispose()
+        geo.dispose()
+        mat.dispose()
+      } catch {
+        /* renderer already torn down */
+      }
+    })
   })
 })
 </script>

@@ -115,11 +115,43 @@ useSeoMeta({
       </Reveal>
     </Section>
 
-    <!-- BODY -->
-    <Container class="py-12">
+    <!-- LEARNING PATH (programming only) — animated 6-step pathway
+         inspired by k-robotic's "Unitree Robot Operation for Beginners"
+         article, adapted for qtvue's industrial-robotics stack. -->
+    <Section
+      v-if="slug === 'programming'"
+      eyebrow="The pathway"
+      heading="From theory to real-world control."
+    >
       <Reveal>
-        <ContentRenderer :value="feature" class="prose max-w-none" />
+        <p class="max-w-2xl text-lg text-text-secondary">
+          Every qtvue programmer follows the same six-step pathway. We hire at step one and
+          grow people through the rest — because the only way to ship a reliable cell is to
+          understand every layer from the math to the on-floor hand-off.
+        </p>
       </Reveal>
+      <div class="mt-10">
+        <LearningPath />
+      </div>
+    </Section>
+
+    <!-- BODY -->
+    <!-- ClientOnly wraps ContentRenderer as a safety net: any hydration
+         mismatch in @nuxt/content's renderer (which throws
+         "Cannot read properties of null (reading 'nextSibling')" on
+         some setups) is contained — the SSR HTML stays visible and
+         the rich body content hydrates client-side. -->
+    <Container class="py-12">
+      <ClientOnly>
+        <Reveal>
+          <ContentRenderer :value="feature" class="prose max-w-none" />
+        </Reveal>
+        <template #fallback>
+          <Reveal>
+            <div class="prose max-w-none" v-html="feature?.body" />
+          </Reveal>
+        </template>
+      </ClientOnly>
     </Container>
 
     <!-- RELATED -->
