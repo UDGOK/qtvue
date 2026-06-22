@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "updated": "2026-06-22T19:30:00Z",
+  "current": {
+    "id": "now-001",
+    "text": "Wiring the service-mode hardening guide for Friday's customer.",
+    "mood": "shipping",
+    "category": "engineering",
+    "link": null,
+    "postedAt": "2026-06-22T19:30:00Z",
+    "expiresAt": "2026-06-24T19:30:00Z"
+  },
+  "recent": [
+    {
+      "id": "now-000",
+      "text": "Replaced the platforms dropdown — 8 platforms in a 387px panel with distinct icons per form factor.",
+      "mood": "shipping",
+      "category": "engineering",
+      "link": "/blog/unitree-sdk2-deep-dive",
+      "postedAt": "2026-06-22T15:00:00Z"
+    },
+    {
+      "id": "now-archive-001",
+      "text": "Shipped the complete AIO/GEO/SEO stack — llms.txt, robots.txt with 30+ AI bot Allow rules, Organization JSON-LD, per-page Product/Service schemas.",
+      "mood": "shipping",
+      "category": "seo",
+      "link": null,
+      "postedAt": "2026-06-22T11:30:00Z"
+    },
+    {
+      "id": "now-archive-002",
+      "text": "Fixed iOS Safari video autoplay — autoplay attribute now in static HTML, added webkit-playsinline, background-mode wrapper fills parent.",
+      "mood": "shipping",
+      "category": "bugfix",
+      "link": "/",
+      "postedAt": "2026-06-22T07:00:00Z"
+    },
+    {
+      "id": "now-archive-003",
+      "text": "Diagnosed the dark-mode nextSibling crash — ThemeToggle's v-if/v-else rendered different DOM between SSR and CSR.",
+      "mood": "shipping",
+      "category": "bugfix",
+      "link": null,
+      "postedAt": "2026-06-21T22:00:00Z"
+    }
+  ]
+}

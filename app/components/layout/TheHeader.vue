@@ -215,24 +215,30 @@ watch(() => route.path, () => {
 <template>
   <!-- ============================================================
        ANNOUNCEMENT BAR (greptile pattern — mint bg, single line)
+       When a "now" status exists, it preempts the pre-launch copy
+       (but the Submit CTA stays). The pill is a self-contained
+       NowPill component that fetches /now.json client-side.
        ============================================================ -->
   <div
     v-if="showAnnouncement"
     class="relative z-50 border-b border-accent/30 bg-accent text-text"
   >
-    <Container class="flex h-9 items-center justify-center gap-3 text-[12px] sm:text-[13px]">
+    <Container class="flex h-9 flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[12px] sm:text-[13px]">
+      <!-- Pre-launch CTA (always) -->
       <span class="font-mono uppercase tracking-[0.18em] text-text/70">Pre-launch</span>
       <span class="hidden h-3 w-px bg-text/20 sm:block" />
-      <span class="font-medium">
-        <span class="hidden sm:inline">Submit your use case — </span>engineering review within 1 business day.
-      </span>
       <NuxtLink
         to="/intake"
-        class="inline-flex items-center gap-1 font-semibold underline-offset-2 hover:underline"
+        class="inline-flex items-center gap-1 font-medium underline-offset-2 hover:underline"
       >
-        Submit now
+        Submit your use case
         <span aria-hidden="true">→</span>
       </NuxtLink>
+
+      <!-- Now status (dynamic, hides itself if no current entry) -->
+      <span v-if="$slots.now" class="hidden h-3 w-px bg-text/20 sm:block" />
+      <slot name="now" />
+
       <button
         type="button"
         class="absolute right-3 top-1/2 -translate-y-1/2 grid h-6 w-6 place-items-center rounded-full text-text/60 hover:bg-text/10"
