@@ -96,6 +96,18 @@ export default defineNuxtConfig({
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       script: [
+        // Build-version guard. Bumps BUILD_VERSION on every deploy.
+        // The script compares localStorage.qtvue_build to the embedded
+        // value; if they differ, the user is on a stale cached page
+        // (browser served an old HTML that references an old JS hash
+        // with the broken WebGL cleanup) and we force a hard reload
+        // to pull the fresh HTML + JS. This is the belt-and-braces to
+        // the http-equiv no-cache meta tags above.
+        {
+          innerHTML:
+            "(function(){var V='qtvue_build_2026_06_22_post_reveal_revert';try{var s=localStorage.getItem('qtvue_build');if(s&&s!==V){localStorage.setItem('qtvue_build',V);location.reload();return}localStorage.setItem('qtvue_build',V)}catch(e){}})();",
+          tagPosition: 'head',
+        },
         {
           // No-FOUC theme bootstrap. Runs synchronously in <head> so
           // the very first paint is already in the correct theme. This
