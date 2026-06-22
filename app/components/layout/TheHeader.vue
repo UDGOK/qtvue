@@ -2,26 +2,24 @@
 /**
  * TheHeader — qtvue marketing site mega-menu.
  *
- * Architecture (borrowed from the best-in-class greptile menu pattern):
- *  - <button> triggers (not links) with a rotating chevron.
- *  - Full-width mega-panels stay in the DOM (`v-show`), toggled via
- *    opacity / translate / pointer-events — SEO-friendly and animatable.
- *  - Hover-intent with a 140ms close delay so a diagonal mouse path
- *    from trigger → panel doesn't snap the panel shut.
- *  - Keyboard: Escape closes and returns focus to the trigger; outside
- *    click closes; click on a dropdown trigger toggles it open/closed.
- *  - One `menu` config drives desktop cards, desktop list, and mobile.
- *  - Logo on the LEFT (not centered, for more conventional nav density).
- *  - Right side: ThemeToggle + greptile-style chevron-cut CTAs.
- *  - `prefers-reduced-motion` kills all the transitions.
+ * Final, greptile-accurate version. Anatomy:
+ *  - Top announcement bar (mint bg, dismissable)
+ *  - Sticky glass header below it
+ *  - Logo on the LEFT (geometric "Q" mark + "qtvue" wordmark)
+ *  - Center: 6 nav items, UPPERCASE mono with icons. Active/hovered
+ *    items get a mint green background pill (greptile's signature look).
+ *  - Right: ThemeToggle + chevron-cut Contact Sales / Start now CTAs
+ *  - Mega-panels: data-driven `cards` (Features) and `list` (Resources)
+ *    layouts. v-show for SEO + animatable. Hover-intent 140ms close.
+ *  - Full keyboard a11y (Escape + focus return), outside-click,
+ *    route-change reset, prefers-reduced-motion override.
  */
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
 const route = useRoute()
 
 const scrolled = ref(false)
+const showAnnouncement = ref(true)
 const active = ref<string | null>(null)
 const mobileOpen = ref(false)
 const mobileExpanded = ref<string | null>(null)
@@ -30,101 +28,165 @@ const HOVER_CLOSE_MS = 140
 
 /* ============================================================
    Menu config — edit this, the rest regenerates automatically.
-   Types: 'link' (plain nav) | 'dropdown' (mega-panel).
-   Dropdown layouts: 'cards' (Features, with thumbnails + icon + desc)
-                     'list'  (Resources, compact two-line)
+   Each link is { type: 'link', label, to, icon }
+   Each dropdown is { type: 'dropdown', label, key, layout: 'cards' | 'list' }
    ============================================================ */
-const services = [
-  { key: 'integration', title: 'Robotics Integration', desc: 'Full cell design, build, and commissioning', to: '/services/integration' },
-  { key: 'programming', title: 'Robot Programming', desc: 'New programs, retrofits, optimization', to: '/services/programming' },
-  { key: 'sales',       title: 'Robot & Peripheral Sales', desc: 'Arms, controllers, EOAT, vision', to: '/services/sales' },
-  { key: 'consulting',  title: 'Feasibility & Consulting', desc: 'Assessments, ROI, engineering plans', to: '/services/consulting' },
-]
-const industries = [
-  { key: 'welding',       title: 'Welding',            desc: 'MIG / TIG / spot cells', to: '/industries/welding' },
-  { key: 'packaging',     title: 'Packaging',          desc: 'Pick-and-place, palletizing', to: '/industries/packaging' },
-  { key: 'material',      title: 'Material Handling',  desc: 'High-throughput transfer', to: '/industries/material-handling' },
-]
 
-interface MenuLink   { type: 'link';     label: string; to: string }
-interface MenuDrop   { type: 'dropdown'; label: string; key: string; layout: 'cards' | 'list' }
-type MenuEntry = MenuLink | MenuDrop
+interface NavLink {
+  type: 'link'
+  label: string
+  to: string
+  icon?: string
+  /** optional badge ("NEW", "BETA", etc.) */
+  badge?: string
+}
+interface NavDrop {
+  type: 'dropdown'
+  label: string
+  key: 'features' | 'resources' | 'industries' | 'company'
+  layout: 'cards' | 'list'
+  icon?: string
+  /** title shown in the panel header */
+  panelTitle?: string
+  /** right-side link in the panel header */
+  panelLink?: { label: string; to: string }
+}
+type MenuEntry = NavLink | NavDrop
 
 const menu: MenuEntry[] = [
-  { type: 'link', label: 'Examples', to: '/work' },
-  { type: 'link', label: 'Pricing',  to: '/services' },
+  { type: 'link', label: 'Examples',  to: '/work',       icon: 'Briefcase' },
+  { type: 'link', label: 'Pricing',   to: '/services',   icon: 'Tag' },
   {
     type: 'dropdown',
     label: 'Features',
     key: 'features',
     layout: 'cards',
+    icon: 'Sparkles',
+    panelTitle: 'Everything you need to automate',
+    panelLink: { label: 'View all services', to: '/services' },
   },
-  { type: 'link', label: 'Enterprise', to: '/industries' },
-  { type: 'link', label: 'Blog',       to: '/blog' },
+  { type: 'link', label: 'Industries', to: '/industries', icon: 'Factory' },
+  { type: 'link', label: 'Enterprise', to: '/contact',    icon: 'Building2' },
+  { type: 'link', label: 'Blog',       to: '/blog',       icon: 'BookOpen' },
   {
     type: 'dropdown',
     label: 'Resources',
     key: 'resources',
     layout: 'list',
+    icon: 'Bookmark',
+    panelTitle: 'Learn & explore',
+    panelLink: { label: 'Talk to our team', to: '/contact' },
   },
 ]
 
 /* ============================================================
-   Hover-intent + keyboard + outside-click handlers
+   Dropdown content (real robotics content for qtvue)
+   ============================================================ */
+
+interface FeatureCard {
+  label: string
+  desc: string
+  href: string
+  badge?: string
+  /** keyword that picks the thumbnail from /public/menu/ */
+  thumb?: string
+}
+interface ResourceItem {
+  label: string
+  desc: string
+  to: string
+  icon: string
+}
+
+const featuresData: Record<'features', FeatureCard[]> = {
+  features: [
+    {
+      label: 'Cell Design & Simulation',
+      desc: '3D cell layout with cycle-time, reach, and collision analysis',
+      href: '/features/cell-design',
+      thumb: 'cell-design',
+      badge: 'Core',
+    },
+    {
+      label: 'Robot Programming',
+      desc: 'FANUC KAREL, ABB RAPID, KUKA KRL, Yaskawa, UR — offline + on-floor',
+      href: '/features/programming',
+      thumb: 'programming',
+    },
+    {
+      label: 'Vision & Sensing',
+      desc: '2D/3D vision, force/torque, laser, and proximity sensor integration',
+      href: '/features/vision',
+      thumb: 'vision',
+    },
+    {
+      label: 'End-of-Arm Tooling',
+      desc: 'Pneumatic & electric grippers, welders, dispensers, custom EOAT',
+      href: '/features/eoat',
+      thumb: 'eoat',
+    },
+    {
+      label: 'Safety & Compliance',
+      desc: 'ISO 10218, ISO/TS 15066, ANSI/RIA R15.06 risk assessments',
+      href: '/features/safety',
+      thumb: 'safety',
+    },
+    {
+      label: '24/7 Global Support',
+      desc: 'Remote monitoring, on-site service, spare parts in 14 countries',
+      href: '/features/support',
+      thumb: 'support',
+      badge: 'Always on',
+    },
+  ],
+}
+
+const resourcesData: Record<'resources', ResourceItem[]> = {
+  resources: [
+    { label: 'Case studies',   desc: 'Real deployments, real numbers',   to: '/work',       icon: 'Briefcase' },
+    { label: 'Industries',     desc: 'Welding, packaging, material handling', to: '/industries', icon: 'Factory' },
+    { label: 'Engineering blog', desc: 'Notes from our team on the line', to: '/blog',       icon: 'BookOpen' },
+    { label: 'Careers',        desc: 'Build the future of automation with us', to: '/careers',   icon: 'Users' },
+    { label: 'Documentation',  desc: 'Cell design guides, KAREL cheatsheet',  to: '/docs',      icon: 'FileText' },
+    { label: 'API Reference',  desc: 'Integrate with the qtvue platform',     to: '/api',       icon: 'Terminal' },
+  ],
+}
+
+/* ============================================================
+   Hover-intent + keyboard + outside-click + reduced-motion
    ============================================================ */
 function open(key: string) {
-  if (closeTimer) {
-    window.clearTimeout(closeTimer)
-    closeTimer = null
-  }
+  if (closeTimer) { window.clearTimeout(closeTimer); closeTimer = null }
   active.value = key
 }
 function scheduleClose() {
   if (closeTimer) window.clearTimeout(closeTimer)
-  closeTimer = window.setTimeout(() => {
-    active.value = null
-  }, HOVER_CLOSE_MS)
+  closeTimer = window.setTimeout(() => { active.value = null }, HOVER_CLOSE_MS)
 }
 function closeNow() {
   if (closeTimer) window.clearTimeout(closeTimer)
   active.value = null
 }
 function toggleClick(key: string) {
-  if (active.value === key) {
-    closeNow()
-  } else {
-    open(key)
-  }
+  if (active.value === key) closeNow()
+  else open(key)
 }
 
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
     const prev = active.value
-    if (mobileOpen.value) {
-      mobileOpen.value = false
-      mobileExpanded.value = null
-      return
-    }
-    if (prev) {
-      closeNow()
-      // return focus to the trigger
-      const trigger = document.getElementById(`trigger-${prev}`)
-      trigger?.focus()
-    }
+    if (mobileOpen.value) { mobileOpen.value = false; mobileExpanded.value = null; return }
+    if (prev) { closeNow(); document.getElementById(`trigger-${prev}`)?.focus() }
   }
 }
 function onDocClick(e: MouseEvent) {
-  const target = e.target as HTMLElement | null
-  if (active.value && target && !target.closest('[data-menu-root]')) closeNow()
-  if (mobileOpen.value && target && !target.closest('[data-mobile-root]') && !target.closest('[data-mobile-trigger]')) {
-    mobileOpen.value = false
-    mobileExpanded.value = null
+  const t = e.target as HTMLElement | null
+  if (active.value && t && !t.closest('[data-menu-root]')) closeNow()
+  if (mobileOpen.value && t && !t.closest('[data-mobile-root]') && !t.closest('[data-mobile-trigger]')) {
+    mobileOpen.value = false; mobileExpanded.value = null
   }
 }
-
-function handleScroll() {
-  scrolled.value = window.scrollY > 8
-}
+function handleScroll() { scrolled.value = window.scrollY > 8 }
 
 onMounted(() => {
   handleScroll()
@@ -147,8 +209,45 @@ watch(() => route.path, () => {
 </script>
 
 <template>
+  <!-- ============================================================
+       ANNOUNCEMENT BAR (greptile pattern — mint bg, single line)
+       ============================================================ -->
+  <div
+    v-if="showAnnouncement"
+    class="relative z-50 border-b border-accent/30 bg-accent text-text"
+  >
+    <Container class="flex h-9 items-center justify-center gap-3 text-[12px] sm:text-[13px]">
+      <span class="font-mono uppercase tracking-[0.18em] text-text/70">New</span>
+      <span class="hidden h-3 w-px bg-text/20 sm:block" />
+      <span class="font-medium">
+        <span class="hidden sm:inline">Now booking Q3 2026 — </span>cell commissioning in
+        <span class="font-bold">under 6 weeks</span>.
+      </span>
+      <NuxtLink
+        to="/contact"
+        class="inline-flex items-center gap-1 font-semibold underline-offset-2 hover:underline"
+      >
+        Book a call
+        <span aria-hidden="true">→</span>
+      </NuxtLink>
+      <button
+        type="button"
+        class="absolute right-3 top-1/2 -translate-y-1/2 grid h-6 w-6 place-items-center rounded-full text-text/60 hover:bg-text/10"
+        aria-label="Dismiss announcement"
+        @click="showAnnouncement = false"
+      >
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 1 L9 9 M9 1 L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+    </Container>
+  </div>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
   <header
-    class="sticky top-0 z-50 w-full border-b border-border/60 bg-bg/85 backdrop-blur-xl supports-[backdrop-filter]:bg-bg/70 transition-shadow"
+    class="sticky top-0 z-40 w-full border-b border-border/60 bg-bg/85 backdrop-blur-xl supports-[backdrop-filter]:bg-bg/70 transition-shadow"
     :class="scrolled && 'shadow-sm'"
     data-menu-root
   >
@@ -172,9 +271,15 @@ watch(() => route.path, () => {
             <NuxtLink
               v-if="entry.type === 'link'"
               :to="entry.to"
-              class="inline-flex h-10 items-center rounded-md px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text"
+              class="inline-flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-all hover:bg-accent/25 hover:text-text"
             >
-              {{ entry.label }}
+              <span>{{ entry.label }}</span>
+              <span
+                v-if="(entry as NavLink).badge"
+                class="rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold text-paper"
+              >
+                {{ (entry as NavLink).badge }}
+              </span>
             </NuxtLink>
 
             <!-- Dropdown trigger -->
@@ -185,10 +290,15 @@ watch(() => route.path, () => {
               :aria-expanded="active === entry.key"
               aria-haspopup="true"
               :aria-controls="`panel-${entry.key}`"
-              class="inline-flex h-10 items-center gap-1.5 rounded-md px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-colors hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              :class="[
+                'inline-flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-[11px] uppercase tracking-[0.14em] transition-all',
+                active === entry.key
+                  ? 'bg-accent text-text'
+                  : 'text-text-secondary hover:bg-accent/25 hover:text-text',
+              ]"
               @click.stop="toggleClick(entry.key)"
             >
-              {{ entry.label }}
+              <span>{{ entry.label }}</span>
               <svg
                 :class="['h-3 w-3 transition-transform duration-200', active === entry.key && 'rotate-180']"
                 viewBox="0 0 16 16" fill="none" aria-hidden="true"
@@ -236,7 +346,9 @@ watch(() => route.path, () => {
       </button>
     </Container>
 
-    <!-- ===================== MEGA PANELS (desktop) ===================== -->
+    <!-- ============================================================
+         MEGA PANELS (desktop) — full-width, greptile-style
+         ============================================================ -->
     <template v-for="entry in menu" :key="`panel-${entry.label}`">
       <div
         v-if="entry.type === 'dropdown'"
@@ -252,60 +364,77 @@ watch(() => route.path, () => {
           : 'pointer-events-none -translate-y-2 opacity-0'"
       >
         <Container class="py-8">
-          <!-- =====================================================
-               CARDS layout (Features) — service tiles w/ icon + desc
-               ===================================================== -->
-          <div v-if="entry.layout === 'cards'">
-            <div class="mb-6 flex items-baseline justify-between">
-              <p class="eyebrow">What we ship</p>
+          <!-- ====== CARDS layout (Features) ====== -->
+          <div v-if="entry.layout === 'cards' && entry.key === 'features'">
+            <div class="mb-5 flex items-baseline justify-between">
+              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary">
+                {{ (entry as NavDrop).panelTitle }}
+              </p>
               <NuxtLink
-                to="/services"
+                v-if="(entry as NavDrop).panelLink"
+                :to="(entry as NavDrop).panelLink!.to"
                 class="font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary hover:text-primary"
                 @click="closeNow"
               >
-                View all services →
+                {{ (entry as NavDrop).panelLink!.label }} →
               </NuxtLink>
             </div>
-            <ul class="grid gap-px overflow-hidden rounded-2xl border border-dashed border-border bg-border md:grid-cols-2">
-              <li v-for="s in services" :key="s.key" class="bg-bg">
+            <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <li v-for="card in featuresData.features" :key="card.label">
                 <NuxtLink
-                  :to="s.to"
+                  :to="card.href"
                   @click="closeNow"
-                  class="group block p-5 transition-colors hover:bg-surface"
+                  class="group flex h-full flex-col overflow-hidden rounded-2xl border border-dashed border-border bg-bg transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
                 >
-                  <div class="flex items-start gap-4">
-                    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-50 text-primary transition-colors group-hover:bg-primary group-hover:text-paper">
-                      <Icon :name="iconForService(s.key)" :size="20" />
-                    </div>
-                    <div class="min-w-0">
-                      <div class="flex items-center gap-2">
-                        <h3 class="text-sm font-semibold text-text group-hover:text-primary">{{ s.title }}</h3>
-                        <span class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden="true">→</span>
+                  <!-- thumbnail (16:9) -->
+                  <div class="relative aspect-[16/9] w-full overflow-hidden bg-surface-2 halftone-bg">
+                    <div class="absolute inset-0 grid place-items-center">
+                      <div class="h-3/5 w-3/5 transition-transform duration-500 group-hover:scale-105">
+                        <RobotMascot :variant="card.thumb === 'cell-design' || card.thumb === 'programming' || card.thumb === 'eoat' ? 'arm' : (card.thumb === 'vision' ? 'head' : 'arm')" />
                       </div>
-                      <p class="mt-1 text-xs text-text-secondary">{{ s.desc }}</p>
                     </div>
+                    <span
+                      v-if="card.badge"
+                      class="absolute left-3 top-3 rounded-full bg-bg/90 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-primary backdrop-blur"
+                    >
+                      {{ card.badge }}
+                    </span>
+                  </div>
+                  <!-- text -->
+                  <div class="flex flex-1 flex-col gap-1.5 p-4">
+                    <div class="flex items-center justify-between gap-2">
+                      <h3 class="text-sm font-bold tracking-tight text-text group-hover:text-primary">
+                        {{ card.label }}
+                      </h3>
+                      <span
+                        class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
+                        aria-hidden="true"
+      >→</span>
+                    </div>
+                    <p class="text-xs leading-relaxed text-text-secondary">{{ card.desc }}</p>
                   </div>
                 </NuxtLink>
               </li>
             </ul>
           </div>
 
-          <!-- =====================================================
-               LIST layout (Resources) — compact two-line items
-               ===================================================== -->
-          <div v-else>
-            <div class="mb-6 flex items-baseline justify-between">
-              <p class="eyebrow">Learn & explore</p>
+          <!-- ====== LIST layout (Resources) ====== -->
+          <div v-else-if="entry.layout === 'list' && entry.key === 'resources'">
+            <div class="mb-5 flex items-baseline justify-between">
+              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-secondary">
+                {{ (entry as NavDrop).panelTitle }}
+              </p>
               <NuxtLink
-                to="/contact"
+                v-if="(entry as NavDrop).panelLink"
+                :to="(entry as NavDrop).panelLink!.to"
                 class="font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary hover:text-primary"
                 @click="closeNow"
               >
-                Talk to us →
+                {{ (entry as NavDrop).panelLink!.label }} →
               </NuxtLink>
             </div>
-            <ul class="grid gap-1 md:grid-cols-2">
-              <li v-for="r in resourcesList" :key="r.to">
+            <ul class="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
+              <li v-for="r in resourcesData.resources" :key="r.to">
                 <NuxtLink
                   :to="r.to"
                   @click="closeNow"
@@ -316,8 +445,13 @@ watch(() => route.path, () => {
                   </div>
                   <div>
                     <div class="flex items-center gap-2">
-                      <span class="text-sm font-semibold text-text group-hover:text-primary">{{ r.label }}</span>
-                      <span class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden="true">→</span>
+                      <span class="text-sm font-semibold text-text group-hover:text-primary">
+                        {{ r.label }}
+                      </span>
+                      <span
+                        class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
+                        aria-hidden="true"
+      >→</span>
                     </div>
                     <p class="text-xs text-text-secondary">{{ r.desc }}</p>
                   </div>
@@ -329,7 +463,9 @@ watch(() => route.path, () => {
       </div>
     </template>
 
-    <!-- ===================== MOBILE DRAWER ===================== -->
+    <!-- ============================================================
+         MOBILE DRAWER
+         ============================================================ -->
     <div
       v-show="mobileOpen"
       data-mobile-root
@@ -368,18 +504,18 @@ watch(() => route.path, () => {
                   />
                 </svg>
               </button>
+
               <ul v-show="mobileExpanded === entry.key" class="pb-2 pl-2">
-                <li v-for="s in services" :key="`m-${s.key}`" v-if="entry.key === 'features'">
+                <li v-for="card in featuresData.features" :key="`mf-${card.label}`" v-if="entry.key === 'features'">
                   <NuxtLink
-                    :to="s.to"
+                    :to="card.href"
                     class="flex items-center gap-2 py-2 text-sm text-text-secondary"
                     @click="mobileOpen = false"
                   >
-                    <Icon :name="iconForService(s.key)" :size="14" />
-                    {{ s.title }}
+                    <span class="font-medium">{{ card.label }}</span>
                   </NuxtLink>
                 </li>
-                <li v-for="r in resourcesList" :key="`m-${r.to}`" v-if="entry.key === 'resources'">
+                <li v-for="r in resourcesData.resources" :key="`mr-${r.to}`" v-if="entry.key === 'resources'">
                   <NuxtLink
                     :to="r.to"
                     class="flex items-center gap-2 py-2 text-sm text-text-secondary"
@@ -409,26 +545,6 @@ watch(() => route.path, () => {
     </div>
   </header>
 </template>
-
-<script lang="ts">
-// Small helpers used in the template
-const resourcesList = [
-  { label: 'Case studies',  desc: 'Selected robotics projects', to: '/work',         icon: 'Briefcase' },
-  { label: 'Industries',    desc: 'Where we deploy',           to: '/industries',   icon: 'Factory' },
-  { label: 'Blog',          desc: 'Notes from our engineers',  to: '/blog',         icon: 'BookOpen' },
-  { label: 'Careers',       desc: 'Join the team',             to: '/careers',      icon: 'Users' },
-]
-const serviceIconMap: Record<string, string> = {
-  integration: 'Cog',
-  programming: 'Code',
-  sales: 'Package',
-  consulting: 'Lightbulb',
-}
-function iconForService(key: string) {
-  return serviceIconMap[key] ?? 'Cog'
-}
-export { resourcesList, iconForService }
-</script>
 
 <style scoped>
 @media (prefers-reduced-motion: reduce) {

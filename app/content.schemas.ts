@@ -43,3 +43,15 @@ export const careerSchema = z.object({
   type: z.string().default('Full-time'),
   department: z.string().optional(),
 })
+
+export const featureSchema = z.object({
+  title: z.string(),
+  summary: z.string(),
+  icon: z.string().default('Sparkles'),
+  thumb: z.string().optional(),
+  badge: z.string().optional(),
+  capabilities: z.array(z.string()).default([]),
+  brands: z.array(z.string()).default([]),
+  metrics: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  order: z.number().default(0),
+})
