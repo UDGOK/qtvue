@@ -28,6 +28,8 @@ export interface NowEntry {
   text: string
   mood: 'shipping' | 'thinking' | 'investigating' | 'shipping-fast' | 'live' | 'reading' | string
   category: string
+  /** Engineering-specific tags — Unitree platforms, SDKs, techniques */
+  tags?: string[]
   link: string | null
   postedAt: string
   expiresAt?: string

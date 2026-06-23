@@ -115,6 +115,21 @@ function moodStyle(mood: string) {
     default:               return 'bg-primary text-paper'
   }
 }
+
+/**
+ * Highlight tags that name a Unitree platform, since they're the
+ * primary subject of every entry. Other tags render neutral.
+ */
+const HIGHLIGHT_PLATFORMS = new Set([
+  'g1', 'go2', 'b2', 'r1', 'h1', 'h2', 'h1-2', 'g1-d', 'arms', 'z1', 'unitree',
+])
+const HIGHLIGHT_SDKS = new Set([
+  'unitree_sdk2', 'unitree_ros2', 'unitree_sim_isaaclab',
+  'lerobot', 'isaac-lab', 'sim2real', 'cyclonedds',
+])
+function tagHighlight(tag: string): boolean {
+  return HIGHLIGHT_PLATFORMS.has(tag) || HIGHLIGHT_SDKS.has(tag)
+}
 </script>
 
 <template>
@@ -265,10 +280,24 @@ function moodStyle(mood: string) {
                 <p class="text-base leading-relaxed text-text">
                   {{ entry.text }}
                 </p>
+
+                <!-- Engineering tags: which Unitree platform / SDK / technique -->
+                <div v-if="entry.tags && entry.tags.length" class="mt-3 flex flex-wrap items-center gap-1.5">
+                  <span class="font-mono text-[9px] uppercase tracking-widest text-text-muted mr-0.5">stack</span>
+                  <span
+                    v-for="tag in entry.tags"
+                    :key="tag"
+                    class="inline-flex h-5 items-center rounded-full border border-border bg-bg px-2 font-mono text-[10px] lowercase tracking-wide text-text-secondary"
+                    :class="tagHighlight(tag) && 'border-primary/40 bg-primary/10 text-primary'"
+                  >
+                    {{ tag.replace(/-/g, ' ') }}
+                  </span>
+                </div>
+
                 <NuxtLink
                   v-if="entry.link"
                   :to="entry.link"
-                  class="mt-3 inline-flex items-center gap-1 font-mono text-[11px] font-semibold uppercase tracking-widest text-primary hover:underline"
+                  class="mt-4 inline-flex items-center gap-1 font-mono text-[11px] font-semibold uppercase tracking-widest text-primary hover:underline"
                 >
                   Read more
                   <span aria-hidden="true">→</span>

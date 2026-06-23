@@ -1,47 +1,115 @@
 {
   "version": 1,
-  "updated": "2026-06-22T19:30:00Z",
+  "updated": "2026-06-22T20:00:00Z",
   "current": {
     "id": "now-001",
-    "text": "Wiring the service-mode hardening guide for Friday's customer.",
+    "text": "Tuning G1 gait parameters for warehouse pick-and-place at 0.6 m/s — cut peak joint torque 18%, smoothed the swing-leg spike.",
     "mood": "shipping",
     "category": "engineering",
-    "link": null,
-    "postedAt": "2026-06-22T19:30:00Z",
-    "expiresAt": "2026-06-24T19:30:00Z"
+    "tags": ["g1", "gait-control", "unitree_sdk2"],
+    "link": "/platforms/g1",
+    "postedAt": "2026-06-22T20:00:00Z",
+    "expiresAt": "2026-06-24T20:00:00Z"
   },
   "recent": [
     {
-      "id": "now-000",
-      "text": "Replaced the platforms dropdown — 8 platforms in a 387px panel with distinct icons per form factor.",
-      "mood": "shipping",
+      "id": "now-002",
+      "text": "Patched 12 G1s in a customer fleet to firmware 1.5.3 — UniPwn-disclosed BT attack surface closed. Verified pairing now requires the physical side-button hold.",
+      "mood": "shipping-fast",
+      "category": "security",
+      "tags": ["g1", "unipwn-2025", "firmware-1.5.3", "bt-hardening"],
+      "link": "/blog/post-unipwn-2025",
+      "postedAt": "2026-06-22T16:00:00Z"
+    },
+    {
+      "id": "now-003",
+      "text": "Tracking intermittent Go2 IMU drift under cold-start. Suspect magnetometer calibration order — collecting 200 cold-boot logs from the customer fleet tonight.",
+      "mood": "investigating",
       "category": "engineering",
-      "link": "/blog/unitree-sdk2-deep-dive",
-      "postedAt": "2026-06-22T15:00:00Z"
-    },
-    {
-      "id": "now-archive-001",
-      "text": "Shipped the complete AIO/GEO/SEO stack — llms.txt, robots.txt with 30+ AI bot Allow rules, Organization JSON-LD, per-page Product/Service schemas.",
-      "mood": "shipping",
-      "category": "seo",
+      "tags": ["go2", "imu", "magnetometer", "cold-start"],
       "link": null,
-      "postedAt": "2026-06-22T11:30:00Z"
+      "postedAt": "2026-06-22T11:00:00Z"
     },
     {
-      "id": "now-archive-002",
-      "text": "Fixed iOS Safari video autoplay — autoplay attribute now in static HTML, added webkit-playsinline, background-mode wrapper fills parent.",
-      "mood": "shipping",
-      "category": "bugfix",
-      "link": "/",
+      "id": "now-004",
+      "text": "Deployed the ACT locomotion policy to 4 customer Go2s. Threshold success went 67% → 89% at 8cm obstacles, 41% → 91% on push recovery.",
+      "mood": "shipping-fast",
+      "category": "programming",
+      "tags": ["go2", "lerobot", "act-policy", "imitation-learning"],
+      "link": "/blog/lerobot-meets-unitree-go2",
       "postedAt": "2026-06-22T07:00:00Z"
     },
     {
-      "id": "now-archive-003",
-      "text": "Diagnosed the dark-mode nextSibling crash — ThemeToggle's v-if/v-else rendered different DOM between SSR and CSR.",
-      "mood": "shipping",
-      "category": "bugfix",
-      "link": null,
+      "id": "now-005",
+      "text": "Re-reading the LeRobot ACT paper for the third time. The temporal-ensembling trick is the whole reason it transfers without retraining.",
+      "mood": "reading",
+      "category": "research",
+      "tags": ["lerobot", "act", "transformer", "imitation-learning"],
+      "link": "/blog/lerobot-meets-unitree-go2",
       "postedAt": "2026-06-21T22:00:00Z"
+    },
+    {
+      "id": "now-006",
+      "text": "Wrote the G1 arm trajectory planner. Quintic interpolation, 200 Hz control loop, 0.5mm end-effector precision on the bench.",
+      "mood": "shipping",
+      "category": "programming",
+      "tags": ["g1", "arm-control", "ros2", "trajectory-planning"],
+      "link": "/platforms/g1",
+      "postedAt": "2026-06-21T18:00:00Z"
+    },
+    {
+      "id": "now-007",
+      "text": "Designing the B2 warehouse-patrol geofence. Convex hull over the LiDAR SLAM map with a 30cm buffer for pose uncertainty at 5cm map resolution.",
+      "mood": "thinking",
+      "category": "planning",
+      "tags": ["b2", "lidar-slam", "geofencing", "patrol"],
+      "link": "/platforms/b2",
+      "postedAt": "2026-06-21T14:00:00Z"
+    },
+    {
+      "id": "now-008",
+      "text": "Debugging a DDS multicast TTL=1 issue at one customer site. Their switch vendor confirmed they're silently resetting TTL on L2 forwarding — control packets were looping back to the host.",
+      "mood": "investigating",
+      "category": "engineering",
+      "tags": ["cyclonedds", "multicast", "ttl", "network"],
+      "link": "/blog/unitree-sdk2-deep-dive",
+      "postedAt": "2026-06-20T19:00:00Z"
+    },
+    {
+      "id": "now-009",
+      "text": "Bench-tested the unitree_sim_isaaclab G1 env. Sim-to-real transfer on flat ground hits 96% success before any on-robot fine-tuning.",
+      "mood": "shipping",
+      "category": "sim2real",
+      "tags": ["g1", "isaac-lab", "sim2real", "unitree_sim_isaaclab"],
+      "link": "/blog/isaac-lab-sim-to-real",
+      "postedAt": "2026-06-20T15:00:00Z"
+    },
+    {
+      "id": "now-010",
+      "text": "Re-read the UniPwn 2025 disclosure carefully. The BT pairing flaw is bad but the firmware-upload-over-BT-service is the catastrophic primitive — fixed in 1.5.2 but check if your fleet is on 1.5.0.",
+      "mood": "reading",
+      "category": "security",
+      "tags": ["unipwn-2025", "bt", "firmware", "cve"],
+      "link": "/blog/post-unipwn-2025",
+      "postedAt": "2026-06-19T20:00:00Z"
+    },
+    {
+      "id": "now-011",
+      "text": "Measured the G1 in 'sport mode' at full pace — 1.4 m/s on the bench, not the 1.5 m/s in the marketing. Battery lasted 1h 47m, not the 5h standby figure.",
+      "mood": "shipping",
+      "category": "research",
+      "tags": ["g1", "battery", "measurement", "honest-callout"],
+      "link": "/blog/real-battery-life",
+      "postedAt": "2026-06-19T16:00:00Z"
+    },
+    {
+      "id": "now-012",
+      "text": "Refactored the unitree_sdk2 wrapper to add a heartbeat-watchdog. If the control host misses 3 consecutive state frames at 200 Hz, the robot calls Damp() autonomously.",
+      "mood": "shipping",
+      "category": "programming",
+      "tags": ["unitree_sdk2", "watchdog", "safety", "damp"],
+      "link": "/blog/unitree-sdk2-deep-dive",
+      "postedAt": "2026-06-19T11:00:00Z"
     }
   ]
 }
