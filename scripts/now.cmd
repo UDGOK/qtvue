@@ -1,6 +1,6 @@
 @echo off
 REM ============================================================
-REM qtvue now — cmd.exe wrapper
+REM qtvue now - cmd.exe wrapper
 REM Allows `now "text" mood category` from any command prompt
 REM once scripts\ is on your PATH.
 REM ============================================================

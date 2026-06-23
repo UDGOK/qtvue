@@ -1,6 +1,6 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
-qtvue now — Windows installer
+qtvue now - Windows installer (ASCII-only for Windows PowerShell 5.1 compat)
 
 Run once from PowerShell. It will:
   1. Prompt for your GitHub Personal Access Token (masked input).
@@ -14,6 +14,11 @@ Usage (from inside the qtvue repo, or anywhere after cloning):
 
 If you cloned to a non-standard location, pass it:
   PS> .\scripts\install-windows.ps1 -RepoPath C:\code\qtvue
+
+NOTE: This script is pure ASCII on purpose. PowerShell 5.1 (the version
+       that ships with Windows 10/11) reads .ps1 files as Windows-1252
+       by default, which mangles UTF-8 box-drawing / arrow characters
+       and breaks the parser. ASCII keeps it portable.
 #>
 
 param(
@@ -23,9 +28,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 Write-Host ""
-Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║  qtvue now — Windows installer                       ║" -ForegroundColor Green
-Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Green
+Write-Host "+========================================================+"
+Write-Host "|  qtvue now - Windows installer                         |"
+Write-Host "+========================================================+"
 Write-Host ""
 
 # ---------------------------------------------------------------- locate repo
@@ -43,13 +48,13 @@ if (-not $RepoPath) {
 }
 
 if (-not $RepoPath -or -not (Test-Path (Join-Path $RepoPath "public/now.json"))) {
-    Write-Host "Cannot find public/now.json." -ForegroundColor Red
+    Write-Host "ERROR: Cannot find public/now.json." -ForegroundColor Red
     Write-Host ""
-    Write-Host "Either:" -ForegroundColor Yellow
+    Write-Host "Either:"
     Write-Host "  (a) cd into the qtvue repo first, or"
     Write-Host "  (b) pass the path:  .\install-windows.ps1 -RepoPath C:\code\qtvue"
     Write-Host ""
-    Write-Host "Clone the repo if you haven't:" -ForegroundColor Cyan
+    Write-Host "Clone the repo if you haven't:"
     Write-Host "  git clone https://github.com/UDGOK/qtvue.git C:\Users\$env:USERNAME\qtvue"
     exit 1
 }
@@ -67,7 +72,7 @@ if ($ExistingToken -and $ExistingToken.Length -gt 0) {
         Write-Host "Keeping existing token." -ForegroundColor Green
         $Token = $ExistingToken
     } else {
-        $Token = $null  # prompt below
+        $Token = $null
     }
 }
 
@@ -75,12 +80,12 @@ if ($ExistingToken -and $ExistingToken.Length -gt 0) {
 if (-not $Token) {
     Write-Host ""
     Write-Host "Create a GitHub Personal Access Token at:" -ForegroundColor Cyan
-    Write-Host "  https://github.com/settings/tokens" -ForegroundColor White
+    Write-Host "  https://github.com/settings/tokens"
     Write-Host ""
-    Write-Host "Settings:" -ForegroundColor Cyan
-    Write-Host "  Name:        qtvue-now-cli" -ForegroundColor White
-    Write-Host "  Expiration:  90 days (or no expiration)" -ForegroundColor White
-    Write-Host "  Scopes:      repo (only this is needed)" -ForegroundColor White
+    Write-Host "Settings:"
+    Write-Host "  Name:        qtvue-now-cli"
+    Write-Host "  Expiration:  90 days (or no expiration)"
+    Write-Host "  Scopes:      repo (only this is needed)"
     Write-Host ""
 
     $SecureToken = Read-Host "Paste your GitHub PAT (input hidden)" -AsSecureString
@@ -98,14 +103,14 @@ if (-not $Token) {
     if (-not $Token.StartsWith("ghp_") -and -not $Token.StartsWith("github_pat_")) {
         Write-Host ""
         Write-Host "WARNING: token doesn't start with 'ghp_' or 'github_pat_'." -ForegroundColor Yellow
-        Write-Host "It might be invalid. Continuing anyway — you can fix it later." -ForegroundColor Yellow
+        Write-Host "It might be invalid. Continuing anyway - you can fix it later." -ForegroundColor Yellow
     }
 
     # Save to user environment (persistent)
     [Environment]::SetEnvironmentVariable("GITHUB_TOKEN", $Token, "User")
     Write-Host ""
-    Write-Host "✓ Token saved to your user environment." -ForegroundColor Green
-    Write-Host "  (Stored in HKEY_CURRENT_USER\Environment — visible to all your apps.)" -ForegroundColor DarkGray
+    Write-Host "[OK] Token saved to your user environment." -ForegroundColor Green
+    Write-Host "  (Stored in HKEY_CURRENT_USER\Environment - visible to all your apps.)" -ForegroundColor DarkGray
 }
 
 # ---------------------------------------------------------------- add scripts/ to PATH
@@ -116,7 +121,6 @@ Write-Host ""
 if ($UserPath -and ($UserPath -split ";" -contains $ScriptsDir)) {
     Write-Host "scripts\ already on user PATH." -ForegroundColor Green
 } else {
-    # Avoid duplicates
     $PathParts = if ($UserPath) { $UserPath -split ";" } else { @() }
     $PathParts = @($PathParts | Where-Object { $_ -and $_ -ne "" })
 
@@ -125,7 +129,7 @@ if ($UserPath -and ($UserPath -split ";" -contains $ScriptsDir)) {
     } else {
         $NewPath = if ($UserPath) { "$UserPath;$ScriptsDir" } else { $ScriptsDir }
         [Environment]::SetEnvironmentVariable("Path", $NewPath, "User")
-        Write-Host "✓ Added scripts\ to your user PATH:" -ForegroundColor Green
+        Write-Host "[OK] Added scripts\ to your user PATH:" -ForegroundColor Green
         Write-Host "  $ScriptsDir" -ForegroundColor DarkGray
     }
 }
@@ -136,26 +140,26 @@ $env:Path = [Environment]::GetEnvironmentVariable("Path", "User") + ";" + $env:P
 
 # ---------------------------------------------------------------- verify install
 Write-Host ""
-Write-Host "→ Verifying install..." -ForegroundColor Cyan
+Write-Host "-> Verifying install..." -ForegroundColor Cyan
 Write-Host ""
 
 $TestNow = Get-Command now -ErrorAction SilentlyContinue
 if ($TestNow) {
-    Write-Host "✓ 'now' command resolved:" -ForegroundColor Green
+    Write-Host "[OK] 'now' command resolved:" -ForegroundColor Green
     Write-Host "  $($TestNow.Source)" -ForegroundColor DarkGray
 } else {
-    Write-Host "⚠ 'now' not yet on PATH in this session." -ForegroundColor Yellow
+    Write-Host "[!] 'now' not yet on PATH in this session." -ForegroundColor Yellow
     Write-Host "  Open a new PowerShell window and try again." -ForegroundColor Yellow
 }
 
 Write-Host ""
-Write-Host "→ Testing JSON parse + git status..." -ForegroundColor Cyan
+Write-Host "-> Testing JSON parse + git status..." -ForegroundColor Cyan
 Write-Host ""
 
 Push-Location $RepoPath
 try {
     $Json = Get-Content "public/now.json" -Raw -Encoding UTF8 | ConvertFrom-Json
-    Write-Host "✓ public/now.json parsed:" -ForegroundColor Green
+    Write-Host "[OK] public/now.json parsed:" -ForegroundColor Green
     Write-Host "  current: $($Json.current.text)" -ForegroundColor DarkGray
     Write-Host "  recent:  $($Json.recent.Count) archived entries" -ForegroundColor DarkGray
     Write-Host ""
@@ -165,7 +169,7 @@ try {
         Write-Host "Uncommitted changes:" -ForegroundColor Yellow
         Write-Host $GitStatus
     } else {
-        Write-Host "✓ Working tree clean." -ForegroundColor Green
+        Write-Host "[OK] Working tree clean." -ForegroundColor Green
     }
 }
 finally {
@@ -174,15 +178,15 @@ finally {
 
 # ---------------------------------------------------------------- done
 Write-Host ""
-Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║  ✓ Install complete                                   ║" -ForegroundColor Green
-Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Green
+Write-Host "+========================================================+"
+Write-Host "|  [OK] Install complete                                 |"
+Write-Host "+========================================================+"
 Write-Host ""
 Write-Host "Open a NEW PowerShell window (so PATH updates apply), then from anywhere:"
 Write-Host ""
 Write-Host "  PS> now `"Tuning H1 footstep planner for 12cm obstacles`" shipping-fast engineering" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "Or with tags:" -ForegroundColor Cyan
+Write-Host "Or with tags:"
 Write-Host "  PS> now `"Deployed ACT policy to Go2s`" shipping-fast programming `"go2,lerobot,act`"" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "Tip: hit Up arrow in PowerShell to recall the last command — just edit the text."
+Write-Host "Tip: hit Up arrow in PowerShell to recall the last command - just edit the text."

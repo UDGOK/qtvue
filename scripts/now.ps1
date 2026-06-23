@@ -1,6 +1,6 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
-qtvue now — PowerShell port of scripts/now.sh
+qtvue now - PowerShell port of scripts/now.sh
 
 Same flow as the bash version:
   1. Read public/now.json in the qtvue repo (or QTvue_REPO path).
@@ -24,7 +24,7 @@ Tags (optional, comma-separated): platform/SDK/technique identifiers
   e.g. "g1,lerobot,act-policy"
 
 Setup (one-time on Windows):
-  Run .\install-windows.ps1 in PowerShell — it will:
+  Run .\install-windows.ps1 in PowerShell - it will:
     - Prompt for your GitHub PAT (with masked input)
     - Save it permanently to your user environment
     - Add the scripts\ directory to your user PATH
@@ -159,10 +159,10 @@ if ($TagsArray.Count -gt 0) {
     $NewEntry["tags"] = $TagsArray
 }
 
-# Archive previous current → top of recent
+# Archive previous current -> top of recent
 if ($Data.current) {
     if (-not $Data.recent) { $Data.recent = @() }
-    # Convert PSCustomObject → ordered hashtable to preserve insertion order
+    # Convert PSCustomObject -> ordered hashtable to preserve insertion order
     $PrevCurrent = [ordered]@{}
     foreach ($prop in $Data.current.PSObject.Properties) {
         $PrevCurrent[$prop.Name] = $prop.Value
@@ -198,7 +198,7 @@ Write-Host "  postedAt:  $Now"
 
 # ---------------------------------------------------------------- commit + push
 Write-Host ""
-Write-Host "→ Committing and pushing..."
+Write-Host "-> Committing and pushing..."
 
 Push-Location $Repo
 try {
@@ -207,7 +207,7 @@ try {
     $CommitMsg = "now: $Text"
     $CommitOutput = git -c user.email="now@qtvue.com" -c user.name="qtvue now CLI" commit -m $CommitMsg --no-verify 2>&1
     if ($LASTEXITCODE -ne 0) {
-        # Could be 'nothing to commit' — handle gracefully
+        # Could be 'nothing to commit' - handle gracefully
         if ($CommitOutput -match "nothing to commit") {
             Write-Host "WARN: nothing to commit (entry text identical to last?)" -ForegroundColor Yellow
         } else {
@@ -222,17 +222,17 @@ try {
     $PushOutput = git push $Remote $Branch --no-verify 2>&1
     if ($LASTEXITCODE -ne 0) {
         Write-Host ""
-        Write-Host "✗ Push failed." -ForegroundColor Red
+        Write-Host "[X] Push failed." -ForegroundColor Red
         Write-Host $PushOutput
         Write-Host ""
-        Write-Host "The commit is local — retry manually:"
+        Write-Host "The commit is local - retry manually:"
         Write-Host "  cd $Repo"
         Write-Host "  git push https://x-access-token:`$GITHUB_TOKEN@github.com/UDGOK/qtvue.git $Branch"
         exit 1
     }
 
     Write-Host ""
-    Write-Host "✓ Pushed. Vercel will deploy in ~30s." -ForegroundColor Green
+    Write-Host "[OK] Pushed. Vercel will deploy in ~30s." -ForegroundColor Green
     Write-Host "  Live at: https://qtvue.com/now"
 }
 finally {
