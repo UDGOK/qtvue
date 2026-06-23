@@ -33,6 +33,7 @@ const cols = [
     links: [
       { label: 'About',         to: '/about' },
       { label: 'How it works',  to: '/how-it-works' },
+      { label: 'Pricing',       to: '/pricing' },
       { label: 'Blog',          to: '/blog' },
       { label: 'Careers',       to: '/careers' },
       { label: 'Submit use case', to: '/intake' },
