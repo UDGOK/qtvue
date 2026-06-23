@@ -128,8 +128,8 @@ if ($ValidMoods -notcontains $Mood) {
 # ---------------------------------------------------------------- update JSON
 $JsonPath = Join-Path $Repo "public/now.json"
 
-# Parse with strict error reporting. If parsing fails, show the
-# raw error and offer to reset from git.
+# Parse with strict error reporting. If parsing fails, attempt to
+# auto-recover from git's last-known-good version before bailing.
 try {
     $Raw = Get-Content $JsonPath -Raw -Encoding UTF8
     $Data = $Raw | ConvertFrom-Json
@@ -138,20 +138,30 @@ try {
     Write-Host ""
     Write-Host "  Parse error: $($_.Exception.Message)" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "  This usually means the JSON was corrupted by an earlier" -ForegroundColor Yellow
-    Write-Host "  failed run (write succeeded but push did not)." -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host "  Fix it now:" -ForegroundColor Cyan
-    Write-Host "    cd $Repo"
-    Write-Host "    git checkout main -- public/now.json"
-    Write-Host ""
+    Write-Host "  Attempting auto-recovery from git..." -ForegroundColor Cyan
+
     Push-Location $Repo -ErrorAction SilentlyContinue
-    if ($Repo) {
-        Write-Host "  Or see the corrupted file:" -ForegroundColor Cyan
-        Write-Host "    Get-Content public/now.json -Raw | Select-Object -First 20"
+    try {
+        # Try HEAD first (the most recent good commit, even if unpushed)
+        $Recovered = git checkout HEAD -- public/now.json 2>&1
+        if ($Recovered -match "error") {
+            # Fall back to origin/main
+            $Recovered = git checkout origin/main -- public/now.json 2>&1
+        }
+        if ($Recovered -notmatch "error") {
+            Write-Host "  [OK] Restored from git. Retrying parse..." -ForegroundColor Green
+            $Data = Get-Content $JsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        } else {
+            Write-Host "  [X] Auto-recovery failed: $Recovered" -ForegroundColor Red
+            Write-Host ""
+            Write-Host "  Manual fix:" -ForegroundColor Cyan
+            Write-Host "    cd $Repo"
+            Write-Host "    git checkout HEAD -- public/now.json"
+            exit 1
+        }
+    } finally {
+        Pop-Location -ErrorAction SilentlyContinue
     }
-    Pop-Location -ErrorAction SilentlyContinue
-    exit 1
 }
 
 # Normalize arrays: PowerShell's ConvertFrom-Json returns single
@@ -204,16 +214,36 @@ $Data.current = $NewEntry
 $Data.updated = $Now
 if (-not $Data.version) { $Data.version = 1 }
 
-# Write back with stable field ordering
+# Write back with stable field ordering. We use [System.IO.File]::WriteAllText
+# with a UTF-8 encoder that does NOT emit a BOM. This is critical because:
+#  (1) Out-File -Encoding utf8 in PS 5.1 emits a BOM that some downstream
+#      JSON parsers reject (Python's json.load, some AI crawlers).
+#  (2) ConvertTo-Json on [ordered]@{} piped through | is occasionally flaky
+#      on PowerShell 5.1 and can emit a stray "1," prefix.
+# Direct WriteAllText with UTF8NoBOM encoding sidesteps both issues.
 $Ordered = [ordered]@{}
 foreach ($prop in "version", "updated", "current", "recent") {
     if ($null -ne $Data.$prop) { $Ordered[$prop] = $Data.$prop }
 }
 $Json = $Ordered | ConvertTo-Json -Depth 20
-# PowerShell 5.1 emits UTF-8 with BOM by default; ConvertFrom-Json
-# tolerates it, but git diff is cleaner without. Strip the BOM.
 if ($Json.StartsWith([char]0xFEFF)) { $Json = $Json.Substring(1) }
-$Json | Out-File -FilePath $JsonPath -Encoding utf8 -NoNewline
+
+# Validate the JSON before writing — fail fast if ConvertTo-Json produced
+# anything unparseable. This catches the "1," artifact at write time
+# instead of at next read time.
+try {
+    $null = $Json | ConvertFrom-Json
+} catch {
+    Write-Host "ERROR: ConvertTo-Json produced invalid JSON. Aborting." -ForegroundColor Red
+    Write-Host "  $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host "  Raw output (first 200 chars):" -ForegroundColor Yellow
+    Write-Host "  $($Json.Substring(0, [Math]::Min(200, $Json.Length)))" -ForegroundColor Yellow
+    exit 1
+}
+
+# Write without BOM. Use the constructor with $false to disable the BOM.
+$Utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+[System.IO.File]::WriteAllText($JsonPath, $Json, $Utf8NoBom)
 
 Write-Host ""
 Write-Host "  id:        $Id"
