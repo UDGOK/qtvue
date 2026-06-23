@@ -142,6 +142,18 @@ useSchemaOrg([
       </Reveal>
     </Section>
 
+    <!-- ============================================================
+         PRACTITIONER TOOL — the most "we actually do this work"
+         artifact on the site. Goes right before the ink-band CTA so
+         a visitor who's read this far and is still engaged sees a
+         working tool, not a sales pitch.
+         ============================================================ -->
+    <ChecklistCallout
+      variant="banner"
+      context="Same checklist we use internally before signing off a deployment"
+      placement="about"
+    />
+
     <Section tone="ink" eyebrow="Get in touch" heading="Submit your use case.">
       <Reveal>
         <p class="max-w-2xl text-paper/80">

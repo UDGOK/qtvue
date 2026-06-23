@@ -39,6 +39,13 @@ const cols = [
     ],
   },
   {
+    heading: 'Free tool',
+    links: [
+      { label: 'Robot Review Checklist', to: '/robot-review-checklist' },
+    ],
+    blurb: '47 checks &middot; saves locally &middot; no login',
+  },
+  {
     heading: 'Legal',
     links: [
       { label: 'Privacy', to: '/legal/privacy' },
@@ -71,7 +78,7 @@ const cols = [
       </Container>
     </div>
 
-    <Container class="grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-6">
+    <Container class="grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-7">
       <div class="lg:col-span-2">
         <Logo variant="full" />
         <p class="mt-4 max-w-xs text-sm text-text-secondary">
@@ -111,6 +118,11 @@ const cols = [
         >
           {{ l.label }}
         </NuxtLink>
+        <p
+          v-if="col.blurb"
+          class="mt-1 text-xs leading-snug text-text-muted"
+          v-html="col.blurb"
+        />
       </div>
     </Container>
 

@@ -196,6 +196,19 @@ useSchemaOrg(() => {
     </section>
 
     <!-- ============================================================
+         FREE TOOL CALLOUT — sits between the hero and the featured
+         article. Blog readers are the most qualified visitors on
+         the site (they chose to read 45-min deep-dives). A working
+         checklist is exactly the artifact a serious reader wants
+         to bookmark.
+         ============================================================ -->
+    <ChecklistCallout
+      variant="banner"
+      context="Most bookmarked page on the site · 47 checks · no login"
+      placement="blog"
+    />
+
+    <!-- ============================================================
          FEATURED ARTICLE (greptile pattern: big cover + meta + CTAs)
          ============================================================ -->
     <section v-if="featured" class="relative border-b border-border bg-bg">

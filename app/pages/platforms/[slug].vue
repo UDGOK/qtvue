@@ -278,6 +278,18 @@ useSchemaOrg(() => {
       </div>
     </Section>
 
+    <!-- ============================================================
+         BEFORE YOU DEPLOY — anyone evaluating a Unitree platform
+         for a real deployment needs an acceptance checklist. Drop
+         the cta-band RIGHT BEFORE the ink CTA, so the visitor's
+         eye sees: 'checklist' → 'submit use case' → 'intake form'.
+         ============================================================ -->
+    <ChecklistCallout
+      variant="cta-band"
+      :context="`Before you sign off a ${platform.value?.title ?? 'Unitree'} deployment, run the 47-check acceptance test.`"
+      placement="platform"
+    />
+
     <!-- CTA -->
     <Section tone="ink" eyebrow="Get one" heading="Submit your use case.">
       <Reveal>

@@ -161,6 +161,19 @@ useSchemaOrg(() => {
       </Reveal>
     </Section>
 
+    <!-- ============================================================
+         BEFORE YOU ENGAGE — services pages attract evaluators who
+         are about to commit. A free self-assessment tool right
+         before the intake CTA converts a curious visitor into a
+         qualified lead (they tick the boxes, then they know what
+         to put in the form).
+         ============================================================ -->
+    <ChecklistCallout
+      variant="cta-band"
+      :context="`Self-assess before you scope a ${service.value?.title ?? 'qtvue'} engagement — 47 checks, saves locally.`"
+      placement="service"
+    />
+
     <Section tone="ink" eyebrow="Get started" heading="Submit your use case.">
       <Reveal>
         <p class="max-w-2xl text-paper/80">

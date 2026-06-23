@@ -28,6 +28,20 @@ useSeoMeta({
       </Container>
     </section>
 
+    <!-- ============================================================
+         STEP 0 — SELF-ASSESS. The page most likely to convert a
+         qualified lead is the one that catches them BEFORE they
+         hit "Submit". The Robot Review Checklist is the most
+         qualified-engagement filter we can offer: 47 checks,
+         tick-as-you-go, saves locally. Visitors who complete it
+         arrive at the form knowing what they actually need.
+         ============================================================ -->
+    <ChecklistCallout
+      variant="banner"
+      context="Step 0 — runs before the 4 steps below · no login required"
+      placement="how-it-works"
+    />
+
     <Section>
       <ol class="grid gap-4 md:grid-cols-2">
         <Reveal :delay="0" as="li">

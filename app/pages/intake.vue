@@ -121,6 +121,20 @@ const canProceed = computed(() => {
       </Container>
     </section>
 
+    <!-- ============================================================
+         BEFORE YOU SUBMIT — run the checklist first.
+         The most intelligent place for this: anyone landing on the
+         intake page is committed enough to engage. Giving them a
+         free self-assessment tool right before the form helps them
+         write a better submission (faster engineering review on
+         our end = better quote for them).
+         ============================================================ -->
+    <ChecklistCallout
+      variant="banner"
+      context="On the conversion path · before the 5-step form"
+      placement="intake"
+    />
+
     <Section>
       <div class="mx-auto max-w-2xl">
         <!-- progress -->

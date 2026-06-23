@@ -296,6 +296,15 @@ const servicesByKey = computed(() => {
       eyebrow="How it works"
       heading="From use case to first deployment."
     >
+      <!-- Self-assess callout sits above the 4 steps, mirroring
+           /how-it-works — a free pre-engagement tool catches visitors
+           BEFORE they hit the form. -->
+      <ChecklistCallout
+        variant="inline"
+        context="Step 0 — run it before step 01 to know what you actually need."
+        placement="homepage"
+        class="mb-6"
+      />
       <ol class="grid gap-4 md:grid-cols-4">
         <Reveal :delay="0" as="li">
           <div class="flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-6">
@@ -445,7 +454,7 @@ const servicesByKey = computed(() => {
               </NuxtLink>
             </div>
           </div>
-          <div class="lg:col-span-5">
+          <div class="lg:col-span-5 flex flex-col gap-4">
             <Card variant="default" pad="lg" class="border-dashed">
               <p class="eyebrow">Honest spec callouts</p>
               <ul class="mt-3 space-y-2 font-mono text-xs leading-relaxed text-text-secondary">
@@ -459,6 +468,14 @@ const servicesByKey = computed(() => {
                 The kinds of specifics that signal we actually know the hardware.
               </p>
             </Card>
+            <!-- Free tool — same right column, stacks below the callouts.
+                 A practitioner-led shop publishes its acceptance criteria
+                 as a working tool, not a marketing PDF. -->
+            <ChecklistCallout
+              variant="inline"
+              context="47 checks · 3 layers · saves locally · no login."
+              placement="homepage"
+            />
           </div>
         </div>
       </Reveal>
