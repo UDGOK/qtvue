@@ -128,13 +128,37 @@ if ($ValidMoods -notcontains $Mood) {
 # ---------------------------------------------------------------- update JSON
 $JsonPath = Join-Path $Repo "public/now.json"
 
+# Parse with strict error reporting. If parsing fails, show the
+# raw error and offer to reset from git.
 try {
-    $Data = Get-Content $JsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $Raw = Get-Content $JsonPath -Raw -Encoding UTF8
+    $Data = $Raw | ConvertFrom-Json
 } catch {
     Write-Host "ERROR: failed to parse $JsonPath" -ForegroundColor Red
-    Write-Host $_.Exception.Message
+    Write-Host ""
+    Write-Host "  Parse error: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "  This usually means the JSON was corrupted by an earlier" -ForegroundColor Yellow
+    Write-Host "  failed run (write succeeded but push did not)." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "  Fix it now:" -ForegroundColor Cyan
+    Write-Host "    cd $Repo"
+    Write-Host "    git checkout main -- public/now.json"
+    Write-Host ""
+    Push-Location $Repo -ErrorAction SilentlyContinue
+    if ($Repo) {
+        Write-Host "  Or see the corrupted file:" -ForegroundColor Cyan
+        Write-Host "    Get-Content public/now.json -Raw | Select-Object -First 20"
+    }
+    Pop-Location -ErrorAction SilentlyContinue
     exit 1
 }
+
+# Normalize arrays: PowerShell's ConvertFrom-Json returns single
+# objects (not arrays) for 1-element arrays. We need them as arrays
+# so subsequent writes don't produce malformed JSON.
+if ($null -eq $Data.recent) { $Data.recent = @() }
+if ($Data.recent -isnot [System.Array]) { $Data.recent = @($Data.recent) }
 
 # Build new entry
 $Now = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
@@ -159,16 +183,21 @@ if ($TagsArray.Count -gt 0) {
     $NewEntry["tags"] = $TagsArray
 }
 
-# Archive previous current -> top of recent
+# Archive previous current -> top of recent.
+# Wrap each step in @() to force array semantics so PowerShell
+# doesn't flatten a 1-element list into a scalar.
 if ($Data.current) {
-    if (-not $Data.recent) { $Data.recent = @() }
-    # Convert PSCustomObject -> ordered hashtable to preserve insertion order
+    if ($null -eq $Data.recent) { $Data.recent = @() }
+    if ($Data.recent -isnot [System.Array]) { $Data.recent = @($Data.recent) }
+
     $PrevCurrent = [ordered]@{}
     foreach ($prop in $Data.current.PSObject.Properties) {
         $PrevCurrent[$prop.Name] = $prop.Value
     }
-    $Data.recent = @($PrevCurrent) + @($Data.recent | Select-Object)
-    $Data.recent = @($Data.recent | Select-Object -First 20)
+    # Prepend the previous current to the recent list, then cap at 20
+    $Data.recent = @($PrevCurrent) + @($Data.recent) | Select-Object -First 20
+    # Ensure it stays an array even after Select-Object
+    $Data.recent = @($Data.recent)
 }
 
 $Data.current = $NewEntry
