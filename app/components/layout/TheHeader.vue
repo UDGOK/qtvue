@@ -73,6 +73,7 @@ const menu: MenuEntry[] = [
     panelLink: { label: 'See the full stack', to: '/services' },
   },
   { type: 'link', label: 'How it works', to: '/how-it-works', icon: 'ListChecks' },
+  { type: 'link', label: 'Pricing',     to: '/pricing',      icon: 'Tag' },
   { type: 'link', label: 'About',       to: '/about',         icon: 'User' },
 ]
 
