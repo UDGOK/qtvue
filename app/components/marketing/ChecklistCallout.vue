@@ -70,7 +70,7 @@ withDefaults(
         <div class="md:col-span-4 flex flex-col items-start md:items-end gap-3">
           <NuxtLink
             to="/robot-review-checklist"
-            class="group inline-flex h-12 items-center gap-2 rounded-full bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:bg-primary-600"
+            class="group inline-flex h-12 items-center gap-2 rounded-none bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:bg-primary-600"
           >
             Open the checklist
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform group-hover:translate-x-0.5">
@@ -92,11 +92,11 @@ withDefaults(
   <NuxtLink
     v-else-if="variant === 'inline'"
     to="/robot-review-checklist"
-    class="group block rounded-2xl border border-dashed border-border bg-bg p-5 transition-all hover:border-primary/60 hover:bg-primary-50/40 hover:-translate-y-0.5"
+    class="group block rounded-none border border-dashed border-border bg-bg p-5 transition-all hover:border-primary/60 hover:bg-primary-50/40 hover:-translate-y-0.5"
   >
     <div class="flex items-start gap-4">
       <!-- icon: clipboard with check -->
-      <div class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-bg">
+      <div class="grid h-10 w-10 shrink-0 place-items-center rounded-none bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-bg">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="8" y="2" width="8" height="4" rx="1" />
           <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
@@ -175,7 +175,7 @@ withDefaults(
         <div class="md:col-span-4 flex md:justify-end">
           <NuxtLink
             to="/robot-review-checklist"
-            class="group inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+            class="group inline-flex h-11 items-center gap-2 rounded-none bg-accent px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
           >
             Open the checklist
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform group-hover:translate-x-0.5">

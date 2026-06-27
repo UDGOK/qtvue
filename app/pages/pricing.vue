@@ -270,7 +270,7 @@ const capacity = {
             </NuxtLink>
             <NuxtLink
               to="/how-it-works"
-              class="inline-flex h-12 items-center rounded-full border border-border px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+              class="inline-flex h-12 items-center rounded-none border border-border px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
             >
               How it works
             </NuxtLink>
@@ -310,7 +310,7 @@ const capacity = {
          ==================================================================== -->
     <section class="border-b border-border">
       <Container class="py-16 sm:py-20">
-        <div class="grid gap-px md:grid-cols-2 bg-border rounded-2xl overflow-hidden border border-border">
+        <div class="grid gap-px md:grid-cols-2 bg-border rounded-none overflow-hidden border border-border">
           <!-- ============================================================
                PLAN 1: ENGAGEMENT (project-based, greptile "Pro")
                ============================================================ -->
@@ -497,7 +497,7 @@ const capacity = {
          ==================================================================== -->
     <section class="border-b border-border">
       <Container class="py-16 sm:py-20">
-        <div class="grid gap-px md:grid-cols-2 bg-border rounded-2xl overflow-hidden border border-border">
+        <div class="grid gap-px md:grid-cols-2 bg-border rounded-none overflow-hidden border border-border">
           <!-- ============================================================
                PROMO 1: RESEARCH & ACADEMIA (greptile OSS)
                ============================================================ -->
@@ -634,7 +634,7 @@ const capacity = {
           </div>
           <div class="md:col-span-7 space-y-4">
             <!-- Q3 capacity bar -->
-            <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+            <div class="rounded-none border border-dashed border-border bg-surface p-5">
               <div class="flex items-baseline justify-between">
                 <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
                   Q3 2026 · Jul–Sep
@@ -654,7 +654,7 @@ const capacity = {
               </p>
             </div>
             <!-- Q4 capacity bar -->
-            <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+            <div class="rounded-none border border-dashed border-border bg-surface p-5">
               <div class="flex items-baseline justify-between">
                 <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
                   Q4 2026 · Oct–Dec
@@ -697,7 +697,7 @@ const capacity = {
             </p>
           </div>
           <div class="md:col-span-7">
-            <div class="rounded-2xl border border-dashed border-border bg-bg p-6">
+            <div class="rounded-none border border-dashed border-border bg-bg p-6">
               <div class="space-y-4">
                 <!-- bar row -->
                 <div v-for="row in [
@@ -803,7 +803,7 @@ const capacity = {
           </NuxtLink>
           <NuxtLink
             to="/how-it-works"
-            class="inline-flex h-12 items-center rounded-full border border-ink-text/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink-text transition-all hover:bg-ink-text/10"
+            class="inline-flex h-12 items-center rounded-none border border-ink-text/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink-text transition-all hover:bg-ink-text/10"
           >
             How it works
           </NuxtLink>

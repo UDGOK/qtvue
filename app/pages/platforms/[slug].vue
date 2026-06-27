@@ -301,7 +301,7 @@ useSchemaOrg(() => {
       <Reveal :delay="100" class="mt-6">
         <NuxtLink
           to="/intake"
-          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
         >
           Submit your use case →
         </NuxtLink>
@@ -319,7 +319,7 @@ useSchemaOrg(() => {
         >
           <NuxtLink
             :to="`/platforms/${s.slug}`"
-            class="group flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40"
+            class="group flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40"
           >
             <span class="font-mono text-[10px] uppercase tracking-widest text-text-muted">
               {{ s.type }}

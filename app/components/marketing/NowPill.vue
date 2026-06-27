@@ -72,8 +72,8 @@ const link = computed(() => {
     :to="link"
     :class="[
       'group inline-flex items-center gap-2 font-mono text-[12px] sm:text-[13px] transition-all',
-      variant === 'banner' && 'rounded-md px-3 py-1 border border-current/20 hover:opacity-90',
-      variant === 'inline' && 'rounded-full border border-border bg-bg/85 px-3 py-1 hover:border-primary hover:text-primary',
+      variant === 'banner' && 'rounded-none px-3 py-1 border border-current/20 hover:opacity-90',
+      variant === 'inline' && 'rounded-none border border-border bg-bg/85 px-3 py-1 hover:border-primary hover:text-primary',
       variant === 'compact' && 'hover:opacity-80',
       moodColor.text,
       variant === 'banner' && moodColor.bg,

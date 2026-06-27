@@ -185,13 +185,13 @@ useSchemaOrg(() => {
       <Reveal :delay="100" class="mt-6 flex flex-wrap gap-3">
         <NuxtLink
           to="/intake"
-          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
         >
           Submit your use case →
         </NuxtLink>
         <NuxtLink
           to="/services"
-          class="inline-flex h-11 items-center rounded-full border border-paper/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-paper transition-all hover:border-paper/60"
+          class="inline-flex h-11 items-center rounded-none border border-paper/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-paper transition-all hover:border-paper/60"
         >
           Other services
         </NuxtLink>
@@ -208,7 +208,7 @@ useSchemaOrg(() => {
         >
           <NuxtLink
             :to="`/services/${s.stem?.replace(/^en\/services\//, '')}`"
-            class="group flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40"
+            class="group flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40"
           >
             <span class="font-mono text-[10px] uppercase tracking-widest text-text-muted">
               {{ s.label || s.title }}

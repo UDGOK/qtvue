@@ -15,7 +15,7 @@ withDefaults(
 <template>
   <span
     :class="[
-      'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium font-mono uppercase tracking-wider',
+      'inline-flex items-center gap-2 rounded-none px-3 py-1 text-xs font-medium font-mono uppercase tracking-wider',
       variant === 'default' && 'bg-surface-2 text-text-secondary border border-border',
       variant === 'live' && 'bg-primary-50 text-primary border border-primary/20',
       variant === 'accent' && 'bg-accent/20 text-text border border-accent/40',

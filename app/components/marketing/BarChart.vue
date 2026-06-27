@@ -15,7 +15,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="rounded-2xl border border-border bg-bg p-6 sm:p-8">
+  <div class="rounded-none border border-border bg-bg p-6 sm:p-8">
     <div class="mb-6 flex items-end justify-between gap-4">
       <p v-if="yLabel" class="eyebrow">{{ yLabel }}</p>
       <p class="font-mono text-xs text-text-muted">
@@ -60,7 +60,7 @@ defineProps<{
             class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             <div
-              class="grid h-10 w-10 place-items-center rounded-md border-2 border-primary bg-bg"
+              class="grid h-10 w-10 place-items-center rounded-none border-2 border-primary bg-bg"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path

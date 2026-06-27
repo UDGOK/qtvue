@@ -169,11 +169,11 @@ function categoryLabelForCategory(c: string): string {
             <NuxtLink to="/blog" class="hover:text-primary">← Blog</NuxtLink>
             <span class="text-text-muted">·</span>
             <span
-              :class="['inline-flex h-5 items-center rounded-full border px-2 font-bold', categoryStyle.bg, categoryStyle.text, categoryStyle.border]"
+              :class="['inline-flex h-5 items-center rounded-none border px-2 font-bold', categoryStyle.bg, categoryStyle.text, categoryStyle.border]"
             >
               {{ categoryLabel }}
             </span>
-            <span v-if="wasUpdated" class="inline-flex items-center gap-1.5 rounded-full border border-accent bg-accent/15 px-2 text-accent">
+            <span v-if="wasUpdated" class="inline-flex items-center gap-1.5 rounded-none border border-accent bg-accent/15 px-2 text-accent">
               <span class="relative flex h-1.5 w-1.5">
                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
                 <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
@@ -203,7 +203,7 @@ function categoryLabelForCategory(c: string): string {
             <div class="relative ml-auto">
               <button
                 type="button"
-                class="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-bg px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+                class="inline-flex h-8 items-center gap-1.5 rounded-none border border-border bg-bg px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-text-secondary transition-all hover:border-primary hover:text-primary"
                 @click="showShare = !showShare"
               >
                 Share
@@ -213,11 +213,11 @@ function categoryLabelForCategory(c: string): string {
               </button>
               <div
                 v-if="showShare"
-                class="absolute right-0 top-10 z-30 w-56 rounded-xl border border-border bg-bg p-2 shadow-[var(--shadow-lg)]"
+                class="absolute right-0 top-10 z-30 w-56 rounded-none border border-border bg-bg p-2 shadow-[var(--shadow-lg)]"
               >
                 <button
                   type="button"
-                  class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-surface"
+                  class="flex w-full items-center gap-2 rounded-none px-3 py-2 text-left text-sm transition-colors hover:bg-surface"
                   @click="copyUrl"
                 >
                   <Icon name="Link2" :size="14" /> Copy link
@@ -225,14 +225,14 @@ function categoryLabelForCategory(c: string): string {
                 <a
                   :href="`https://x.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(pageUrl)}`"
                   target="_blank" rel="noopener"
-                  class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-surface"
+                  class="flex items-center gap-2 rounded-none px-3 py-2 text-sm transition-colors hover:bg-surface"
                 >
                   <Icon name="Twitter" :size="14" /> Post on X
                 </a>
                 <a
                   :href="`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`"
                   target="_blank" rel="noopener"
-                  class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-surface"
+                  class="flex items-center gap-2 rounded-none px-3 py-2 text-sm transition-colors hover:bg-surface"
                 >
                   <Icon name="Linkedin" :size="14" /> Share on LinkedIn
                 </a>
@@ -242,7 +242,7 @@ function categoryLabelForCategory(c: string): string {
         </Reveal>
 
         <!-- Cover image -->
-        <div class="mt-12 relative overflow-hidden rounded-3xl border border-dashed border-border aspect-[16/10]">
+        <div class="mt-12 relative overflow-hidden rounded-none border border-dashed border-border aspect-[16/10]">
           <ArticleHero
             v-if="post.image"
             :src="post.image"
@@ -291,14 +291,14 @@ function categoryLabelForCategory(c: string): string {
                 prose-code:font-mono prose-code:text-[0.92em] prose-code:bg-surface
                 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
                 prose-code:border prose-code:border-border
-                prose-pre:my-8 prose-pre:rounded-2xl
+                prose-pre:my-8 prose-pre:rounded-none
                 prose-blockquote:border-l-4 prose-blockquote:border-primary
                 prose-blockquote:bg-primary-50/40 prose-blockquote:py-3 prose-blockquote:px-6
                 prose-blockquote:not-italic prose-blockquote:text-text
                 prose-li:text-text-secondary
                 prose-ul:my-6 prose-ol:my-6
                 prose-hr:border-dashed prose-hr:border-border
-                prose-img:rounded-2xl prose-img:border prose-img:border-dashed prose-img:border-border"
+                prose-img:rounded-none prose-img:border prose-img:border-dashed prose-img:border-border"
             />
 
             <!-- Tags -->
@@ -307,7 +307,7 @@ function categoryLabelForCategory(c: string): string {
               <span
                 v-for="t in post.tags"
                 :key="t"
-                class="inline-flex h-7 items-center rounded-full border border-border bg-surface px-3 font-mono text-[10px] uppercase tracking-widest text-text-secondary"
+                class="inline-flex h-7 items-center rounded-none border border-border bg-surface px-3 font-mono text-[10px] uppercase tracking-widest text-text-secondary"
               >
                 {{ t }}
               </span>
@@ -316,7 +316,7 @@ function categoryLabelForCategory(c: string): string {
             <!-- Author bio -->
             <div
               v-if="post.authorBio"
-              class="mt-12 flex items-start gap-4 rounded-2xl border border-dashed border-border bg-surface p-6"
+              class="mt-12 flex items-start gap-4 rounded-none border border-dashed border-border bg-surface p-6"
             >
               <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-dashed border-border bg-bg font-bold text-primary">
                 {{ post.author?.split(' ').map(s => s[0]).slice(0, 2).join('').toUpperCase() ?? 'QT' }}
@@ -334,7 +334,7 @@ function categoryLabelForCategory(c: string): string {
             </div>
 
             <!-- End-of-article CTA -->
-            <div class="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-dashed border-primary/40 bg-primary-50 p-6">
+            <div class="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-none border border-dashed border-primary/40 bg-primary-50 p-6">
               <div>
                 <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
                   Working on something Unitree-shaped?
@@ -345,7 +345,7 @@ function categoryLabelForCategory(c: string): string {
               </div>
               <NuxtLink
                 to="/intake"
-                class="inline-flex h-11 shrink-0 items-center rounded-full bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[#faf6ec] transition-all hover:bg-primary-600"
+                class="inline-flex h-11 shrink-0 items-center rounded-none bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[#faf6ec] transition-all hover:bg-primary-600"
                 style="clip-path:polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%, 13px 50%);"
               >
                 <span class="pl-3 sm:pl-4">Submit your use case →</span>
@@ -357,7 +357,7 @@ function categoryLabelForCategory(c: string): string {
           <aside class="hidden lg:col-span-3 lg:block">
             <div class="sticky top-24 space-y-6">
               <!-- Article meta box -->
-              <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+              <div class="rounded-none border border-dashed border-border bg-surface p-5">
                 <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Article</p>
                 <p class="mt-3 text-sm font-semibold text-text">{{ categoryLabel }}</p>
                 <dl class="mt-4 space-y-2 font-mono text-xs">
@@ -381,7 +381,7 @@ function categoryLabelForCategory(c: string): string {
               </div>
 
               <!-- Cite -->
-              <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+              <div class="rounded-none border border-dashed border-border bg-surface p-5">
                 <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Cite this</p>
                 <pre class="mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[11px] leading-relaxed text-text-secondary">{{ post.author }}. ({{ new Date(post.date).getFullYear() }}). {{ post.title }}. qtvue.com.</pre>
               </div>
@@ -408,7 +408,7 @@ function categoryLabelForCategory(c: string): string {
               v-for="r in related"
               :key="r.slug"
               :to="`/blog/${r.slug}`"
-              class="group flex flex-col overflow-hidden rounded-2xl border border-dashed border-border bg-surface transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
+              class="group flex flex-col overflow-hidden rounded-none border border-dashed border-border bg-surface transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
             >
               <div class="relative aspect-[16/10] overflow-hidden border-b border-dashed border-border">
                 <ArticleHero :tone="r.tone ?? 'cream'" :slug="r.slug" />

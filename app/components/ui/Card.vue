@@ -15,7 +15,7 @@ withDefaults(
 <template>
   <div
     :class="[
-      'relative rounded-2xl transition-all duration-300',
+      'relative rounded-none transition-all duration-300',
       variant === 'default' && 'border border-border bg-surface',
       variant === 'outline' && 'border border-border bg-transparent',
       variant === 'solid' && 'bg-surface-2',

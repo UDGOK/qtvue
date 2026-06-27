@@ -25,14 +25,14 @@ const industries = [
 
 <template>
   <form
-    class="space-y-5 rounded-2xl border border-border bg-surface p-6 sm:p-8"
+    class="space-y-5 rounded-none border border-border bg-surface p-6 sm:p-8"
     novalidate
     @submit.prevent="submit(form)"
   >
-    <div v-if="status === 'success'" class="rounded-xl bg-primary-50 p-4 text-sm text-primary">
+    <div v-if="status === 'success'" class="rounded-none bg-primary-50 p-4 text-sm text-primary">
       {{ t('contact.success') }}
     </div>
-    <div v-if="errors._form" class="rounded-xl bg-danger/10 p-4 text-sm text-danger">
+    <div v-if="errors._form" class="rounded-none bg-danger/10 p-4 text-sm text-danger">
       {{ errors._form }}
     </div>
 

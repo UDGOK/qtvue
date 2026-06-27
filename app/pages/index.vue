@@ -172,7 +172,7 @@ const servicesByKey = computed(() => {
         >
           <NuxtLink
             :to="stemToRoute(p.stem)"
-            class="group flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
+            class="group flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
           >
             <div class="flex items-baseline justify-between">
               <span class="font-mono text-[10px] uppercase tracking-widest text-text-muted">
@@ -195,7 +195,7 @@ const servicesByKey = computed(() => {
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <NuxtLink
           to="/platforms"
-          class="inline-flex h-10 items-center rounded-full border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+          class="inline-flex h-10 items-center rounded-none border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
         >
           See full platform comparison
         </NuxtLink>
@@ -219,7 +219,7 @@ const servicesByKey = computed(() => {
       bleed
     >
       <Reveal>
-        <div class="relative isolate overflow-hidden rounded-3xl border border-paper/10">
+        <div class="relative isolate overflow-hidden rounded-none border border-paper/10">
           <!-- Full-bleed autoplay loop, no chrome, themed tint -->
           <div class="relative aspect-video">
             <DemoVideo
@@ -232,7 +232,7 @@ const servicesByKey = computed(() => {
 
             <!-- Top-left status pill — same shape as platform pages,
                  but on a dark tinted background so it reads -->
-            <div class="pointer-events-none absolute left-6 top-6 flex items-center gap-2 rounded-full border border-paper/20 bg-bg/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-paper/80 backdrop-blur">
+            <div class="pointer-events-none absolute left-6 top-6 flex items-center gap-2 rounded-none border border-paper/20 bg-bg/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-paper/80 backdrop-blur">
               <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
                 <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
@@ -250,7 +250,7 @@ const servicesByKey = computed(() => {
       <Reveal :delay="120" class="mt-6 text-center">
         <NuxtLink
           to="/platforms/g1"
-          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
         >
           See the G1 page →
         </NuxtLink>
@@ -307,7 +307,7 @@ const servicesByKey = computed(() => {
       />
       <ol class="grid gap-4 md:grid-cols-4">
         <Reveal :delay="0" as="li">
-          <div class="flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-6">
+          <div class="flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-6">
             <span class="font-mono text-[10px] uppercase tracking-widest text-primary">step 01</span>
             <h3 class="mt-3 text-lg font-bold tracking-tight text-text">Submit use case</h3>
             <p class="mt-2 text-sm text-text-secondary">
@@ -316,7 +316,7 @@ const servicesByKey = computed(() => {
           </div>
         </Reveal>
         <Reveal :delay="80" as="li">
-          <div class="flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-6">
+          <div class="flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-6">
             <span class="font-mono text-[10px] uppercase tracking-widest text-primary">step 02</span>
             <h3 class="mt-3 text-lg font-bold tracking-tight text-text">Engineering review</h3>
             <p class="mt-2 text-sm text-text-secondary">
@@ -326,7 +326,7 @@ const servicesByKey = computed(() => {
           </div>
         </Reveal>
         <Reveal :delay="160" as="li">
-          <div class="flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-6">
+          <div class="flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-6">
             <span class="font-mono text-[10px] uppercase tracking-widest text-primary">step 03</span>
             <h3 class="mt-3 text-lg font-bold tracking-tight text-text">Scope + quote</h3>
             <p class="mt-2 text-sm text-text-secondary">
@@ -336,7 +336,7 @@ const servicesByKey = computed(() => {
           </div>
         </Reveal>
         <Reveal :delay="240" as="li">
-          <div class="flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-6">
+          <div class="flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-6">
             <span class="font-mono text-[10px] uppercase tracking-widest text-primary">step 04</span>
             <h3 class="mt-3 text-lg font-bold tracking-tight text-text">Build, ship, run</h3>
             <p class="mt-2 text-sm text-text-secondary">
@@ -358,56 +358,56 @@ const servicesByKey = computed(() => {
     >
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Reveal :delay="0">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">SDK</p>
             <p class="mt-2 font-semibold text-text">unitree_sdk2 / unitree_sdk2_python</p>
             <p class="mt-1 text-xs text-text-secondary">C++ and Python SDK across the full Unitree range.</p>
           </div>
         </Reveal>
         <Reveal :delay="60">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Middleware</p>
             <p class="mt-2 font-semibold text-text">ROS 2 (unitree_ros2)</p>
             <p class="mt-1 text-xs text-text-secondary">Same DDS interface on real hardware and in simulation.</p>
           </div>
         </Reveal>
         <Reveal :delay="120">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Simulation</p>
             <p class="mt-2 font-semibold text-text">Isaac Lab (unitree_sim_isaaclab)</p>
             <p class="mt-1 text-xs text-text-secondary">High-fidelity sim-to-real workflow, validated policies.</p>
           </div>
         </Reveal>
         <Reveal :delay="180">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Learning</p>
             <p class="mt-2 font-semibold text-text">LeRobot + UnifoLM-VLA-0</p>
             <p class="mt-1 text-xs text-text-secondary">Imitation learning and Unitree's open VLA model.</p>
           </div>
         </Reveal>
         <Reveal :delay="240">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Perception</p>
             <p class="mt-2 font-semibold text-text">LiDAR SLAM · RealSense · CUDA pipelines</p>
             <p class="mt-1 text-xs text-text-secondary">Localization, mapping, multi-sensor fusion.</p>
           </div>
         </Reveal>
         <Reveal :delay="300">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Safety</p>
             <p class="mt-2 font-semibold text-text">ISO 10218 · RIA R15.06</p>
             <p class="mt-1 text-xs text-text-secondary">Industrial robot safety standards we scope to.</p>
           </div>
         </Reveal>
         <Reveal :delay="360">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Security</p>
             <p class="mt-2 font-semibold text-text">Firmware hardening · network isolation</p>
             <p class="mt-1 text-xs text-text-secondary">Post-UniPwn 2025 — verified patches, isolated robot networks.</p>
           </div>
         </Reveal>
         <Reveal :delay="420">
-          <div class="rounded-2xl border border-dashed border-border bg-surface p-5">
+          <div class="rounded-none border border-dashed border-border bg-surface p-5">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">Hardware</p>
             <p class="mt-2 font-semibold text-text">EOAT · power · mounting</p>
             <p class="mt-1 text-xs text-text-secondary">Grippers, batteries, charging, custom mounts.</p>
@@ -442,13 +442,13 @@ const servicesByKey = computed(() => {
             <div class="mt-6 flex flex-wrap gap-3">
               <NuxtLink
                 to="/about"
-                class="inline-flex h-10 items-center rounded-full border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+                class="inline-flex h-10 items-center rounded-none border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
               >
                 About the founder →
               </NuxtLink>
               <NuxtLink
                 to="/blog"
-                class="inline-flex h-10 items-center rounded-full border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+                class="inline-flex h-10 items-center rounded-none border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
               >
                 Read technical articles →
               </NuxtLink>
@@ -486,7 +486,7 @@ const servicesByKey = computed(() => {
          ============================================================= -->
     <Section tone="ink" bleed>
       <Reveal>
-        <div class="relative isolate overflow-hidden rounded-3xl">
+        <div class="relative isolate overflow-hidden rounded-none">
           <ClientOnly>
             <AmbientField :density="500" height="100%" class="!relative" />
           </ClientOnly>

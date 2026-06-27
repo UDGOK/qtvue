@@ -120,7 +120,7 @@ useSchemaOrg(() =>
         >
           <NuxtLink
             :to="`/faq/${s.slug}`"
-            class="group flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40"
+            class="group flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40"
           >
             <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
               {{ s.topic }}
@@ -149,14 +149,14 @@ useSchemaOrg(() =>
       <Reveal :delay="120" class="mt-6 flex flex-wrap gap-3">
         <NuxtLink
           to="/contact"
-          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
         >
           Book a call →
         </NuxtLink>
         <NuxtLink
           v-if="faq.parent"
           :to="faq.parent"
-          class="inline-flex h-11 items-center rounded-full border border-paper/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-paper transition-all hover:border-paper/60"
+          class="inline-flex h-11 items-center rounded-none border border-paper/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-paper transition-all hover:border-paper/60"
         >
           Back to {{ faq.parent }}
         </NuxtLink>

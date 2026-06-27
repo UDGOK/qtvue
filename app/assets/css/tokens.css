@@ -56,10 +56,10 @@
   /* ---------- Layout rhythm --------------------------------------------- */
   --container-max: 1280px;
   --container-narrow: 920px;
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 0;
+  --radius: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
   --radius-pill: 9999px;
 
   /* ---------- Effects ---------------------------------------------------- */

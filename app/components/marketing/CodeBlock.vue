@@ -74,7 +74,7 @@ const highlighted = computed(() => {
 
 <template>
   <div
-    class="overflow-hidden rounded-2xl border border-[#1f2a22] bg-[#0a0f0a] text-[#e8f0e5] shadow-[var(--shadow-lg)]"
+    class="overflow-hidden rounded-none border border-[#1f2a22] bg-[#0a0f0a] text-[#e8f0e5] shadow-[var(--shadow-lg)]"
   >
     <div class="flex items-center gap-3 border-b border-[#1f2a22] bg-[#101510] px-4 py-2.5">
       <div class="flex items-center gap-1.5" aria-hidden="true">

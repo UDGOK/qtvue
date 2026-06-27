@@ -47,7 +47,7 @@ useSeoMeta({ title: 'Careers — qtvue', description: 'Join the qtvue team.' })
         </div>
 
         <!-- Evergreen CTA -->
-        <div v-else class="rounded-2xl border border-border bg-surface p-8 text-center sm:p-12">
+        <div v-else class="rounded-none border border-border bg-surface p-8 text-center sm:p-12">
           <div class="mx-auto h-32 w-32">
             <RobotMascot variant="head" />
           </div>

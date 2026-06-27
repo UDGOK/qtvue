@@ -547,7 +547,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
             v-for="(layer, li) in CHECKLIST"
             :key="layer.number"
             :class="[
-              'relative rounded-2xl border border-border bg-bg p-6 md:p-8 border-l-4 transition-shadow',
+              'relative rounded-none border border-border bg-bg p-6 md:p-8 border-l-4 transition-shadow',
               accentBorder[layer.accent],
             ]"
           >
@@ -556,7 +556,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
               <div class="flex items-start gap-4">
                 <div
                   :class="[
-                    'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl font-display font-bold text-2xl',
+                    'flex h-12 w-12 shrink-0 items-center justify-center rounded-none font-display font-bold text-2xl',
                     accentBg[layer.accent],
                     layer.accent === 'mint' ? 'text-[#0a1f14]' : 'text-white',
                   ]"
@@ -595,7 +595,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
                       type="button"
                       :aria-pressed="checked.has(makeId(li, ci, ii))"
                       :class="[
-                        'group flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-all duration-200',
+                        'group flex w-full items-start gap-3 rounded-none px-3 py-2.5 text-left transition-all duration-200',
                         'hover:bg-surface-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                         checked.has(makeId(li, ci, ii))
                           ? accentChecked[layer.accent]
@@ -666,7 +666,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
         </p>
 
         <div class="space-y-4">
-          <div class="rounded-xl border border-border bg-surface p-5">
+          <div class="rounded-none border border-border bg-surface p-5">
             <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-danger mb-2">
               Layer 2 — Security
             </p>
@@ -678,7 +678,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
             </p>
           </div>
 
-          <div class="rounded-xl border border-border bg-surface p-5">
+          <div class="rounded-none border border-border bg-surface p-5">
             <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[#a55a0a] mb-2">
               Layer 2 — Control loop
             </p>
@@ -690,7 +690,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
             </p>
           </div>
 
-          <div class="rounded-xl border border-border bg-surface p-5">
+          <div class="rounded-none border border-border bg-surface p-5">
             <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[#0e5c3a] mb-2">
               Layer 3 — Use case fit
             </p>
@@ -702,7 +702,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
             </p>
           </div>
 
-          <div class="rounded-xl border border-border bg-surface p-5">
+          <div class="rounded-none border border-border bg-surface p-5">
             <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[#0a8f57] mb-2">
               Layer 1 — Pre-flight telemetry
             </p>
@@ -818,7 +818,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
         <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <NuxtLink
             to="/intake"
-            class="group inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full font-semibold uppercase tracking-[0.12em] text-sm bg-accent text-[#0a1f14] hover:bg-accent-600 transition-colors"
+            class="group inline-flex items-center justify-center gap-2 h-12 px-6 rounded-none font-semibold uppercase tracking-[0.12em] text-sm bg-accent text-[#0a1f14] hover:bg-accent-600 transition-colors"
           >
             Submit your use case
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transition-transform group-hover:translate-x-0.5">
@@ -827,7 +827,7 @@ const accentChecked: Record<CheckLayer['accent'], string> = {
           </NuxtLink>
           <NuxtLink
             to="/blog"
-            class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full font-semibold uppercase tracking-[0.12em] text-sm border border-ink-text/30 hover:bg-ink-text/10 transition-colors"
+            class="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-none font-semibold uppercase tracking-[0.12em] text-sm border border-ink-text/30 hover:bg-ink-text/10 transition-colors"
           >
             Read the research
           </NuxtLink>

@@ -165,7 +165,7 @@ const canProceed = computed(() => {
             <div class="mt-6">
               <NuxtLink
                 to="/"
-                class="inline-flex h-10 items-center rounded-full border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+                class="inline-flex h-10 items-center rounded-none border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
               >
                 Back to home
               </NuxtLink>
@@ -189,7 +189,7 @@ const canProceed = computed(() => {
                 <textarea
                   v-model="form.goal"
                   rows="4"
-                  class="w-full rounded-2xl border border-dashed border-border bg-bg p-4 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
+                  class="w-full rounded-none border border-dashed border-border bg-bg p-4 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
                   placeholder="e.g. I want to automate the inspection rounds in our 12,000 sq ft warehouse, twice a day, on shift handover."
                 />
                 <div class="mt-4 flex flex-wrap gap-2">
@@ -198,7 +198,7 @@ const canProceed = computed(() => {
                     :key="chip"
                     type="button"
                     @click="toggleChip('goalChips', chip)"
-                    class="rounded-full border border-dashed px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-all"
+                    class="rounded-none border border-dashed px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-all"
                     :class="form.goalChips.includes(chip)
                       ? 'border-primary bg-primary text-bg'
                       : 'border-border text-text-secondary hover:border-primary hover:text-primary'"
@@ -225,7 +225,7 @@ const canProceed = computed(() => {
                   :key="p"
                   type="button"
                   @click="selectSingle('platform', p)"
-                  class="rounded-2xl border border-dashed px-4 py-3 text-left text-sm font-medium transition-all"
+                  class="rounded-none border border-dashed px-4 py-3 text-left text-sm font-medium transition-all"
                   :class="form.platform === p
                     ? 'border-primary bg-primary text-bg'
                     : 'border-border bg-bg text-text hover:border-primary'"
@@ -250,7 +250,7 @@ const canProceed = computed(() => {
                   :key="s"
                   type="button"
                   @click="selectSingle('currentState', s)"
-                  class="rounded-2xl border border-dashed px-4 py-3 text-left text-sm font-medium transition-all"
+                  class="rounded-none border border-dashed px-4 py-3 text-left text-sm font-medium transition-all"
                   :class="form.currentState === s
                     ? 'border-primary bg-primary text-bg'
                     : 'border-border bg-bg text-text hover:border-primary'"
@@ -279,7 +279,7 @@ const canProceed = computed(() => {
                       :key="t"
                       type="button"
                       @click="selectSingle('timeline', t)"
-                      class="rounded-full border border-dashed px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-all"
+                      class="rounded-none border border-dashed px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-all"
                       :class="form.timeline === t
                         ? 'border-primary bg-primary text-bg'
                         : 'border-border text-text-secondary hover:border-primary hover:text-primary'"
@@ -296,7 +296,7 @@ const canProceed = computed(() => {
                       :key="b"
                       type="button"
                       @click="selectSingle('budget', b)"
-                      class="rounded-full border border-dashed px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-all"
+                      class="rounded-none border border-dashed px-3 py-1.5 font-mono text-[11px] uppercase tracking-widest transition-all"
                       :class="form.budget === b
                         ? 'border-primary bg-primary text-bg'
                         : 'border-border text-text-secondary hover:border-primary hover:text-primary'"
@@ -323,7 +323,7 @@ const canProceed = computed(() => {
                   <input
                     v-model="form.name"
                     type="text"
-                    class="mt-1 w-full rounded-xl border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
+                    class="mt-1 w-full rounded-none border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
                     placeholder="Your name"
                   />
                 </div>
@@ -332,7 +332,7 @@ const canProceed = computed(() => {
                   <input
                     v-model="form.email"
                     type="email"
-                    class="mt-1 w-full rounded-xl border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
+                    class="mt-1 w-full rounded-none border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
                     placeholder="you@company.com"
                   />
                 </div>
@@ -341,7 +341,7 @@ const canProceed = computed(() => {
                   <input
                     v-model="form.company"
                     type="text"
-                    class="mt-1 w-full rounded-xl border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
+                    class="mt-1 w-full rounded-none border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
                     placeholder="Where you're based"
                   />
                 </div>
@@ -350,7 +350,7 @@ const canProceed = computed(() => {
                   <textarea
                     v-model="form.notes"
                     rows="3"
-                    class="mt-1 w-full rounded-xl border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
+                    class="mt-1 w-full rounded-none border border-dashed border-border bg-bg p-3 text-sm text-text placeholder:text-text-muted focus:border-primary focus:outline-none"
                     placeholder="Constraints we should know about."
                   />
                 </div>
@@ -363,7 +363,7 @@ const canProceed = computed(() => {
                 v-if="step > 1"
                 type="button"
                 @click="prev"
-                class="inline-flex h-10 items-center rounded-full border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+                class="inline-flex h-10 items-center rounded-none border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
               >
                 ← Back
               </button>
@@ -373,7 +373,7 @@ const canProceed = computed(() => {
                 type="button"
                 @click="next"
                 :disabled="!canProceed"
-                class="inline-flex h-10 items-center rounded-full bg-primary px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+                class="inline-flex h-10 items-center rounded-none bg-primary px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 Next →
               </button>
@@ -382,7 +382,7 @@ const canProceed = computed(() => {
                 type="button"
                 @click="submit"
                 :disabled="!canProceed"
-                class="inline-flex h-10 items-center rounded-full bg-primary px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+                class="inline-flex h-10 items-center rounded-none bg-primary px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 Submit use case →
               </button>

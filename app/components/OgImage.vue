@@ -56,7 +56,7 @@ defineProps<{
         style="
           width: 56px;
           height: 56px;
-          border-radius: 12px;
+          border-radius: 0;
           background: #faf6ec;
           display: flex;
           align-items: center;

@@ -70,7 +70,7 @@ useHead({
 
 <template>
   <div class="not-prose">
-    <ol class="divide-y divide-border rounded-2xl border border-dashed border-border bg-surface">
+    <ol class="divide-y divide-border rounded-none border border-dashed border-border bg-surface">
       <li v-for="(qa, i) in questions" :key="i" class="group">
         <button
           type="button"

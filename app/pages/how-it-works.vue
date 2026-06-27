@@ -131,7 +131,7 @@ useSeoMeta({
       <Reveal :delay="100" class="mt-6">
         <NuxtLink
           to="/intake"
-          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
         >
           Submit your use case →
         </NuxtLink>

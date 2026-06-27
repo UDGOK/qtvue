@@ -112,7 +112,7 @@ function onPause() { playing.value = false }
     :class="[
       mode === 'background'
         ? 'absolute inset-0'
-        : 'relative overflow-hidden rounded-2xl border border-dashed border-border bg-surface',
+        : 'relative overflow-hidden rounded-none border border-dashed border-border bg-surface',
     ]"
     :style="mode !== 'background' ? { aspectRatio: aspect } : {}"
   >
@@ -163,7 +163,7 @@ function onPause() { playing.value = false }
     -->
     <div
       v-if="label && mode === 'showcase'"
-      class="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full border border-border bg-bg/85 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-text-secondary backdrop-blur"
+      class="pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-none border border-border bg-bg/85 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-text-secondary backdrop-blur"
     >
       <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
         <span

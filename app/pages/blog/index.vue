@@ -179,14 +179,14 @@ useSchemaOrg(() => {
           <div class="mt-8 flex flex-wrap items-center gap-3">
             <a
               href="#feed"
-              class="group relative inline-flex h-11 items-center rounded-full bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[#faf6ec] transition-all hover:bg-primary-600"
+              class="group relative inline-flex h-11 items-center rounded-none bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[#faf6ec] transition-all hover:bg-primary-600"
               style="clip-path:polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%, 13px 50%);"
             >
               <span class="pl-3 sm:pl-4">Browse the feed</span>
             </a>
             <NuxtLink
               to="/intake"
-              class="inline-flex h-11 items-center rounded-full border border-border bg-bg px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+              class="inline-flex h-11 items-center rounded-none border border-border bg-bg px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
             >
               Submit your use case
             </NuxtLink>
@@ -228,10 +228,10 @@ useSchemaOrg(() => {
 
           <NuxtLink
             :to="`/blog/${featured.slug}`"
-            class="group grid gap-8 rounded-3xl border border-dashed border-border bg-surface p-4 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)] lg:grid-cols-12 lg:p-6"
+            class="group grid gap-8 rounded-none border border-dashed border-border bg-surface p-4 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)] lg:grid-cols-12 lg:p-6"
           >
             <!-- Cover / hero illustration -->
-            <div class="relative aspect-[16/10] overflow-hidden rounded-2xl border border-dashed border-border lg:col-span-7">
+            <div class="relative aspect-[16/10] overflow-hidden rounded-none border border-dashed border-border lg:col-span-7">
               <ArticleHero
                 v-if="featured.image"
                 :src="featured.image"
@@ -281,7 +281,7 @@ useSchemaOrg(() => {
             <button
               type="button"
               :class="[
-                'inline-flex h-8 items-center rounded-full border px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] transition-all',
+                'inline-flex h-8 items-center rounded-none border px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] transition-all',
                 activeCategory === 'all'
                   ? 'border-primary bg-primary text-[#faf6ec]'
                   : 'border-border bg-bg text-text-secondary hover:border-primary hover:text-primary',
@@ -289,14 +289,14 @@ useSchemaOrg(() => {
               @click="activeCategory = 'all'"
             >
               All
-              <span class="ml-1.5 rounded-full bg-bg/20 px-1.5 py-px text-[9px]">{{ posts.length }}</span>
+              <span class="ml-1.5 rounded-none bg-bg/20 px-1.5 py-px text-[9px]">{{ posts.length }}</span>
             </button>
             <button
               v-for="cat in categories"
               :key="cat"
               type="button"
               :class="[
-                'inline-flex h-8 items-center rounded-full border px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] transition-all',
+                'inline-flex h-8 items-center rounded-none border px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] transition-all',
                 activeCategory === cat
                   ? 'border-primary bg-primary text-[#faf6ec]'
                   : 'border-border bg-bg text-text-secondary hover:border-primary hover:text-primary',
@@ -305,7 +305,7 @@ useSchemaOrg(() => {
               @click="activeCategory = cat"
             >
               {{ categoryLabels[cat].label }}
-              <span class="ml-1.5 rounded-full bg-bg/20 px-1.5 py-px text-[9px]">
+              <span class="ml-1.5 rounded-none bg-bg/20 px-1.5 py-px text-[9px]">
                 {{ posts.filter((p) => p.category === cat).length }}
               </span>
             </button>
@@ -322,7 +322,7 @@ useSchemaOrg(() => {
          ============================================================ -->
     <section class="bg-bg">
       <Container class="py-16 sm:py-20">
-        <div v-if="filtered.length === 0" class="rounded-2xl border border-dashed border-border bg-surface p-12 text-center">
+        <div v-if="filtered.length === 0" class="rounded-none border border-dashed border-border bg-surface p-12 text-center">
           <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">No articles in this category yet.</p>
           <p class="mt-3 text-lg text-text-secondary">More coming. Try another filter.</p>
         </div>
@@ -330,7 +330,7 @@ useSchemaOrg(() => {
           <Reveal v-for="p in filtered" :key="p.slug" class="h-full">
             <NuxtLink
               :to="`/blog/${p.slug}`"
-              class="group flex h-full flex-col overflow-hidden rounded-2xl border border-dashed border-border bg-surface transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
+              class="group flex h-full flex-col overflow-hidden rounded-none border border-dashed border-border bg-surface transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
             >
               <!-- Cover / hero illustration -->
               <div class="relative aspect-[16/10] overflow-hidden border-b border-dashed border-border">
@@ -343,7 +343,7 @@ useSchemaOrg(() => {
                 <div class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-primary/5" />
                 <span
                   :class="[
-                    'absolute left-3 top-3 inline-flex h-6 items-center rounded-full border px-2.5 font-mono text-[10px] font-bold uppercase tracking-widest backdrop-blur',
+                    'absolute left-3 top-3 inline-flex h-6 items-center rounded-none border px-2.5 font-mono text-[10px] font-bold uppercase tracking-widest backdrop-blur',
                     p.category === 'security'   && 'border-red-300 bg-red-50 text-red-700',
                     p.category === 'research'   && 'border-primary bg-primary/15 text-primary',
                     p.category === 'engineering'&& 'border-border bg-bg/85 text-text',
@@ -407,12 +407,12 @@ useSchemaOrg(() => {
                     type="email"
                     required
                     placeholder="you@company.com"
-                    class="w-full rounded-full border border-paper/20 bg-paper/5 px-5 py-3 text-paper placeholder-paper/40 transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent"
+                    class="w-full rounded-none border border-paper/20 bg-paper/5 px-5 py-3 text-paper placeholder-paper/40 transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent"
                   />
                 </label>
                 <button
                   type="submit"
-                  class="inline-flex h-12 items-center justify-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:bg-paper"
+                  class="inline-flex h-12 items-center justify-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:bg-paper"
                 >
                   Subscribe — one email per research piece
                 </button>

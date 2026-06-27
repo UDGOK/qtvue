@@ -27,7 +27,7 @@ useSeoMeta({
         <div class="grid gap-6 lg:grid-cols-2">
           <Card pad="lg" class="flex flex-col">
             <div class="flex items-center gap-3">
-              <span class="rounded-md bg-primary px-2 py-0.5 font-mono text-[10px] font-bold text-paper">GET</span>
+              <span class="rounded-none bg-primary px-2 py-0.5 font-mono text-[10px] font-bold text-paper">GET</span>
               <h3 class="text-lg font-bold tracking-tight text-text">/v1/cells</h3>
             </div>
             <p class="mt-3 flex-1 text-sm text-text-secondary">
@@ -43,7 +43,7 @@ useSeoMeta({
 
           <Card pad="lg" class="flex flex-col">
             <div class="flex items-center gap-3">
-              <span class="rounded-md bg-primary px-2 py-0.5 font-mono text-[10px] font-bold text-paper">GET</span>
+              <span class="rounded-none bg-primary px-2 py-0.5 font-mono text-[10px] font-bold text-paper">GET</span>
               <h3 class="text-lg font-bold tracking-tight text-text">/v1/cells/:id</h3>
             </div>
             <p class="mt-3 flex-1 text-sm text-text-secondary">
@@ -58,7 +58,7 @@ useSeoMeta({
 
           <Card pad="lg" class="flex flex-col">
             <div class="flex items-center gap-3">
-              <span class="rounded-md bg-accent px-2 py-0.5 font-mono text-[10px] font-bold text-text">POST</span>
+              <span class="rounded-none bg-accent px-2 py-0.5 font-mono text-[10px] font-bold text-text">POST</span>
               <h3 class="text-lg font-bold tracking-tight text-text">/v1/cells/:id/reload</h3>
             </div>
             <p class="mt-3 flex-1 text-sm text-text-secondary">
@@ -74,7 +74,7 @@ useSeoMeta({
 
           <Card pad="lg" class="flex flex-col">
             <div class="flex items-center gap-3">
-              <span class="rounded-md bg-primary px-2 py-0.5 font-mono text-[10px] font-bold text-paper">GET</span>
+              <span class="rounded-none bg-primary px-2 py-0.5 font-mono text-[10px] font-bold text-paper">GET</span>
               <h3 class="text-lg font-bold tracking-tight text-text">/v1/cells/:id/alerts</h3>
             </div>
             <p class="mt-3 flex-1 text-sm text-text-secondary">

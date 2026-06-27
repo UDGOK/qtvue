@@ -23,7 +23,7 @@ function onError() { failed.value = true }
 
 <template>
   <div
-    class="relative overflow-hidden rounded-2xl border border-border bg-surface-2"
+    class="relative overflow-hidden rounded-none border border-border bg-surface-2"
     :style="aspectStyle"
   >
     <!-- placeholder / fallback -->

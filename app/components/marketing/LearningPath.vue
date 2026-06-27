@@ -99,7 +99,7 @@ const defaultSteps = [
         as="li"
       >
         <div
-          class="group relative grid grid-cols-[40px_1fr] items-start gap-4 rounded-2xl border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)] sm:p-6"
+          class="group relative grid grid-cols-[40px_1fr] items-start gap-4 rounded-none border border-dashed border-border bg-surface p-5 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)] sm:p-6"
         >
           <!-- number bubble -->
           <div
@@ -124,7 +124,7 @@ const defaultSteps = [
               <span
                 v-for="t in s.tools"
                 :key="t"
-                class="rounded-full border border-border bg-bg px-2 py-0.5 font-mono text-[10px] text-text-secondary"
+                class="rounded-none border border-border bg-bg px-2 py-0.5 font-mono text-[10px] text-text-secondary"
               >
                 {{ t }}
               </span>

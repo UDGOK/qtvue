@@ -42,7 +42,7 @@ useSeoMeta({
         >
           <NuxtLink
             :to="`/platforms/${p.slug}`"
-            class="group flex h-full flex-col rounded-2xl border border-dashed border-border bg-surface p-6 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
+            class="group flex h-full flex-col rounded-none border border-dashed border-border bg-surface p-6 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
           >
             <div class="flex items-baseline justify-between">
               <span class="font-mono text-[10px] uppercase tracking-widest text-text-muted">
@@ -81,7 +81,7 @@ useSeoMeta({
       <Reveal :delay="100" class="mt-6">
         <NuxtLink
           to="/intake"
-          class="inline-flex h-11 items-center rounded-full bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-primary px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90"
         >
           Submit your use case →
         </NuxtLink>

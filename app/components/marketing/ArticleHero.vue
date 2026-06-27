@@ -150,7 +150,7 @@ const palette = computed(() => {
         </p>
       </div>
       <div
-        class="grid h-16 w-16 place-items-center rounded-2xl border"
+        class="grid h-16 w-16 place-items-center rounded-none border"
         :style="{ borderColor: palette.ring, background: 'rgba(255,255,255,0.06)' }"
       >
         <Icon :name="glyph.icon" :size="30" :style="{ color: palette.accent }" />
@@ -168,7 +168,7 @@ const palette = computed(() => {
 
     <!-- dashed border accent -->
     <div
-      class="pointer-events-none absolute inset-3 rounded-xl border border-dashed"
+      class="pointer-events-none absolute inset-3 rounded-none border border-dashed"
       :style="{ borderColor: palette.ring }"
     />
   </div>

@@ -20,7 +20,7 @@ defineEmits<{ 'update:modelValue': [string] }>()
         :name="name"
         :required="required"
         :value="modelValue"
-        class="h-11 w-full appearance-none rounded-xl border border-border bg-bg px-4 pr-10 text-sm text-text focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        class="h-11 w-full appearance-none rounded-none border border-border bg-bg px-4 pr-10 text-sm text-text focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
       >
         <option v-for="o in options" :key="o.value" :value="o.value">{{ o.label }}</option>

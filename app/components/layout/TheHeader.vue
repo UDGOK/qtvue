@@ -281,12 +281,12 @@ watch(() => route.path, () => {
             <NuxtLink
               v-if="entry.type === 'link'"
               :to="entry.to"
-              class="inline-flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-all hover:bg-accent/25 hover:text-text"
+              class="inline-flex h-9 items-center gap-1.5 rounded-none px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary transition-all hover:bg-accent/25 hover:text-text"
             >
               <span>{{ entry.label }}</span>
               <span
                 v-if="(entry as NavLink).badge"
-                class="rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold text-paper"
+                class="rounded-none bg-primary px-1.5 py-0.5 text-[9px] font-bold text-paper"
               >
                 {{ (entry as NavLink).badge }}
               </span>
@@ -301,7 +301,7 @@ watch(() => route.path, () => {
               aria-haspopup="true"
               :aria-controls="`panel-${entry.key}`"
               :class="[
-                'inline-flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-[11px] uppercase tracking-[0.14em] transition-all',
+                'inline-flex h-9 items-center gap-1.5 rounded-none px-3 font-mono text-[11px] uppercase tracking-[0.14em] transition-all',
                 active === entry.key
                   ? 'bg-accent text-text'
                   : 'text-text-secondary hover:bg-accent/25 hover:text-text',
@@ -404,12 +404,12 @@ watch(() => route.path, () => {
                 <NuxtLink
                   :to="card.href"
                   @click="closeNow"
-                  class="group flex items-center gap-3 rounded-xl p-2.5 transition-all hover:bg-surface"
+                  class="group flex items-center gap-3 rounded-none p-2.5 transition-all hover:bg-surface"
                 >
                   <!-- icon tile — distinct per form factor -->
                   <div
                     :class="[
-                      'grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-dashed border-border halftone-bg transition-colors',
+                      'grid h-12 w-12 shrink-0 place-items-center rounded-none border border-dashed border-border halftone-bg transition-colors',
                       card.thumb === 'quadruped' && 'bg-surface-2 text-primary group-hover:bg-primary-50',
                       card.thumb === 'humanoid' && 'bg-surface-2 text-primary group-hover:bg-primary-50',
                       card.thumb === 'arm' && 'bg-surface-2 text-primary group-hover:bg-primary-50',
@@ -445,7 +445,7 @@ watch(() => route.path, () => {
                   </div>
                   <span
                     v-if="card.badge"
-                    class="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-widest text-primary"
+                    class="shrink-0 rounded-none bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-widest text-primary"
                   >
                     {{ card.badge }}
                   </span>
@@ -474,9 +474,9 @@ watch(() => route.path, () => {
                 <NuxtLink
                   :to="r.to"
                   @click="closeNow"
-                  class="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-surface"
+                  class="group flex items-start gap-3 rounded-none p-3 transition-colors hover:bg-surface"
                 >
-                  <div class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-text-secondary group-hover:bg-primary-50 group-hover:text-primary">
+                  <div class="grid h-9 w-9 shrink-0 place-items-center rounded-none bg-surface-2 text-text-secondary group-hover:bg-primary-50 group-hover:text-primary">
                     <Icon :name="r.icon" :size="18" />
                   </div>
                   <div>
@@ -597,7 +597,7 @@ watch(() => route.path, () => {
           <NuxtLink
             to="/intake"
             @click="mobileOpen = false"
-            class="inline-flex h-10 items-center justify-center rounded-full bg-primary font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-bg"
+            class="inline-flex h-10 items-center justify-center rounded-none bg-primary font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-bg"
           >
             Submit your use case
           </NuxtLink>

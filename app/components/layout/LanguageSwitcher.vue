@@ -19,7 +19,7 @@ function onChange(e: Event) {
   <select
     v-if="locales.length > 1"
     data-i18n-switcher
-    class="rounded-lg border border-border bg-bg px-2 py-1 text-sm"
+    class="rounded-none border border-border bg-bg px-2 py-1 text-sm"
     :value="current"
     @change="onChange"
   >

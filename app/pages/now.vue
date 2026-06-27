@@ -162,10 +162,10 @@ function tagHighlight(tag: string): boolean {
 
         <!-- Current status, big -->
         <Reveal v-if="hasCurrent" :delay="150">
-          <div class="mt-10 flex flex-col gap-3 rounded-3xl border border-dashed border-border bg-surface p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
+          <div class="mt-10 flex flex-col gap-3 rounded-none border border-dashed border-border bg-surface p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
             <span
               :class="[
-                'inline-flex h-12 shrink-0 items-center justify-center rounded-full px-5 font-mono text-xs font-bold uppercase tracking-[0.14em]',
+                'inline-flex h-12 shrink-0 items-center justify-center rounded-none px-5 font-mono text-xs font-bold uppercase tracking-[0.14em]',
                 moodStyle(currentMood),
               ]"
             >
@@ -186,7 +186,7 @@ function tagHighlight(tag: string): boolean {
             <NuxtLink
               v-if="recent && recent.length"
               to="#timeline"
-              class="inline-flex h-10 shrink-0 items-center rounded-full border border-border bg-bg px-5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+              class="inline-flex h-10 shrink-0 items-center rounded-none border border-border bg-bg px-5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-text-secondary transition-all hover:border-primary hover:text-primary"
             >
               See timeline →
             </NuxtLink>
@@ -194,7 +194,7 @@ function tagHighlight(tag: string): boolean {
         </Reveal>
 
         <Reveal v-else :delay="150">
-          <div class="mt-10 rounded-3xl border border-dashed border-border bg-surface p-8">
+          <div class="mt-10 rounded-none border border-dashed border-border bg-surface p-8">
             <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-text-muted">
               Current
             </p>
@@ -217,7 +217,7 @@ function tagHighlight(tag: string): boolean {
             <h2 class="display-md">Timeline.</h2>
             <button
               type="button"
-              class="inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-bg px-4 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+              class="inline-flex h-9 items-center gap-1.5 rounded-none border border-border bg-bg px-4 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-text-secondary transition-all hover:border-primary hover:text-primary"
               @click="refresh(true)"
             >
               <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -227,7 +227,7 @@ function tagHighlight(tag: string): boolean {
             </button>
           </div>
 
-          <div v-if="!recent || recent.length === 0" class="rounded-2xl border border-dashed border-border bg-surface p-12 text-center">
+          <div v-if="!recent || recent.length === 0" class="rounded-none border border-dashed border-border bg-surface p-12 text-center">
             <p class="font-mono text-[10px] uppercase tracking-widest text-text-muted">No history yet.</p>
             <p class="mt-3 text-lg text-text-secondary">First update will appear here.</p>
           </div>
@@ -241,7 +241,7 @@ function tagHighlight(tag: string): boolean {
             <li
               v-for="entry in recent"
               :key="entry.id"
-              class="relative flex gap-4 rounded-2xl border border-dashed border-border bg-surface p-5 pl-12 transition-all hover:border-primary/40 sm:gap-6 sm:p-6 sm:pl-14"
+              class="relative flex gap-4 rounded-none border border-dashed border-border bg-surface p-5 pl-12 transition-all hover:border-primary/40 sm:gap-6 sm:p-6 sm:pl-14"
             >
               <!-- Timeline dot -->
               <span
@@ -259,7 +259,7 @@ function tagHighlight(tag: string): boolean {
                 <div class="mb-2 flex flex-wrap items-center gap-2">
                   <span
                     :class="[
-                      'inline-flex h-5 items-center rounded-full px-2 font-mono text-[9px] font-bold uppercase tracking-widest',
+                      'inline-flex h-5 items-center rounded-none px-2 font-mono text-[9px] font-bold uppercase tracking-widest',
                       moodStyle(entry.mood),
                     ]"
                   >
@@ -287,7 +287,7 @@ function tagHighlight(tag: string): boolean {
                   <span
                     v-for="tag in entry.tags"
                     :key="tag"
-                    class="inline-flex h-5 items-center rounded-full border border-border bg-bg px-2 font-mono text-[10px] lowercase tracking-wide text-text-secondary"
+                    class="inline-flex h-5 items-center rounded-none border border-border bg-bg px-2 font-mono text-[10px] lowercase tracking-wide text-text-secondary"
                     :class="tagHighlight(tag) && 'border-primary/40 bg-primary/10 text-primary'"
                   >
                     {{ tag.replace(/-/g, ' ') }}
@@ -330,7 +330,7 @@ function tagHighlight(tag: string): boolean {
               </p>
             </div>
             <div class="lg:col-span-7">
-              <div class="rounded-2xl border border-dashed border-border bg-surface p-6">
+              <div class="rounded-none border border-dashed border-border bg-surface p-6">
                 <div class="mb-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-text-muted">
                   <span class="h-2 w-2 rounded-full bg-accent" />
                   Quick setup

@@ -135,7 +135,7 @@ useSchemaOrg([
       <Reveal :delay="100" class="mt-6">
         <NuxtLink
           to="/blog"
-          class="inline-flex h-10 items-center rounded-full border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+          class="inline-flex h-10 items-center rounded-none border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
         >
           Read the technical articles →
         </NuxtLink>
@@ -165,7 +165,7 @@ useSchemaOrg([
       <Reveal :delay="100" class="mt-6">
         <NuxtLink
           to="/intake"
-          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
         >
           Submit your use case →
         </NuxtLink>

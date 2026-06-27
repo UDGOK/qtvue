@@ -43,13 +43,13 @@ useSeoMeta({
         <Reveal :delay="120" class="mt-8 flex flex-wrap items-center gap-3">
           <a
             href="#topics"
-            class="inline-flex h-10 items-center rounded-full bg-primary px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90"
+            class="inline-flex h-10 items-center rounded-none bg-primary px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-bg transition-all hover:opacity-90"
           >
             Browse topics
           </a>
           <NuxtLink
             to="/contact"
-            class="inline-flex h-10 items-center rounded-full border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
+            class="inline-flex h-10 items-center rounded-none border border-border px-5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-text-secondary transition-all hover:border-primary hover:text-primary"
           >
             Ask your own →
           </NuxtLink>
@@ -77,7 +77,7 @@ useSeoMeta({
         >
           <NuxtLink
             :to="`/faq/${faq.slug}`"
-            class="group flex h-full flex-col justify-between rounded-2xl border border-dashed border-border bg-surface p-6 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
+            class="group flex h-full flex-col justify-between rounded-none border border-dashed border-border bg-surface p-6 transition-all hover:border-primary/40 hover:shadow-[var(--shadow-lg)]"
           >
             <div>
               <div class="flex items-center justify-between">
@@ -120,13 +120,13 @@ useSeoMeta({
       <Reveal :delay="120" class="mt-6 flex flex-wrap gap-3">
         <NuxtLink
           to="/contact"
-          class="inline-flex h-11 items-center rounded-full bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
+          class="inline-flex h-11 items-center rounded-none bg-accent px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink transition-all hover:opacity-90"
         >
           Book a call →
         </NuxtLink>
         <NuxtLink
           to="/services"
-          class="inline-flex h-11 items-center rounded-full border border-paper/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-paper transition-all hover:border-paper/60"
+          class="inline-flex h-11 items-center rounded-none border border-paper/30 px-6 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-paper transition-all hover:border-paper/60"
         >
           See services
         </NuxtLink>
