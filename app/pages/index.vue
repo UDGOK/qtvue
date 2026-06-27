@@ -482,6 +482,15 @@ const servicesByKey = computed(() => {
     </Section>
 
     <!-- =============================================================
+         6.5 PROOF — runnable code + real measurements
+         (Ticket 1 from the v2 brief — links the GitHub org + blog as
+         evidence for the practitioner claim. Inserted between the founder
+         section and the final CTA so visitors who've read about us get
+         something verifiable to click.)
+         ============================================================= -->
+    <ProofSection />
+
+    <!-- =============================================================
          7. FINAL CTA
          ============================================================= -->
     <Section tone="ink" bleed>

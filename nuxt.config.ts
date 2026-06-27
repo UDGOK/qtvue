@@ -126,6 +126,9 @@ export default defineNuxtConfig({
       prerender: true,
       headers: { 'Cache-Control': 'public, max-age=0, must-revalidate' },
     },
+    // /unipwn → /unitree-security 301 redirect. Short, shareable URL.
+    // Ticket 2 from the v2 brief.
+    '/unipwn': { redirect: { to: '/unitree-security', statusCode: 301 } },
     // Reserved for Spec 2 / future:
     // '/portal/**': { ssr: true },
     // '/quote': { ssr: true },
@@ -146,6 +149,14 @@ export default defineNuxtConfig({
         '/humans.txt',
         '/.well-known/security.txt',
         '/.well-known/ai.txt',
+        // v2 brief — Ticket 2 (security landing) + Ticket 3 (comparisons)
+        '/unitree-security',
+        '/compare',
+        '/compare/go2-vs-b2',
+        '/compare/g1-vs-h1',
+        '/compare/r1-vs-g1',
+        '/compare/h1-vs-h2',
+        '/compare/go2-vs-g1',
       ],
     },
   },

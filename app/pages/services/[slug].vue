@@ -106,6 +106,17 @@ useSchemaOrg(() => {
           <p v-if="service.label" class="eyebrow">{{ service.label }}</p>
           <h1 class="display-xl mt-3 max-w-4xl">{{ service.title }}</h1>
           <p class="mt-5 max-w-2xl text-lg text-text-secondary sm:text-xl">{{ service.summary }}</p>
+          <!-- Security-specific callout: links to the SEO landing page
+               for the UniPwn search funnel. Only shown on this service. -->
+          <div v-if="slug === 'security'" class="mt-6">
+            <NuxtLink
+              to="/unitree-security"
+              class="inline-flex items-center gap-2 border border-dashed border-border bg-surface px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-text-secondary transition-all hover:border-primary hover:text-primary"
+            >
+              <span class="inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+              Read the 2026 Unitree security &amp; UniPwn hardening guide →
+            </NuxtLink>
+          </div>
         </Reveal>
       </Container>
     </section>

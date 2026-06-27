@@ -33,6 +33,15 @@ useSeoMeta({
     </section>
 
     <Section eyebrow="Browse" heading="Eight platforms. One SDK.">
+      <Reveal class="mb-6">
+        <NuxtLink
+          to="/compare"
+          class="inline-flex items-center gap-2 border border-dashed border-border bg-surface px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-text-secondary transition-all hover:border-primary hover:text-primary"
+        >
+          <span class="inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+          Compare platforms head-to-head (5 matchups) →
+        </NuxtLink>
+      </Reveal>
       <ul class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Reveal
           v-for="(p, i) in platforms"
